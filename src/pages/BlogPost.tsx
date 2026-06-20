@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import butter from '../lib/butter';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Calendar, User } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -14,14 +13,14 @@ const BlogPost = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/posts.json')
-      .then(res => res.json())
-      .then(data => {
-        const found = data.find(p => p.slug === slug);
-        setPost(found || null);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    if (slug) {
+      butter.post.retrieve(slug)
+        .then((res) => {
+          setPost(res.data.data);
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    }
   }, [slug]);
 
   if (loading) {
@@ -54,8 +53,8 @@ const BlogPost = () => {
           <ArrowLeft className="w-4 h-4 mr-1" /> {language === 'en' ? 'Back to all posts' : 'सबै पोस्टहरूमा फर्कनुहोस्'}
         </Link>
 
-        {post.coverImage && (
-          <img src={post.coverImage} alt={post.title} className="w-full h-64 md:h-96 object-cover rounded-xl mb-8" />
+        {post.featured_image && (
+          <img src={post.featured_image} alt={post.title} className="w-full h-64 md:h-96 object-cover rounded-xl mb-8" />
         )}
 
         <h1 className="text-3xl md:text-4xl font-serif font-bold text-royal-blue dark:text-white mb-4">
@@ -65,16 +64,18 @@ const BlogPost = () => {
         <div className="flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400 mb-8 pb-4 border-b border-gray-200 dark:border-gray-700">
           <span className="flex items-center gap-2">
             <Calendar className="w-4 h-4" />
-            {new Date(post.date).toLocaleDateString(language === 'en' ? 'en-US' : 'ne-NP')}
+            {new Date(post.published).toLocaleDateString(language === 'en' ? 'en-US' : 'ne-NP')}
           </span>
           <span className="flex items-center gap-2">
             <User className="w-4 h-4" />
-            {post.author}
+            {post.author?.first_name || 'Bhasya Legal'}
           </span>
         </div>
 
         <div className="prose prose-lg dark:prose-invert max-w-none">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+          {post.body && (
+            <div dangerouslySetInnerHTML={{ __html: post.body }} />
+          )}
         </div>
       </div>
     </div>

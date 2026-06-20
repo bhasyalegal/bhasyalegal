@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import butter from '../lib/butter';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 
@@ -9,27 +10,29 @@ const Blog = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/posts.json')
-      .then(res => res.json())
-      .then(data => {
-        setPosts(data);
+    butter.post.list({ page: 1, page_size: 10 })
+      .then((res) => {
+        setPosts(res.data.data);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   }, []);
 
   const content = {
     en: {
       title: 'Legal Insights & Updates',
       subtitle: 'From the desk of Bhasya Legal',
-      description: 'Stay informed with the latest legal developments, case commentaries, and practical advice from our team.',
+      description: 'Stay informed with the latest legal developments from our team.',
       readMore: 'Read More',
       noPosts: 'No blog posts yet. Check back soon!',
     },
     np: {
       title: 'कानूनी अन्तरदृष्टि र अपडेटहरू',
       subtitle: 'भास्य कानूनको डेस्कबाट',
-      description: 'हाम्रो टोलीबाट नवीनतम कानूनी विकास, केस टिप्पणी, र व्यावहारिक सल्लाहको जानकारी रहनुहोस्।',
+      description: 'हाम्रो टोलीबाट नवीनतम कानूनी विकासको जानकारी रहनुहोस्।',
       readMore: 'थप पढ्नुहोस्',
       noPosts: 'अहिलेसम्म कुनै ब्लग पोस्ट छैन। चाँडै हेर्नुहोस्!',
     },
@@ -66,9 +69,9 @@ const Blog = () => {
                 key={post.slug}
                 className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700"
               >
-                {post.coverImage && (
+                {post.featured_image && (
                   <img
-                    src={post.coverImage}
+                    src={post.featured_image}
                     alt={post.title}
                     className="w-full h-48 object-cover"
                   />
@@ -77,17 +80,17 @@ const Blog = () => {
                   <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-3">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
-                      {new Date(post.date).toLocaleDateString(language === 'en' ? 'en-US' : 'ne-NP')}
+                      {new Date(post.published).toLocaleDateString(language === 'en' ? 'en-US' : 'ne-NP')}
                     </span>
                     <span className="flex items-center gap-1">
                       <User className="w-3 h-3" />
-                      {post.author}
+                      {post.author?.first_name || 'Bhasya Legal'}
                     </span>
                   </div>
                   <h2 className="text-xl font-serif font-bold text-royal-blue dark:text-white mb-2">
                     {post.title}
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{post.excerpt}</p>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{post.seo_description || post.summary}</p>
                   <Link
                     to={`/blog/${post.slug}`}
                     className="inline-flex items-center text-law-gold font-medium hover:underline"
