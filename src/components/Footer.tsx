@@ -15,7 +15,7 @@ const Footer = () => {
       contactInfo: "Contact Info",
       address: "Kadaghari, Kathmandu, Nepal",
       phone: "+977 9843722015",
-      email: "info@bhasyalegal.com",
+      email: "bhasyalegal@gmail.com",
       hours: "Mon–Fri: 9:00 AM – 6:00 PM",
       hoursSat: "Sat: 10:00 AM – 2:00 PM",
       emergency: "Emergency: 24/7",

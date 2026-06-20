@@ -2,6 +2,8 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Navigation from './Navigation';
 import Footer from './Footer';
+import ScrollToTopButton from './ScrollToTopButton';
+import StickyCTA from './StickyCTA';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,6 +20,8 @@ const Layout = ({ children }: LayoutProps) => {
         {children}
       </main>
       <Footer />
+      <ScrollToTopButton />
+      <StickyCTA />
     </div>
   );
 };
