@@ -2,6 +2,7 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Link } from 'react-router-dom'; // Make sure this import exists
 
 // Export this so Services.tsx can import it
 export const contentData: any = {
@@ -551,10 +552,13 @@ const ServiceDetail = () => {
           </div>
 
           <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-            <button className="bg-law-gold hover:bg-law-gold/90 text-royal-blue font-semibold px-8 py-3 rounded-lg transition">
-              {language === "en" ? "Schedule a Consultation" : "परामर्शको लागि सम्पर्क गर्नुहोस्"}
-            </button>
-          </div>
+  <Link
+    to="/contact"
+    className="bg-law-gold hover:bg-law-gold/90 text-royal-blue font-semibold px-8 py-3 rounded-lg transition inline-block"
+  >
+    {language === "en" ? "Schedule a Consultation" : "परामर्शको लागि सम्पर्क गर्नुहोस्"}
+  </Link>
+</div>
         </div>
       </div>
     </>

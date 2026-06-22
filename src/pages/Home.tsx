@@ -7,6 +7,10 @@ import HeroBG from "../img/hero-bg.webp";
 import WhoWeAreImg from "../img/lawyer-judge-counselor-having-team-meeting-with-client-law-legal-services.webp";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+<div data-aos="fade-up" data-aos-delay="100">
+  {/* content */}
+</div>
+
 const Home = () => {
   const { language } = useLanguage();
   const slugMap: { [key: string]: string } = {

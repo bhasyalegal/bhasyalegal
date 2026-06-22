@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run build:sitemap && vite build",
     "build:dev": "vite build --mode development",
+    "build:sitemap": "node scripts/generate-sitemap.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -14,16 +15,16 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.1.4",
-    "@sanity/client": "^7.23.0",
     "@tanstack/react-query": "^5.56.2",
-    "buttercms": "^3.0.3",
+    "aos": "^2.3.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-helmet-async": "^3.0.0",
+    "react-helmet-async": "^2.0.5",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^6.26.2",
     "remark-gfm": "^4.0.1",
@@ -41,13 +42,14 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
-    "gray-matter": "^4.0.3",
-    "onchange": "^7.1.0",
-    "remark": "^15.0.1",
-    "remark-html": "^16.0.1",
     "tailwindcss": "^3.4.11",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1"
-  }
+  },
+  "build:posts": "node scripts/generate-posts.js",
+"watch:posts": "onchange 'src/content/blog/*.md' -- npm run build:posts",
+"dev": "npm run build:posts && npm run watch:posts & vite",
+"build": "npm run build:posts && vite build"
+
 }
