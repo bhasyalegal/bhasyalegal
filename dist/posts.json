@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "welcome",
+    "title": "Welcome to Bhasya Legal Blog",
+    "date": "2025-06-19",
+    "author": "Subin Pandey",
+    "excerpt": "We are excited to launch our blog. Stay tuned for legal insights.",
+    "coverImage": "/img/blog/welcome.jpg",
+    "content": "\r\n# Welcome to Our Blog\r\n\r\nWe are thrilled to announce the launch of **Bhasya Legal Blog**. Here we will share legal updates, case commentaries, and practical advice for our clients.\r\n\r\n## What to expect\r\n\r\n- Regular legal news\r\n- Analysis of court decisions\r\n- Tips for clients\r\n\r\nStay connected!"
+  },
+  {
+    "slug": "first-post",
+    "title": "Welcome to Bhasya Legal Blog",
+    "date": "2025-05-27",
+    "author": "Subin Pandey",
+    "excerpt": "We are excited to launch our legal blog. Stay tuned for insights on Nepalese law.",
+    "coverImage": "/img/blog/welcome.jpg",
+    "content": "\r\n# Welcome to Our Legal Blog\r\n\r\nWe are thrilled to announce the launch of **Bhasya Legal Blog**. Here we will share:\r\n\r\n- Legal updates\r\n- Case commentaries\r\n- Practical advice for clients\r\n\r\nStay connected!"
+  }
+]
