@@ -2,93 +2,94 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
+/* ============================================
+   PHASE 1: ENHANCED PREMIUM DESIGN SYSTEM
+   Royal Blue & Golden Theme - Deep Matte Linen Upgrade
+   ============================================ */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Deepened to a premium matte parchment/linen tone—completely eliminating white glare */
+    --background: 43 24% 94%; 
+    
+    /* Primary text remains our signature Royal Blue */
+    --foreground: 261 78% 13%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Layered elements/cards use an ultra-soft premium ivory to pop off the darker linen background */
+    --card: 40 30% 98%;
+    --card-foreground: 261 78% 13%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 40 30% 98%;
+    --popover-foreground: 261 78% 13%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 261 78% 13%; /* Royal Blue #1B0738 */
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 45 65% 53%; /* Law Gold #D4AF37 */
+    --secondary-foreground: 261 78% 13%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 43 15% 88%;
+    --muted-foreground: 261 25% 42%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 45 65% 88%;
+    --accent-foreground: 261 78% 13%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 43 15% 85%;
+    --input: 43 15% 85%;
+    --ring: 45 65% 53%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 43 15% 91%;
+    --sidebar-foreground: 261 78% 20%;
+    --sidebar-primary: 261 78% 13%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 45 65% 88%;
+    --sidebar-accent-foreground: 261 78% 13%;
+    --sidebar-border: 43 15% 83%;
+    --sidebar-ring: 45 65% 53%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 261 80% 6%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 261 75% 8%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 261 75% 8%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 45 65% 53%;
+    --primary-foreground: 261 78% 13%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 261 60% 15%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 261 40% 16%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 261 50% 18%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
+    --border: 261 40% 16%;
+    --input: 261 40% 16%;
+    --ring: 45 65% 53%;
+    
+    --sidebar-background: 261 75% 6%;
     --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-primary: 45 65% 53%;
+    --sidebar-primary-foreground: 261 78% 13%;
+    --sidebar-accent: 261 50% 14%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-border: 261 40% 14%;
+    --sidebar-ring: 45 65% 53%;
   }
 }
 
@@ -98,22 +99,185 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background-color: hsl(43, 24%, 94%);
+    
+    /* Amplified Ambient Textured Silk-Mesh (Golds and Blues bleed smoothly across the canvas) */
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.08) 0px, transparent 60%),
+      radial-gradient(at 100% 0%, rgba(27, 7, 56, 0.06) 0px, transparent 60%),
+      radial-gradient(at 50% 100%, rgba(212, 175, 55, 0.05) 0px, transparent 70%);
     overflow-y: scroll;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .dark body {
+    background-color: hsl(261, 80%, 6%);
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.03) 0px, transparent 40%),
+      radial-gradient(at 100% 100%, rgba(27, 7, 56, 0.2) 0px, transparent 50%);
   }
 }
 
 @layer base {
   html {
     overflow-y: scroll;
+    scroll-behavior: smooth;
   }
 }
 
-/* Smooth theme transition */
+/* ============================================
+   ENHANCED TRANSITIONS & ANIMATIONS
+   ============================================ */
+
 * {
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  transition-property: background-color, border-color, color, fill, stroke, transform, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 250ms;
 }
 
-html {
-  scroll-behavior: smooth;
+button, a, [role="button"] {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:focus-visible {
+  outline: 2px solid #D4AF37;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+::selection {
+  background-color: #D4AF37;
+  color: #1b0738;
+}
+
+/* ============================================
+   SCROLLBAR TREATMENT
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(43, 20%, 90%);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0f051d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b89327;
+}
+
+/* ============================================
+   UTILITY CLASSES & INTERACTIVE TOKENS
+   ============================================ */
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.shadow-elegant {
+  box-shadow: 0 4px 24px -2px rgba(27, 7, 56, 0.05),
+              0 2px 8px -1px rgba(27, 7, 56, 0.03);
+}
+
+.shadow-elegant-lg {
+  box-shadow: 0 12px 34px -4px rgba(27, 7, 56, 0.06),
+              0 4px 14px -2px rgba(27, 7, 56, 0.03);
+}
+
+.shadow-elegant-xl {
+  box-shadow: 0 24px 50px -8px rgba(27, 7, 56, 0.09),
+              0 12px 24px -6px rgba(27, 7, 56, 0.04);
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #E5C060 0%, #D4AF37 50%, #F4E3B2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient-royal {
+  background: linear-gradient(135deg, #130429 0%, #1b0738 50%, #2d1056 100%);
+}
+
+/* PREMIUM SURFACE TRANSLUCENCY */
+.card-premium {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  border-radius: 1.25rem;
+}
+
+.card-premium:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 45px rgba(27, 7, 56, 0.08);
+  border-color: rgba(212, 175, 55, 0.5);
+}
+
+.dark .card-premium {
+  background: rgba(27, 7, 56, 0.45);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.dark .card-premium:hover {
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

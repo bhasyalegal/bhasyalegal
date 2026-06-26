@@ -18,6 +18,8 @@ const Navigation = () => {
   const lastScrollYRef = useRef(0);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const isHomePage = location.pathname === "/";
+
   const navItems = React.useMemo(
     () => [
       { name: t("home"), path: "/" },
@@ -43,17 +45,15 @@ const Navigation = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   }, [theme, setTheme]);
 
-  const refreshPage = useCallback(() => {
-    window.location.reload();
-  }, []);
-
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const scrollDelta = Math.abs(currentScrollY - lastScrollYRef.current);
       setIsScrolled(currentScrollY > 50);
+      
       if (scrollDelta > 10) {
         if (currentScrollY > lastScrollYRef.current && currentScrollY > 80) {
+          setIsMobileMenuOpen(false);
           setIsNavVisible(false);
         } else {
           setIsNavVisible(true);
@@ -66,7 +66,7 @@ const Navigation = () => {
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
       }
-      scrollTimeoutRef.current = setTimeout(handleScroll, 50);
+      scrollTimeoutRef.current = setTimeout(handleScroll, 10);
     };
 
     window.addEventListener("scroll", debouncedScroll, { passive: true });
@@ -84,219 +84,145 @@ const Navigation = () => {
   }, [location.pathname]);
 
   return (
-    <>
-      {/* LOGO - Only on homepage */}
-      {location.pathname === "/" && (
-        <button
-          onClick={refreshPage}
-          aria-label="Home - Refresh page"
-          className={`fixed z-50 transition-all duration-300 ${
-            isNavVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 -translate-y-full"
-          } hover:scale-105 focus:outline-none focus:ring-2 focus:ring-law-gold focus:ring-offset-2`}
-          style={{ top: "12px", left: "24px" }}
-        >
-          <img
-            src={Logo}
-            alt="Company Logo"
-            loading="lazy"
-            className="w-[140px] md:w-[180px] lg:w-[200px] object-contain
-                       drop-shadow-sm
-                       dark:brightness-100
-                       dark:drop-shadow-none"
-          />
-        </button>
-      )}
-
-      {/* NAVBAR */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          isNavVisible ? "translate-y-0" : "-translate-y-full"
-        } ${
-          isScrolled
-            ? "backdrop-blur-2xl bg-white/10 dark:bg-black/20 shadow-lg"
-            : "bg-transparent"
-        }`}
-        role="navigation"
-        aria-label="Main navigation"
-      >
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center h-32 md:h-36 relative">
-            {/* DESKTOP NAVIGATION - moved up by 2cm (added -mt-5) */}
-            <div className="hidden lg:flex items-center space-x-8 absolute left-1/2 -translate-x-1/2 -mt-5">
-              {navItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  aria-current={isActive(item.path) ? "page" : undefined}
-                  className={`text-sm font-semibold tracking-wide transition-all duration-200 
-                    focus:outline-none focus:ring-2 focus:ring-law-gold focus:ring-offset-2 rounded px-2 py-1
-                    ${
-                      isActive(item.path)
-                        ? "text-law-gold border-b-2 border-law-gold pb-1"
-                        : "text-gray-900 dark:text-white hover:text-law-gold"
-                    }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-
-            {/* DESKTOP THEME + LANGUAGE CONTROLS - TOP RIGHT CORNER */}
-            <div className="hidden lg:flex items-center space-x-3 absolute top-4 right-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleTheme}
-                aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-                className="h-10 w-10 rounded-xl
-                           bg-white/15 dark:bg-black/25
-                           backdrop-blur-md
-                           border border-white/20 dark:border-white/10
-                           hover:bg-white/25 dark:hover:bg-black/35
-                           transition-all duration-300
-                           focus:outline-none focus:ring-2 focus:ring-law-gold"
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isNavVisible ? "translate-y-0 text-opacity-100" : "-translate-y-full text-opacity-0"
+      } ${
+        isScrolled
+          ? "backdrop-blur-xl bg-white/80 dark:bg-[#1b0738]/80 shadow-elegant-lg border-b border-gray-200/40 dark:border-white/5"
+          : "bg-transparent"
+      }`}
+      role="navigation"
+      aria-label="Main navigation"
+    >
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="flex items-center justify-between h-24 md:h-28">
+          
+          {/* TOP-LEFT BRANDING LAYER (Home Page Only) */}
+          <div className={`flex-shrink-0 transition-all duration-300 ${isHomePage ? "w-[140px] md:w-[160px] lg:w-[180px] opacity-100" : "w-0 opacity-0 pointer-events-none"}`}>
+            {isHomePage && (
+              <Link
+                to="/"
+                aria-label="Bhasya Legal Home"
+                className="block hover:scale-102 active:scale-98 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 rounded-xl"
               >
-                {theme === "dark" ? (
-                  <Sun className="h-5 w-5 text-white" />
-                ) : (
-                  <Moon className="h-5 w-5 text-black" />
+                <img
+                  src={Logo}
+                  alt="Bhasya Legal Logo"
+                  loading="lazy"
+                  className="w-full object-contain drop-shadow-md"
+                />
+              </Link>
+            )}
+          </div>
+
+          {/* DESKTOP LINKS FRAMEWORK */}
+          <div className="hidden lg:flex items-center space-x-1 xl:space-x-3 mx-6">
+            {navItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                aria-current={isActive(item.path) ? "page" : undefined}
+                className={`relative text-[15px] font-medium tracking-wide transition-all duration-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]
+                  ${
+                    isActive(item.path)
+                      ? "text-[#D4AF37]"
+                      : "text-gray-800 dark:text-gray-100 hover:text-[#D4AF37] dark:hover:text-[#D4AF37]"
+                  }`}
+              >
+                {item.name}
+                {isActive(item.path) && (
+                  <span className="absolute bottom-1 left-4 right-4 h-0.5 bg-[#D4AF37] rounded-full animate-scale-in" />
                 )}
-              </Button>
+              </Link>
+            ))}
+          </div>
 
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={toggleLanguage}
-                aria-label={`Switch to ${language === "en" ? "Nepali" : "English"}`}
-                className="h-10 px-3 rounded-xl
-                           bg-white/15 dark:bg-black/25
-                           text-gray-900 dark:text-white
-                           border border-white/20 dark:border-white/10
-                           backdrop-blur-md
-                           hover:bg-white/25 dark:hover:bg-black/35
-                           transition-all duration-300
-                           focus:outline-none focus:ring-2 focus:ring-law-gold
-                           text-xs font-medium"
-              >
-                <Globe className="h-4 w-4 mr-1.5" />
-                <span>{language === "en" ? "नेपाली" : "English"}</span>
-              </Button>
-            </div>
-
-            {/* MOBILE MENU BUTTON */}
+          {/* DESKTOP CONTROLS (Shifted left via lg:mr-12) */}
+          <div className="hidden lg:flex items-center space-x-3 flex-shrink-0 lg:mr-12">
             <Button
               variant="ghost"
               size="icon"
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isMobileMenuOpen}
-              aria-controls="mobile-menu"
-              className="lg:hidden absolute right-3
-                         h-24 w-24
-                         rounded-[2rem]
-                         bg-white/25 dark:bg-black/35
-                         backdrop-blur-2xl
-                         border-2 border-white/30 dark:border-white/15
-                         shadow-2xl
-                         hover:scale-105
-                         hover:bg-white/35 dark:hover:bg-black/45
-                         transition-all duration-300
-                         focus:outline-none focus:ring-2 focus:ring-law-gold"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={toggleLanguage}
+              className="hover:bg-gray-100 dark:hover:bg-white/10 text-gray-700 dark:text-gray-200"
+              aria-label="Switch Language"
             >
-              {isMobileMenuOpen ? (
-                <X
-                  size={60}
-                  strokeWidth={2.5}
-                  className="text-black dark:text-white"
-                  aria-hidden="true"
-                />
-              ) : (
-                <Menu
-                  size={60}
-                  strokeWidth={2.5}
-                  className="text-black dark:text-white"
-                  aria-hidden="true"
-                />
-              )}
+              <Globe className="w-5 h-5 text-[#D4AF37]" />
+              <span className="ml-1 text-xs uppercase font-bold">{language}</span>
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="hover:bg-gray-100 dark:hover:bg-white/10 text-gray-700 dark:text-gray-200"
+              aria-label="Toggle Theme"
+            >
+              {theme === "dark" ? <Sun className="w-5 h-5 text-[#D4AF37]" /> : <Moon className="w-5 h-5 text-[#1b0738]" />}
             </Button>
           </div>
 
-          {/* MOBILE DROPDOWN MENU */}
-          {isMobileMenuOpen && (
-            <div
-              id="mobile-menu"
-              className="lg:hidden mt-6 pb-8 rounded-[2rem]
-                         bg-white/20 dark:bg-black/30
-                         backdrop-blur-3xl
-                         border-2 border-white/20 dark:border-white/10
-                         shadow-[0_20px_80px_rgba(0,0,0,0.25)]
-                         animate-in fade-in slide-in-from-top-2 duration-200"
+          {/* MOBILE RESPONSIVE ACTION BAR */}
+          <div className="flex lg:hidden items-center justify-end w-full space-x-2 sm:mr-4">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={toggleLanguage} 
+              className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5"
+              aria-label="Switch Language Mobile"
             >
-              <div className="flex flex-col items-end space-y-8 pt-8 px-8">
+              <Globe className="w-5 h-5 text-[#D4AF37]" />
+              <span className="ml-0.5 text-[10px] uppercase font-bold">{language}</span>
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={toggleTheme} 
+              className="text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5"
+              aria-label="Toggle Theme Mobile"
+            >
+              {theme === "dark" ? <Sun className="w-5 h-5 text-[#D4AF37]" /> : <Moon className="w-5 h-5 text-[#1b0738]" />}
+            </Button>
+            
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-[#D4AF37] hover:bg-gray-100 dark:hover:bg-white/5"
+              aria-expanded={isMobileMenuOpen}
+              aria-label="Toggle Navigation Menu"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </Button>
+          </div>
 
-                {navItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.path}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-right w-full
-                               text-3xl font-bold tracking-wide
-                               transition-all duration-200 ${
-                                 isActive(item.path)
-                                   ? "text-law-gold"
-                                   : "text-gray-900 dark:text-white hover:text-law-gold"
-                               }`}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-
-                <div className="w-full border-t-2 border-gray-300/30 dark:border-white/10 pt-6" />
-
-                <div className="flex justify-end items-center gap-6 w-full">
-                  <Button
-                    variant="ghost"
-                    size="lg"
-                    onClick={() =>
-                      setTheme(theme === "dark" ? "light" : "dark")
-                    }
-                    className="h-20 w-20 rounded-[1.5rem]
-                               bg-white/15 dark:bg-black/20
-                               text-gray-900 dark:text-white
-                               border border-white/20 dark:border-white/10
-                               hover:bg-white/25 dark:hover:bg-black/35"
-                  >
-                    {theme === "dark" ? (
-                      <Sun size={38} />
-                    ) : (
-                      <Moon size={38} />
-                    )}
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    onClick={toggleLanguage}
-                    className="h-20 px-8
-                               text-2xl font-semibold
-                               rounded-[1.5rem]
-                               bg-white/15 dark:bg-black/20
-                               text-gray-900 dark:text-white
-                               border-2 border-white/20 dark:border-white/10
-                               backdrop-blur-xl"
-                  >
-                    <Globe className="h-8 w-8 mr-3" />
-                    {language === "en" ? "नेपाली" : "English"}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
-      </nav>
-    </>
+      </div>
+
+      {/* MOBILE EXPANDABLE LINK DRAWER */}
+      <div
+        className={`lg:hidden fixed inset-x-0 top-24 bg-white/95 dark:bg-[#1b0738]/95 backdrop-blur-xl border-b border-gray-200 dark:border-white/10 transition-all duration-300 transform origin-top ${
+          isMobileMenuOpen ? "opacity-100 scale-y-100 pointer-events-auto" : "opacity-0 scale-y-90 pointer-events-none"
+        }`}
+      >
+        <div className="px-6 py-6 space-y-2 flex flex-col">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`text-lg font-medium p-3 rounded-xl transition-all duration-200 ${
+                isActive(item.path)
+                  ? "bg-[#D4AF37]/10 text-[#D4AF37] font-semibold"
+                  : "text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5"
+              }`}
+            >
+              {item.name}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </nav>
   );
 };
 

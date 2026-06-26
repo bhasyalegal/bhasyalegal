@@ -1,20 +1,13 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Scale, Shield, Gavel, Users, Award, Clock } from "lucide-react";
+import { Scale, Shield, Gavel, Users, Award, Clock, ArrowRight } from "lucide-react";
 import HeroBG from "../img/hero-bg.webp";
 import WhoWeAreImg from "../img/lawyer-judge-counselor-having-team-meeting-with-client-law-legal-services.webp";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-<div data-aos="fade-up" data-aos-delay="100">
-  {/* content */}
-</div>
-
-const Home = () => {
-  const { language } = useLanguage();
-  const slugMap: { [key: string]: string } = {
+const SLUG_MAP: Record<string, string> = {
   "Family Law": "family-law",
   "Criminal Defense": "criminal-defense",
   "Business Law": "business-law",
@@ -23,7 +16,9 @@ const Home = () => {
   "व्यापार कानून": "business-law",
 };
 
-  // Bilingual content
+const Home = () => {
+  const { language } = useLanguage();
+
   const content = {
     en: {
       heroTitle: "Justice. Integrity. Nepal.",
@@ -72,34 +67,35 @@ const Home = () => {
   const c = language === "en" ? content.en : content.np;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-hidden">
+      
       {/* Hero Section */}
       <section
-        className="relative h-screen flex items-center justify-center bg-cover bg-top bg-no-repeat"
+        className="relative h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${HeroBG})` }}
       >
-        <div className="absolute inset-0 bg-black/30"></div>
-        <div className="relative z-10 container mx-auto px-4 text-center text-white">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 animate-fade-in">
+        <div className="absolute inset-0 bg-[#1b0738]/40 dark:bg-[#0f051d]/60 backdrop-blur-[2px]" />
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center text-white space-y-8">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold tracking-tight text-white animate-fade-in">
             {c.heroTitle.split(" ").map((word, i) => 
-              word === "Integrity." || word === "अखण्डता।" ? (
-                <span key={i} className="text-law-gold">{word} </span>
-              ) : word === "Nepal." || word === "नेपाल।" ? (
-                <span key={i} className="text-law-gold">{word}</span>
+              word.includes("Integrity.") || word.includes("अखण्डता।") || word.includes("Nepal.") || word.includes("नेपाल।") ? (
+                <span key={i} className="text-gradient-gold block md:inline-block mx-1">{word} </span>
               ) : (
-                <span key={i}>{word} </span>
+                <span key={i} className="mx-1">{word} </span>
               )
             )}
           </h1>
-          <p className="text-l mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in">
+          
+          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-100 font-light leading-relaxed animate-fade-in-up">
             {c.heroSub}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
+
+          <div className="pt-4 animate-fade-in-up">
             <Button
               asChild
               variant="outline"
               size="lg"
-              className="border-white text-white bg-transparent hover:bg-white hover:text-[#1B0738] font-semibold px-8 py-4 text-lg rounded-lg transition-all duration-200"
+              className="border-2 border-[#D4AF37] text-[#D4AF37] bg-transparent hover:bg-[#D4AF37] hover:text-[#1B0738] font-bold px-8 py-6 text-lg rounded-xl shadow-elegant transition-all duration-300"
             >
               <a href="#about">{c.heroBtn}</a>
             </Button>
@@ -108,20 +104,18 @@ const Home = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16" style={{ backgroundColor: "#D4AE36" }}>
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="py-14 bg-gradient-to-r from-[#D4AF37] via-[#E5C060] to-[#D4AF37] shadow-elegant-lg relative z-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {c.stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="flex justify-center mb-4">
-                  <div className="w-16 h-16 bg-royal-blue rounded-full flex items-center justify-center">
-                    {index === 0 && <Users className="w-8 h-8 text-law-gold" />}
-                    {index === 1 && <Award className="w-8 h-8 text-law-gold" />}
-                    {index === 2 && <Clock className="w-8 h-8 text-law-gold" />}
-                  </div>
+              <div key={index} className="flex flex-col items-center text-center space-y-2">
+                <div className="w-16 h-16 bg-[#1b0738] rounded-2xl flex items-center justify-center shadow-md transform hover:rotate-6 transition-transform">
+                  {index === 0 && <Users className="w-7 h-7 text-[#D4AF37]" />}
+                  {index === 1 && <Award className="w-7 h-7 text-[#D4AF37]" />}
+                  {index === 2 && <Clock className="w-7 h-7 text-[#D4AF37]" />}
                 </div>
-                <h3 className="text-4xl font-bold text-royal-blue mb-2">{stat.number}</h3>
-                <p className="text-gray-700 font-medium">{stat.label}</p>
+                <h3 className="text-4xl font-extrabold text-[#1b0738] tracking-tight pt-2">{stat.number}</h3>
+                <p className="text-[#1b0738]/90 font-semibold tracking-wide text-sm uppercase">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -129,79 +123,78 @@ const Home = () => {
       </section>
 
       {/* Who We Are Section */}
-      <section id="about" className="py-20 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section id="about" className="py-24 bg-gray-50 dark:bg-[#110724] relative">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-6">
-              <h2 className="text-4xl md:text-4xl font-serif font-bold text-royal-blue dark:text-white">
-                {c.whoWeAreTitle}
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-0.5 bg-[#D4AF37]" />
+                <span className="text-[#D4AF37] font-bold tracking-widest text-sm uppercase">{c.whoWeAreTitle}</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-serif font-bold text-[#1b0738] dark:text-white leading-tight">
+                Dedicated to Universal Justice
               </h2>
-              <p className="text-l text-gray-600 dark:text-gray-300 leading-relaxed">
+              <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed font-light">
                 {c.whoWeAreP1}
               </p>
-              <p className="text-l text-gray-600 dark:text-gray-300 leading-relaxed">
+              <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed font-light">
                 {c.whoWeAreP2}
               </p>
             </div>
-            <div className="relative">
+            <div className="relative group">
+              <div className="absolute -inset-2 bg-gradient-to-r from-[#D4AF37] to-[#1b0738] rounded-2xl opacity-20 group-hover:opacity-30 blur-lg transition duration-300" />
               <img
                 src={WhoWeAreImg}
                 alt="Bhasya Legal Team"
-                className="rounded-lg shadow-2xl w-full h-auto"
+                className="rounded-2xl shadow-elegant-xl w-full h-auto object-cover relative z-10 border border-gray-200/50 dark:border-white/5"
               />
-              <div className="absolute inset-0 bg-royal-blue/10 rounded-lg"></div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Practice Areas Section */}
-      <section id="services" className="py-20 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-4xl font-serif font-bold text-royal-blue dark:text-white mb-6">
-              {c.practiceTitle}
+      <section id="services" className="py-24 bg-white dark:bg-[#0f051d]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+            <span className="text-[#D4AF37] font-bold tracking-widest text-sm uppercase">{c.practiceTitle}</span>
+            <h2 className="text-4xl md:text-5xl font-serif font-bold text-[#1b0738] dark:text-white">
+              Fields of Legal Competence
             </h2>
-            <p className="text-l text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base md:text-lg text-gray-500 dark:text-gray-400 font-light">
               {c.practiceSub}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {c.practiceAreas.map((area, index) => {
-              // Map practice titles to slugs for linking to service detail pages
-              const slugMap: { [key: string]: string } = {
-                "Family Law": "family-law",
-                "Criminal Defense": "criminal-defense",
-                "Business Law": "business-law",
-                // Add Nepali mapping if needed
-                "पारिवारिक कानून": "family-law",
-                "आपराधिक प्रतिरक्षा": "criminal-defense",
-                "व्यापार कानून": "business-law",
-              };
-              const slug = slugMap[area.title] || "";
+              const slug = SLUG_MAP[area.title] || "";
               return (
                 <Link
-  key={index}
-  to={`/services#${slug}`}  // <-- Hash link
-  className="block transition-all duration-300 hover:-translate-y-2"
->
-                
-                  <Card className="group hover:shadow-xl border-0 shadow-lg dark:bg-gray-800 h-full">
-                    <CardContent className="p-8 text-center">
-                      <div className="flex justify-center mb-6">
-                        <div className="w-20 h-20 bg-royal-blue rounded-full flex items-center justify-center group-hover:bg-law-gold transition-colors duration-300">
-                          {index === 0 && <Scale className="w-10 h-10 text-law-gold group-hover:text-royal-blue transition-colors duration-300" />}
-                          {index === 1 && <Shield className="w-10 h-10 text-law-gold group-hover:text-royal-blue transition-colors duration-300" />}
-                          {index === 2 && <Gavel className="w-10 h-10 text-law-gold group-hover:text-royal-blue transition-colors duration-300" />}
+                  key={index}
+                  to={`/services#${slug}`}
+                  className="block group"
+                >
+                  <Card className="card-premium h-full transition-all duration-300 border border-gray-100 dark:border-gray-800 shadow-elegant hover:shadow-elegant-xl">
+                    <CardContent className="p-8 text-center flex flex-col items-center h-full justify-between">
+                      <div className="space-y-6">
+                        <div className="w-20 h-20 bg-[#1b0738] rounded-2xl flex items-center justify-center mx-auto group-hover:bg-[#D4AF37] transition-colors duration-300 shadow-inner">
+                          {index === 0 && <Scale className="w-9 h-9 text-[#D4AF37] group-hover:text-[#1b0738] transition-colors duration-300" />}
+                          {index === 1 && <Shield className="w-9 h-9 text-[#D4AF37] group-hover:text-[#1b0738] transition-colors duration-300" />}
+                          {index === 2 && <Gavel className="w-9 h-9 text-[#D4AF37] group-hover:text-[#1b0738] transition-colors duration-300" />}
                         </div>
+                        
+                        <h3 className="text-2xl font-serif font-bold text-[#1b0738] dark:text-white group-hover:text-[#D4AF37] transition-colors">
+                          {area.title}
+                        </h3>
+                        <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed font-light">
+                          {area.desc}
+                        </p>
                       </div>
-                      <h3 className="text-2xl font-serif font-semibold text-royal-blue dark:text-white mb-4">
-                        {area.title}
-                      </h3>
-                      <p className="text-l text-gray-600 dark:text-gray-300 leading-relaxed">
-                        {area.desc}
-                      </p>
+
+                      <div className="pt-6 flex items-center text-[#D4AF37] font-semibold text-sm tracking-wider opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
+                        EXPLORE DISCIPLINE <ArrowRight className="w-4 h-4 ml-2" />
+                      </div>
                     </CardContent>
                   </Card>
                 </Link>
@@ -209,11 +202,11 @@ const Home = () => {
             })}
           </div>
 
-          <div className="text-center mt-12">
+          <div className="text-center mt-16">
             <Button
               asChild
               size="lg"
-              className="bg-royal-blue hover:bg-royal-blue/90 text-white font-semibold px-8 py-4"
+              className="bg-[#1b0738] hover:bg-[#2d1056] dark:bg-[#D4AF37] dark:hover:bg-[#b89327] text-white dark:text-[#1b0738] font-bold px-10 py-6 text-base rounded-xl shadow-elegant"
             >
               <Link to="/services">{c.viewAllBtn}</Link>
             </Button>

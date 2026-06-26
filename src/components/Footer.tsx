@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, ShieldCheck } from "lucide-react";
 import LogoLight from "../img/logo-light.webp";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -15,10 +15,10 @@ const Footer = () => {
       contactInfo: "Contact Info",
       address: "Kadaghari, Kathmandu, Nepal",
       phone: "+977 9843722015",
-      email: "bhasyalegal@gmail.com",
+      email: "info@bhasyalegal.com",
       hours: "Mon–Fri: 9:00 AM – 6:00 PM",
       hoursSat: "Sat: 10:00 AM – 2:00 PM",
-      emergency: "Emergency: 24/7",
+      emergency: "Emergency: 24/7 Support",
       copyright: "All rights reserved.",
     },
     np: {
@@ -31,7 +31,7 @@ const Footer = () => {
       email: "info@bhasyalegal.com",
       hours: "सोम–शुक्र: बिहान ९ – साँझ ६",
       hoursSat: "शनि: बिहान १० – दिउँसो २",
-      emergency: "आपत्कालीन: २४/७",
+      emergency: "आपत्कालीन: २४/७ सहायता",
       copyright: "सबै अधिकार सुरक्षित।",
     },
   };
@@ -47,33 +47,46 @@ const Footer = () => {
     { nameEn: "Contact", nameNp: "सम्पर्क", path: "/contact" },
   ];
 
-  // ─── Six practice areas ───────────────────────────────────────────
   const practiceAreas = [
     { slug: "consumer-tort", nameEn: "Consumer Tort", nameNp: "उपभोक्ता अपराध" },
     { slug: "medical-negligence", nameEn: "Medical Negligence", nameNp: "चिकित्सीय लापरवाही" },
-    { slug: "land-disputes", nameEn: "Land Dispute", nameNp: "जग्गा विवाद" },
+    { slug: "land-disputes", nameEn: "Land Disputes", nameNp: "जग्गा विवाद" },
     { slug: "class-action", nameEn: "Class Action Cases", nameNp: "वर्गीय मुद्दा" },
     { slug: "narcotics-cases", nameEn: "Narcotics Cases", nameNp: "लागूऔषध मुद्दा" },
     { slug: "homicide", nameEn: "Homicide", nameNp: "हत्या" },
   ];
 
   return (
-    <footer className="text-white" style={{ backgroundColor: "#100422" }}>
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div className="space-y-4">
-            <img src={LogoLight} width={200} alt="Bhasya Legal Logo" />
-            <p className="text-gray-300 leading-relaxed">{c.companyDesc}</p>
+    <footer className="text-gray-300 border-t border-white/5 relative z-30" style={{ backgroundColor: "#100422" }}>
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          
+          {/* Company Branding Profile */}
+          <div className="space-y-6">
+            <img 
+              src={LogoLight} 
+              width={180} 
+              alt="Bhasya Legal Logo" 
+              className="drop-shadow-sm brightness-105"
+              loading="lazy"
+            />
+            <p className="text-sm md:text-base text-gray-400 leading-relaxed font-light">
+              {c.companyDesc}
+            </p>
           </div>
 
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-law-gold">{c.quickLinks}</h4>
-            <ul className="space-y-2">
+          {/* Quick Links Map */}
+          <div className="space-y-6">
+            <h4 className="text-lg font-serif font-bold text-[#D4AF37] tracking-wider uppercase text-sm">
+              {c.quickLinks}
+            </h4>
+            <ul className="space-y-3" role="navigation" aria-label="Footer Quick Links">
               {quickLinks.map((link) => (
                 <li key={link.path}>
-                  <Link to={link.path} className="text-gray-300 hover:text-law-gold transition-colors">
+                  <Link 
+                    to={link.path} 
+                    className="inline-block text-gray-400 hover:text-[#D4AF37] transform hover:translate-x-1 text-[15px] transition-all duration-200"
+                  >
                     {t(link.nameEn, link.nameNp)}
                   </Link>
                 </li>
@@ -81,15 +94,17 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Practice Areas */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-law-gold">{c.practiceAreas}</h4>
-            <ul className="space-y-2">
+          {/* Core Practice Fields */}
+          <div className="space-y-6">
+            <h4 className="text-lg font-serif font-bold text-[#D4AF37] tracking-wider uppercase text-sm">
+              {c.practiceAreas}
+            </h4>
+            <ul className="space-y-3" role="navigation" aria-label="Footer Practice Disciplines">
               {practiceAreas.map((area) => (
                 <li key={area.slug}>
                   <Link
                     to={`/services#${area.slug}`}
-                    className="text-gray-300 hover:text-law-gold transition-colors"
+                    className="inline-block text-gray-400 hover:text-[#D4AF37] transform hover:translate-x-1 text-[15px] transition-all duration-200"
                   >
                     {t(area.nameEn, area.nameNp)}
                   </Link>
@@ -98,41 +113,52 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact Info */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-law-gold">{c.contactInfo}</h4>
-            <div className="space-y-3">
-              <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-law-gold mt-1 flex-shrink-0" />
-                <div>
-                  <p className="text-gray-300">{c.address}</p>
-                </div>
+          {/* Organized Contact Channels */}
+          <div className="space-y-6">
+            <h4 className="text-lg font-serif font-bold text-[#D4AF37] tracking-wider uppercase text-sm">
+              {c.contactInfo}
+            </h4>
+            <div className="space-y-4 text-[15px]">
+              
+              <div className="flex items-start space-x-3 group">
+                <MapPin className="w-5 h-5 text-[#D4AF37] mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <span className="text-gray-400 leading-relaxed">{c.address}</span>
               </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-law-gold" />
-                <p className="text-gray-300">{c.phone}</p>
+
+              <div className="flex items-center space-x-3 group">
+                <Phone className="w-5 h-5 text-[#D4AF37] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <a href={`tel:${c.phone}`} className="text-gray-400 hover:text-[#D4AF37] transition-colors">{c.phone}</a>
               </div>
-              <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-law-gold" />
-                <p className="text-gray-300">{c.email}</p>
+
+              <div className="flex items-center space-x-3 group">
+                <Mail className="w-5 h-5 text-[#D4AF37] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <a href={`mailto:${c.email}`} className="text-gray-400 hover:text-[#D4AF37] transition-colors break-all">{c.email}</a>
               </div>
-              <div className="flex items-start space-x-3">
-                <Clock className="w-5 h-5 text-law-gold mt-1" />
-                <div className="text-gray-300">
+
+              <div className="flex items-start space-x-3 pt-2 border-t border-white/5">
+                <Clock className="w-5 h-5 text-[#D4AF37] mt-0.5 flex-shrink-0" />
+                <div className="text-gray-400 text-sm space-y-1 font-light">
                   <p>{c.hours}</p>
                   <p>{c.hoursSat}</p>
-                  <p className="text-law-gold font-medium">{c.emergency}</p>
+                  <div className="flex items-center space-x-1.5 text-[#D4AF37] font-semibold mt-2 tracking-wide text-xs uppercase bg-[#D4AF37]/10 px-2.5 py-1 rounded-md border border-[#D4AF37]/20 w-fit">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>{c.emergency}</span>
+                  </div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-700 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-center items-center">
-            <p className="text-gray-300 text-sm">
-              © {new Date().getFullYear()} Bhasya Legal. {c.copyright}
-            </p>
+        {/* Global Structural Copyright Frame */}
+        <div className="border-t border-white/10 mt-16 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-gray-500 text-sm text-center sm:text-left tracking-wide">
+            © {new Date().getFullYear()} Bhasya Legal. {c.copyright}
+          </p>
+          <div className="flex space-x-6 text-xs text-gray-500 font-light">
+            <a href="#privacy" className="hover:text-[#D4AF37] transition-colors">Privacy Policy</a>
+            <a href="#terms" className="hover:text-[#D4AF37] transition-colors">Terms of Service</a>
           </div>
         </div>
       </div>
