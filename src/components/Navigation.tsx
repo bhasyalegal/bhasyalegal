@@ -113,7 +113,6 @@ const Navigation = () => {
                 className="relative p-0 m-0 border-0 bg-transparent cursor-pointer focus:outline-none group select-none flex items-center rounded-xl"
                 aria-label="Bhasya Legal - Reset and Go Home"
               >
-                {/* Expanded width here to ensure single-line text fits beautifully without clipping */}
                 <div className="relative h-20 md:h-24 w-60 sm:w-80 md:w-96 flex items-center justify-start overflow-hidden rounded-lg">
                   <img
                     src={Logo}
@@ -132,7 +131,6 @@ const Navigation = () => {
                         : "opacity-0 translate-y-4 scale-95 pointer-events-none"
                       }`}
                   >
-                    {/* Added whitespace-nowrap to guarantee single-line structural execution */}
                     <div className="flex items-center gap-2 sm:gap-3 whitespace-nowrap">
                       <span className="text-xl sm:text-2xl md:text-3xl font-bold tracking-wider text-[#B38F1D] dark:text-[#D4AF37] drop-shadow-sm">
                         B<span className="text-slate-950 dark:text-neutral-200">L</span>
@@ -140,7 +138,6 @@ const Navigation = () => {
                       
                       <span className="h-6 w-[1px] bg-slate-300 dark:bg-white/20 self-center" />
                       
-                      {/* Removed font-serif to match BL exact sizing type metric, golden 'B' retained */}
                       <span className="text-xl sm:text-2xl md:text-3xl font-bold tracking-wide text-slate-950 dark:text-neutral-200">
                         <span className="text-[#B38F1D] dark:text-[#D4AF37]">B</span>hasya
                       </span>
@@ -158,11 +155,11 @@ const Navigation = () => {
                 key={item.path}
                 to={item.path}
                 aria-current={isActive(item.path) ? "page" : undefined}
-                className={`relative text-[15px] transition-all duration-200 rounded-md focus:outline-none px-4 py-2 text-slate-950 dark:text-neutral-200
+                className={`relative text-[15px] transition-all duration-200 rounded-md focus:outline-none px-4 py-2 text-slate-950
                   ${
                     isActive(item.path)
-                      ? "text-[#B38F1D] dark:text-[#D4AF37] underline underline-offset-8 decoration-2 decoration-[#B38F1D] dark:decoration-[#D4AF37]"
-                      : "hover:text-[#B38F1D] dark:hover:text-[#D4AF37]"
+                      ? "underline underline-offset-8 decoration-2 decoration-[#B38F1D] dark:decoration-[#D4AF37]"
+                      : "hover:underline hover:underline-offset-8 decoration-2 decoration-[#B38F1D]/70 dark:decoration-[#D4AF37]/70"
                   }`}
               >
                 {item.name}
