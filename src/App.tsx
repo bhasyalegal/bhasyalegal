@@ -23,6 +23,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound"; // ✅ Imported
 
+
 // ─── AOS ────────────────────────────────────────────────────────
 import AOS from 'aos';
 import 'aos/dist/aos.css';
