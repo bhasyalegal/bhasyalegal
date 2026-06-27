@@ -20,6 +20,11 @@ const Navigation = () => {
 
   const isHomePage = location.pathname === "/";
 
+  // Dynamic color controller: Fixed black on home page, adaptive theme colors on other pages
+  const navButtonColorClass = isHomePage 
+    ? "text-slate-950 dark:text-slate-950" 
+    : "text-slate-950 dark:text-white";
+
   const navItems = React.useMemo(
     () => [
       { name: t("home"), path: "/" },
@@ -155,7 +160,7 @@ const Navigation = () => {
                 key={item.path}
                 to={item.path}
                 aria-current={isActive(item.path) ? "page" : undefined}
-                className={`relative text-[15px] transition-all duration-200 rounded-md focus:outline-none px-4 py-2 text-slate-950
+                className={`relative text-[15px] transition-all duration-200 rounded-md focus:outline-none px-4 py-2 ${navButtonColorClass}
                   ${
                     isActive(item.path)
                       ? "underline underline-offset-8 decoration-2 decoration-[#B38F1D] dark:decoration-[#D4AF37]"
@@ -173,13 +178,13 @@ const Navigation = () => {
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
-              className="hover:bg-slate-100 dark:hover:bg-white/5 text-slate-950 dark:text-neutral-200 h-9 w-9 rounded-lg"
+              className={`hover:bg-slate-100 dark:hover:bg-white/5 h-9 w-9 rounded-lg ${navButtonColorClass}`}
               aria-label="Toggle Theme"
             >
               {theme === "dark" ? (
                 <Sun className="w-4 h-4 text-[#D4AF37]" />
               ) : (
-                <Moon className="w-4 h-4 text-slate-950" />
+                <Moon className="w-4 h-4" />
               )}
             </Button>
 
@@ -187,11 +192,11 @@ const Navigation = () => {
               variant="ghost"
               size="icon"
               onClick={toggleLanguage}
-              className="hover:bg-slate-100 dark:hover:bg-white/5 text-slate-950 dark:text-neutral-200 h-9 w-14 rounded-lg"
+              className={`hover:bg-slate-100 dark:hover:bg-white/5 h-9 w-14 rounded-lg ${navButtonColorClass}`}
               aria-label="Switch Language"
             >
               <Globe className="w-4 h-4 text-[#B38F1D]" />
-              <span className="ml-1 text-[11px] uppercase text-slate-950 dark:text-neutral-200">{language}</span>
+              <span className={`ml-1 text-[11px] uppercase ${navButtonColorClass}`}>{language}</span>
             </Button>
           </div>
 
@@ -201,7 +206,7 @@ const Navigation = () => {
               variant="ghost"
               size="icon"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-slate-950 dark:text-neutral-200 hover:bg-slate-100 dark:hover:bg-white/5 h-10 w-10 justify-center items-center flex rounded-xl border border-slate-200/50 dark:border-white/10"
+              className={`hover:bg-slate-100 dark:hover:bg-white/5 h-10 w-10 justify-center items-center flex rounded-xl border border-slate-200/50 dark:border-white/10 ${navButtonColorClass}`}
               aria-expanded={isMobileMenuOpen}
               aria-label="Toggle Navigation Menu"
             >
