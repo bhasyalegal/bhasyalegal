@@ -1,26 +1,55 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { 
   Scale, Users, Award, Clock, Shield, Handshake, 
   HeartPulse, Plane, Landmark, ScrollText, Gavel,
-  FileText, Briefcase, Building2, Globe, Monitor,
+  FileText, Building2, Globe, Monitor,
   Copyright, AlertCircle, BookOpen
 } from "lucide-react";
+
+// --- Animation Helper Hooks ---
+const useIntersectionObserver = (options = {}) => {
+  const elementRef = useRef(null);
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("opacity-100", "translate-y-0");
+        entry.target.classList.remove("opacity-0", "translate-y-12");
+        observer.unobserve(entry.target);
+      }
+    }, { threshold: 0.1, ...options });
+
+    if (elementRef.current) observer.observe(elementRef.current);
+    return () => observer.disconnect();
+  }, [options]);
+  return elementRef;
+};
+
+const AnimatedSection = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => {
+  const ref = useIntersectionObserver();
+  return (
+    <div 
+      ref={ref} 
+      className="opacity-0 translate-y-12 transition-all duration-700 ease-out" 
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const About = () => {
   const { language } = useLanguage();
 
-  // Bilingual content
   const content = {
     en: {
       title: "About Bhasya Legal",
       subtitle: "Trusted Legal Excellence in Nepal",
-      // 3-paragraph essay - easier practices first, progressing to more complex
-      essay1: "At Bhasya Legal, we understand that navigating legal challenges can be overwhelming. Whether you're dealing with family matters such as divorce, child custody, or inheritance disputes, or facing personal legal issues like medical negligence, consumer complaints, or land disputes, our team is here to guide you with compassion and clarity. We believe that accessible legal support should be the foundation of every client relationship, and we take pride in making complex legal processes understandable and manageable for everyone who walks through our doors.",
-      essay2: "Our expertise spans a wide range of legal services, including criminal defense, immigration law, labor disputes, contract negotiations, and cyber crime cases. We also handle constitutional matters such as writ petitions and public interest litigation, as well as sensitive cases involving sexual offences, narcotics, and defamation. Each practice area is supported by dedicated professionals who bring years of experience and a deep commitment to protecting your rights. We recognize that no two cases are the same, which is why we approach every matter with fresh eyes and a tailored strategy.",
-      essay3: "For those facing more complex legal battles—such as homicide cases, corporate disputes, class actions, intellectual property challenges, or refugee law matters—we offer the highest level of strategic advocacy. Our senior attorneys have the experience and resources to navigate the most demanding legal environments, ensuring that your case receives the attention and expertise it deserves. At Bhasya Legal, we are more than just lawyers; we are your partners in justice, committed to achieving the best possible outcomes for you, your family, or your business.",
+      essay1: "At Bhasya Legal, we understand that navigating legal challenges can be overwhelming. Whether you're dealing with family matters such as divorce, child custody, or inheritance disputes, or facing personal legal issues like medical negligence, consumer complaints, or land disputes, our team is here to guide you with compassion and clarity.",
+      essay2: "Our expertise spans a wide range of legal services, including criminal defense, immigration law, labor disputes, contract negotiations, and cyber crime cases. We also handle constitutional matters such as writ petitions and public interest litigation, as well as sensitive cases involving sexual offences, narcotics, and defamation.",
+      essay3: "For those facing more complex legal battles—such as homicide cases, corporate disputes, class actions, intellectual property challenges, or refugee law matters—we offer the highest level of strategic advocacy. At Bhasya Legal, we are more than just lawyers; we are your partners in justice.",
       mission: "Our Mission",
       missionText: "To provide accessible, high‑quality legal services that protect rights, resolve disputes, and promote justice in Nepal.",
       vision: "Our Vision",
@@ -61,9 +90,9 @@ const About = () => {
     np: {
       title: "भास्य कानूनको बारेमा",
       subtitle: "नेपालमा भरपर्दो कानूनी उत्कृष्टता",
-      essay1: "भास्य कानूनमा, हामी बुझ्दछौं कि कानूनी चुनौतीहरू नेभिगेट गर्नु अत्यन्तै कठिन हुन सक्छ। चाहे तपाईं सम्बन्ध विच्छेद, बाल हिरासत, वा सम्पत्ति विवाद जस्ता पारिवारिक मामिलाहरूसँग व्यवहार गर्दै हुनुहुन्छ, वा चिकित्सीय लापरवाही, उपभोक्ता उजुरी, वा जग्गा विवाद जस्ता व्यक्तिगत कानूनी मुद्दाहरूको सामना गर्दै हुनुहुन्छ, हाम्रो टोली तपाईंलाई सहानुभूति र स्पष्टताका साथ मार्गदर्शन गर्न यहाँ छ। हामी विश्वास गर्छौं कि पहुँचयोग्य कानूनी सहायता प्रत्येक ग्राहक सम्बन्धको जग हुनुपर्छ, र हामी हाम्रो कार्यालयमा आउने सबैका लागि जटिल कानूनी प्रक्रियाहरूलाई बुझ्न योग्य र व्यवस्थापनीय बनाउन गर्व गर्छौं।",
-      essay2: "हाम्रो विशेषज्ञताले आपराधिक प्रतिरक्षा, अध्यागमन कानून, श्रम विवाद, अनुबंध वार्ता, र साइबर अपराध मुद्दाहरू सहित कानूनी सेवाहरूको विस्तृत दायरालाई समेट्छ। साथै, हामी रिट निवेदन र सार्वजनिक सरोकारका मुद्दाहरू जस्ता संवैधानिक मामिलाहरू, साथै यौन अपराध, लागूऔषध, र मानहानि सम्बन्धी संवेदनशील मुद्दाहरू पनि ह्यान्डल गर्छौं। प्रत्येक अभ्यास क्षेत्र समर्पित पेशेवरहरूद्वारा समर्थित छ जसले वर्षौंको अनुभव र तपाईंको अधिकारको रक्षा गर्न गहिरो प्रतिबद्धता ल्याउँछन्। हामी स्वीकार गर्छौं कि कुनै पनि दुई मुद्दा एउटै हुँदैनन्, जसकारण हामी प्रत्येक मामिलालाई नयाँ दृष्टिकोण र अनुकूल रणनीतिका साथ सामना गर्छौं।",
-      essay3: "अधिक जटिल कानूनी युद्धहरूको सामना गर्नेहरूका लागि—जस्तै हत्या मुद्दाहरू, कर्पोरेट विवादहरू, वर्गीय मुद्दाहरू, बौद्धिक सम्पत्ति चुनौतीहरू, वा शरणार्थी कानून मामिलाहरू—हामी रणनीतिक वकालतको उच्चतम स्तर प्रदान गर्छौं। हाम्रा वरिष्ठ अधिवक्ताहरूसँग सबैभन्दा माग भएका कानूनी वातावरणहरू नेभिगेट गर्न आवश्यक अनुभव र स्रोतहरू छन्, जसले तपाईंको मुद्दालाई योग्य ध्यान र विशेषज्ञता प्राप्त गर्न सुनिश्चित गर्दछ। भास्य कानूनमा, हामी केवल वकिलहरू मात्र होइनौं; हामी तपाईंको न्यायमा साझेदार हौं, तपाईं, तपाईंको परिवार, वा तपाईंको व्यवसायको लागि उत्तम सम्भावित परिणामहरू प्राप्त गर्न प्रतिबद्ध छौं।",
+      essay1: "भास्य कानूनमा, हामी बुझ्दछौं कि कानूनी चुनौतीहरू नेभिगेट गर्नु अत्यन्तै कठिन हुन सक्छ। चाहे तपाईं सम्बन्ध विच्छेद, बाल हिरासत, वा सम्पत्ति विवाद जस्ता पारिवारिक मामिलाहरूसँग व्यवहार गर्दै हुनुहुन्छ, वा चिकित्सीय लापरवाही, उपभोक्ता उजुरी, वा जग्गा विवाद जस्ता व्यक्तिगत कानूनी मुद्दाहरूको सामना गर्दै हुनुहुन्छ, हाम्रो टोली तपाईंलाई सहानुभूति र स्पष्टताका साथ मार्गदर्शन गर्न यहाँ छ।",
+      essay2: "हाम्रो विशेषज्ञताले आपराधिक प्रतिरक्षा, अध्यागमन कानून, श्रम विवाद, अनुबंध वार्ता, र साइबर अपराध मुद्दाहरू सहित कानूनी सेवाहरूको विस्तृत दायरालाई समेट्छ। साथै, हामी रिट निवेदन र सार्वजनिक सरोकारका मुद्दाहरू जस्ता संवैधानिक मामिलाहरू, साथै यौन अपराध, लागूऔषध, र मानहानि सम्बन्धी संवेदनशील मुद्दाहरू पनि ह्यान्डल गर्छौं।",
+      essay3: "अधिक जटिल कानूनी युद्धहरूको सामना गर्नेहरूका लागि—जस्तै हत्या मुद्दाहरू, कर्पोरेट विवादहरू, वर्गीय मुद्दाहरू, बौद्धिक सम्पत्ति चुनौतीहरू, वा शरणार्थी कानून मामिलाहरू—हामी रणनीतिक वकालतको उच्चतम स्तर प्रदान गर्छौं। भास्य कानूनमा, हामी केवल वकिलहरू मात्र होइनौं; हामी तपाईंको न्यायमा साझेदार हौं।",
       mission: "हाम्रो मिसन",
       missionText: "नेपालमा अधिकारको रक्षा गर्ने, विवाद समाधान गर्ने, र न्याय प्रवर्द्धन गर्ने पहुँचयोग्य, उच्च‑गुणस्तरीय कानूनी सेवाहरू प्रदान गर्नु।",
       vision: "हाम्रो दृष्टिकोण",
@@ -106,106 +135,117 @@ const About = () => {
   const c = language === "en" ? content.en : content.np;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 py-20">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0f051d] py-20 transition-colors duration-300 relative">
+      
+      {/* Background Aura Elements */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px]" />
+        <div className="absolute bottom-[10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-[#1b0738]/10 blur-[120px]" />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
+      </div>
+
+      <div className="relative z-10 container mx-auto px-6">
+        
         {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-royal-blue dark:text-white mb-4">
-            {c.title}
-          </h1>
-          <p className="text-lg text-law-gold font-medium mb-4">{c.subtitle}</p>
-          <div className="w-24 h-1 bg-law-gold mx-auto mb-8"></div>
-        </div>
+        <AnimatedSection>
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#1b0738] dark:text-white mb-4 tracking-tight">
+              {c.title}
+            </h1>
+            <p className="text-lg text-[#D4AF37] font-medium mb-4">{c.subtitle}</p>
+            <div className="w-24 h-1 bg-gradient-to-r from-[#D4AF37] to-[#F4E3B2] mx-auto mb-8 rounded-full"></div>
+          </div>
+        </AnimatedSection>
 
         {/* 3-Paragraph Essay */}
-        <div className="max-w-4xl mx-auto mb-16 space-y-6">
-          <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
-            {c.essay1}
-          </p>
-          <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
-            {c.essay2}
-          </p>
-          <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
-            {c.essay3}
-          </p>
-        </div>
+        <AnimatedSection delay={200}>
+          <div className="max-w-4xl mx-auto mb-16 space-y-6">
+            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed font-light">{c.essay1}</p>
+            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed font-light">{c.essay2}</p>
+            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed font-light">{c.essay3}</p>
+          </div>
+        </AnimatedSection>
 
         {/* Mission & Vision Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-          <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl shadow-md">
-            <h2 className="text-2xl font-serif font-bold text-royal-blue dark:text-white mb-4">
-              {c.mission}
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{c.missionText}</p>
-          </div>
-          <div className="bg-gray-50 dark:bg-gray-800 p-8 rounded-xl shadow-md">
-            <h2 className="text-2xl font-serif font-bold text-royal-blue dark:text-white mb-4">
-              {c.vision}
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{c.visionText}</p>
-          </div>
+          <AnimatedSection delay={300}>
+            <div className="bg-white/50 dark:bg-[#1b0738]/20 backdrop-blur-sm p-8 rounded-2xl border border-gray-200/50 dark:border-white/5 h-full">
+              <h2 className="text-2xl font-serif font-bold text-[#1b0738] dark:text-white mb-4">
+                {c.mission}
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed font-light">{c.missionText}</p>
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={400}>
+            <div className="bg-white/50 dark:bg-[#1b0738]/20 backdrop-blur-sm p-8 rounded-2xl border border-gray-200/50 dark:border-white/5 h-full">
+              <h2 className="text-2xl font-serif font-bold text-[#1b0738] dark:text-white mb-4">
+                {c.vision}
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed font-light">{c.visionText}</p>
+            </div>
+          </AnimatedSection>
         </div>
 
         {/* Core Values */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-serif font-bold text-royal-blue dark:text-white text-center mb-12">
-            {c.valuesTitle}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {c.values.map((value, index) => (
-              <div key={index} className="text-center p-6 border border-gray-200 dark:border-gray-700 rounded-xl hover:shadow-lg transition-all">
-                <div className="w-16 h-16 bg-royal-blue rounded-full flex items-center justify-center mx-auto mb-4">
-                  <value.icon className="w-8 h-8 text-law-gold" />
+        <AnimatedSection delay={500}>
+          <div className="mb-20">
+            <h2 className="text-3xl font-serif font-bold text-[#1b0738] dark:text-white text-center mb-12">
+              {c.valuesTitle}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {c.values.map((value, index) => (
+                <div key={index} className="text-center p-6 bg-white/30 dark:bg-[#1b0738]/10 rounded-xl border border-gray-100 dark:border-white/5 hover:border-[#D4AF37]/50 transition-all">
+                  <div className="w-16 h-16 bg-[#1b0738] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <value.icon className="w-8 h-8 text-[#D4AF37]" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-[#1b0738] dark:text-white mb-2">{value.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">{value.desc}</p>
                 </div>
-                <h3 className="text-xl font-semibold text-royal-blue dark:text-white mb-2">
-                  {value.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">{value.desc}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* Practice Areas */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-serif font-bold text-royal-blue dark:text-white text-center mb-12">
-            {c.practicesTitle}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {c.practices.map((practice, index) => (
-              <div key={index} className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all hover:-translate-y-1">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-royal-blue/10 dark:bg-royal-blue/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <practice.icon className="w-6 h-6 text-law-gold" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-royal-blue dark:text-white">
-                      {practice.name}
-                    </h4>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                      {practice.desc}
-                    </p>
+        <AnimatedSection delay={600}>
+          <div className="mb-20">
+            <h2 className="text-3xl font-serif font-bold text-[#1b0738] dark:text-white text-center mb-12">
+              {c.practicesTitle}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {c.practices.map((practice, index) => (
+                <div key={index} className="bg-white/50 dark:bg-[#1b0738]/20 p-6 rounded-xl border border-gray-200 dark:border-white/5 hover:border-[#D4AF37] transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-[#1b0738]/10 dark:bg-white/5 rounded-full flex items-center justify-center flex-shrink-0">
+                      <practice.icon className="w-6 h-6 text-[#D4AF37]" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-[#1b0738] dark:text-white">{practice.name}</h4>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">{practice.desc}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* Call to Action */}
-        <div className="text-center bg-gradient-to-r from-royal-blue to-law-gold/80 rounded-xl p-10 shadow-lg">
-          <h3 className="text-2xl font-serif font-bold text-white mb-4">
-            {language === "en" ? "Ready to Work With Us?" : "हामीसँग काम गर्न तयार हुनुहुन्छ?"}
-          </h3>
-          <p className="text-white/90 mb-6 max-w-2xl mx-auto">
-            {language === "en" 
-              ? "Contact us today for a confidential consultation. Our team is here to help you navigate any legal challenge." 
-              : "गोप्य परामर्शको लागि आज हामीलाई सम्पर्क गर्नुहोस्। हाम्रो टोली कुनै पनि कानूनी चुनौतीमा तपाईंको सहायता गर्न यहाँ छ।"}
-          </p>
-          <Button asChild className="bg-white text-royal-blue hover:bg-gray-100 font-semibold px-8 py-3 rounded-lg">
-            <Link to="/contact">{c.cta}</Link>
-          </Button>
-        </div>
+        <AnimatedSection delay={700}>
+          <div className="text-center bg-[#1b0738] rounded-2xl p-10 shadow-xl overflow-hidden relative">
+            <h3 className="text-2xl font-serif font-bold text-white mb-4 relative z-10">
+              {language === "en" ? "Ready to Work With Us?" : "हामीसँग काम गर्न तयार हुनुहुन्छ?"}
+            </h3>
+            <p className="text-white/80 mb-8 max-w-2xl mx-auto relative z-10">
+              {language === "en" 
+                ? "Contact us today for a confidential consultation. Our team is here to help you navigate any legal challenge." 
+                : "गोप्य परामर्शको लागि आज हामीलाई सम्पर्क गर्नुहोस्। हाम्रो टोली कुनै पनि कानूनी चुनौतीमा तपाईंको सहायता गर्न यहाँ छ।"}
+            </p>
+            <Button asChild className="bg-[#D4AF37] text-[#1b0738] hover:bg-[#F4E3B2] font-semibold px-8 py-3 rounded-lg relative z-10">
+              <Link to="/contact">{c.cta}</Link>
+            </Button>
+          </div>
+        </AnimatedSection>
       </div>
     </div>
   );

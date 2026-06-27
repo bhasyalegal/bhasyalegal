@@ -1,3 +1,4 @@
+// Layout.tsx
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Navigation from "./Navigation";
@@ -13,37 +14,33 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
-  
-  // Track page navigation states
   const [isPageChanging, setIsPageChanging] = useState(false);
 
   useEffect(() => {
-    // 1. Trigger the premium loading screen immediately on any page change
     setIsPageChanging(true);
-
-    // 2. Keep it brief (700ms) so it's snappy but lets the gavel slam down once beautifully
     const transitionTimer = setTimeout(() => {
       setIsPageChanging(false);
     }, 700);
-
-    // 3. Always clean up timers to prevent memory leaks during rapid clicks
     return () => clearTimeout(transitionTimer);
-  }, [location.pathname]); // Fires every single time the URL changes
+  }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background selection:bg-[#D4AF37] selection:text-[#1b0738]">
-      {/* 
-         Render the Gavel loader as a brief overlay when changing pages.
-         We keep the background components mounted underneath so transitions feel fluid.
-      */}
-      {isPageChanging && <GavelLoader />}
+    <div className="min-h-screen flex flex-col bg-background selection:bg-[#D4AF37] selection:text-[#1b0738] relative">
+      
+      {/* --- BACKGROUND TEXTURE --- */}
+      <div 
+        className="pointer-events-none fixed inset-0 z-0 opacity-[0.15] dark:opacity-[0.05]"
+        style={{
+          backgroundImage: 'radial-gradient(#D4AF37 1px, transparent 1px)',
+          backgroundSize: '32px 32px'
+        }}
+      />
 
-      {/* Primary Sticky Header Landmark */}
+      {isPageChanging && <GavelLoader />}
       <Navigation />
       
-      {/* Main Content Area */}
       <main 
-        className={`flex-1 ${!isHomePage ? "pt-24 md:pt-28" : ""} 
+        className={`flex-1 relative z-10 ${!isHomePage ? "pt-24 md:pt-28" : ""} 
           animate-fade-in 
           [&_section]:bg-transparent 
           [&_.bg-white]:bg-transparent 
@@ -52,10 +49,7 @@ const Layout = ({ children }: LayoutProps) => {
         {children}
       </main>
       
-      {/* Structural Footing Landmark */}
       <Footer />
-      
-      {/* Global Context Control Elements */}
       <ScrollToTopButton />
       <StickyCTA />
     </div>
