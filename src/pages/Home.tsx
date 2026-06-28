@@ -48,7 +48,7 @@ const Home = () => {
     en: {
       heroTitle: "Justice. Integrity. Nepal.",
       heroSub: "Bhasya Legal provides premier legal counsel with unwavering dedication to achieving the best outcomes for our clients across Nepal.",
-      heroBtn: "Schedule a Consultation",
+      heroBtn: "Call For Consultation",
       stats: [
         { number: "100+", label: "Cases Won" },
         { number: "2+", label: "Years Experience" },
@@ -153,10 +153,10 @@ const Home = () => {
         .delay-300 { transition-delay: 300ms; }
       `}</style>
 
-      {/* TRUE-CENTERED PREMIUM HERO SECTION */}
+      
       <section className="relative h-screen w-full overflow-hidden bg-[#0A1931] flex items-center justify-center text-center notch-friendly-padding">
         
-        {/* BACKGROUND RENDER SYSTEM */}
+       
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 animate-cinematic-bg will-change-transform"
@@ -165,7 +165,7 @@ const Home = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0A1931]" />
         </div>
 
-        {/* Added top padding to push content slightly lower down the screen */}
+        
         <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8 w-full pt-16 md:pt-24">
           
           {/* HERO HEADLINE ENTRIES */}

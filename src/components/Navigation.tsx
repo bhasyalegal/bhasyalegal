@@ -107,10 +107,10 @@ const Navigation = () => {
       aria-label="Main navigation"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 w-full">
-        <div className="flex items-center justify-between lg:justify-center h-24 md:h-28 relative w-full">
+        <div className="flex items-center justify-start lg:justify-center h-24 md:h-28 relative w-full">
           
-          {/* LOGO LAYER */}
-          <div className="flex-shrink-0 flex items-center lg:absolute lg:left-0 max-w-[70%] sm:max-w-none">
+          {/* LOGO LAYER: Pushed strictly to left edge, tightly bound */}
+          <div className="flex-shrink-0 flex items-center justify-start absolute left-0 z-10">
             {isHomePage && (
               <button
                 onClick={handleLogoRefresh}
@@ -118,7 +118,7 @@ const Navigation = () => {
                 className="relative p-0 m-0 border-0 bg-transparent cursor-pointer focus:outline-none group select-none flex items-center rounded-xl"
                 aria-label="Bhasya Legal - Reset and Go Home"
               >
-                <div className="relative h-20 md:h-24 w-60 sm:w-80 md:w-96 flex items-center justify-start overflow-hidden rounded-lg">
+                <div className="relative h-20 md:h-24 w-44 sm:w-72 md:w-96 flex items-center justify-start overflow-hidden rounded-lg">
                   <img
                     src={Logo}
                     alt="Bhasya Legal Logo"
@@ -201,7 +201,7 @@ const Navigation = () => {
           </div>
 
           {/* MOBILE TRIGGER BUTTON CONTAINER */}
-          <div className="flex lg:hidden items-center justify-end pr-1">
+          <div className="flex lg:hidden items-center justify-end ml-auto pr-1 z-10">
             <Button
               variant="ghost"
               size="icon"
