@@ -195,7 +195,7 @@ const Home = () => {
           {/* Redirection link directly setup to call the dynamic legal number */}
           <div className="pt-2 flex justify-center animate-fade-up-staggered" style={{ animationDelay: "850ms" }}>
             <a
-              href="tel:+9779843722015"
+              href="tel:+9779845047233"
               className="group relative overflow-hidden px-8 py-3.5 sm:px-9 sm:py-4 rounded-xl border-2 border-[#C59B27] text-[#C59B27] bg-black/30 backdrop-blur-[2px] font-bold tracking-widest text-xs uppercase transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#C59B27] focus:ring-offset-2 focus:ring-offset-[#0A1931]
                 hover:text-[#0A1931] hover:bg-[#C59B27] hover:shadow-[0_0_35px_rgba(197,155,39,0.5)]"
             >

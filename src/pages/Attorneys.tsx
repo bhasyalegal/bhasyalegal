@@ -21,9 +21,9 @@ const Attorneys = () => {
         {
           name: "Subin Pandey",
           role: "Advocate & Legal Expert",
-          bio: "Subin Pandey is a highly motivated law practitioner with a Master of Laws (LL.M.) in Criminal and Constitutional Law from National Law College. He has extensive experience litigating civil, criminal, labor, and corporate cases. He has served as a Legal Expert at the Ministry of Federal Affairs and worked with the World Health Organization (WHO) and UNDP on legal reforms and human rights.",
+          bio: "Subin Pandey is a highly motivated law practitioner with a Master of Laws (LL.M.) in Criminal and Constitutional Law from National Law College. He has extensive experience litigating civil, criminal, labor, and corporate cases. He has served as a Legal Expert on government bodies ans INGO's. Currently he is lecturer at Mega Law College. He is full time legal practitioner and has litigated on issues like environment law, consumer law, tort law and wide range of issues like human rights, good governance.",
           education: "LL.M. (Criminal & Constitutional Law), National Law College",
-          experience: "Abhiyan Law Firm, Ministry of Federal Affairs, WHO, UNDP",
+          experience: "Bhasya Legal Law Firm",
           image: SubinPhoto,
         },
         {
@@ -53,9 +53,9 @@ const Attorneys = () => {
         {
           name: "सुबिन पाण्डे",
           role: "अधिवक्ता र कानूनी विशेषज्ञ",
-          bio: "सुबिन पाण्डे एक उच्च उत्प्रेरित कानून व्यवसायी हुन् जसले नेशनल ल कलेजबाट फौजदारी तथा संवैधानिक कानूनमा स्नातकोत्तर (LL.M.) गरेका छन्। उनीसँग नागरिक, फौजदारी, श्रम र कर्पोरेट मुद्दाहरूमा मुद्दा चलाउने व्यापक अनुभव छ। उनले संघीय मामिला मन्त्रालयमा कानुनी विज्ञको रूपमा काम गरेका छन् र विश्व स्वास्थ्य संगठन (WHO) र UNDP सँग कानुनी सुधार र मानव अधिकारमा काम गरेका छन्। ",
+          bio: "सुबिन पाण्डे एक अत्यन्तै उत्साहित कानून व्यवसायी हुन् जसले राष्ट्रिय कानून कलेजबाट फौजदारी तथा संवैधानिक कानूनमा स्नातकोत्तर (LL.M.) गरेका छन्। उहाँसँग देवानी, फौजदारी, श्रम र कर्पोरेट मुद्दाहरूमा मुद्दा चलाउने व्यापक अनुभव छ। उहाँले सरकारी निकाय र अन्तर्राष्ट्रिय गैरसरकारी संस्थाहरूमा कानुनी विज्ञको रूपमा काम गर्नुभएको छ। हाल उहाँ मेगा कानून कलेजमा व्याख्याता हुनुहुन्छ। उहाँ पूर्णकालीन कानून व्यवसायी हुनुहुन्छ र वातावरण कानून, उपभोक्ता कानून, यातना कानून र मानव अधिकार, सुशासन जस्ता विस्तृत मुद्दाहरूमा मुद्दा चलाउनुभएको छ।",
           education: "एलएल.एम. (आपराधिक र संवैधानिक कानून), राष्ट्रिय कानून कलेज",
-          experience: "अभियान ल फर्म, संघीय मामिला मन्त्रालय, WHO, UNDP",
+          experience: "भास्य कानूनी कानून फर्म",
           image: SubinPhoto,
         },
         {
@@ -63,7 +63,7 @@ const Attorneys = () => {
           role: "अधिवक्ता र कानूनी सहयोगी",
           bio: "सरना शाही काठमाडौँ स्कूल अफ लबाट BALLB गरेकी एक समयनिष्ठ, विवरण-उन्मुख अधिवक्ता हुन्। उनीसँग वास्या लिगल ल फर्ममा कानुनी सहयोगीको रूपमा मुद्दा तयारी, ग्राहक परामर्श र अदालतको कार्यवाही ह्यान्डल गर्ने अनुभव छ। उनले SANN इन्टरनेशनल कलेजमा BALLB संयोजकको रूपमा पनि काम गरिन्, मुट कोर्ट र कानुनी अनुसन्धानमा विद्यार्थीहरूलाई मार्गदर्शन गरिन्।",
           education: "BALLB, काठमाडौं स्कूल अफ ल, पूर्वाञ्चल विश्वविद्यालय",
-          experience: "भास्य कानून फर्म, SANN इन्टरनेशनल कलेज",
+          experience: "भास्य कानूनी कानून फर्म, SANN इन्टरनेशनल कलेज",
           image: SaranaPhoto,
         },
         {
