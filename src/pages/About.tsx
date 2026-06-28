@@ -141,7 +141,7 @@ const About = () => {
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px]" />
         <div className="absolute bottom-[10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-[#1b0738]/10 blur-[120px]" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
+        <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03]" />
       </div>
 
       <div className="relative z-10 container mx-auto px-6">
