@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,16 +17,101 @@ const PRACTICE_GROUPS = [
   { id: "property", icon: Landmark, titleEn: "Property & Real Estate", titleNp: "सम्पत्ति र रियल इस्टेट", descEn: "Title, transfer, and disputes — protecting what matters most.", descNp: "टाइटल, स्थानान्तरण र विवाद — महत्त्वपूर्ण कुराको संरक्षण।" },
 ];
 
+const STAT_ICONS = [Users, Award, Clock];
+
+const DEVANAGARI_DIGITS = "०१२३४५६७८९";
+
+function toLocaleDigits(n: number, useDevanagari: boolean): string {
+  const s = Math.max(0, Math.round(n)).toString();
+  return useDevanagari ? s.replace(/[0-9]/g, (d) => DEVANAGARI_DIGITS[Number(d)]) : s;
+}
+
+function parseStatValue(value: string): {
+  prefix: string;
+  target: number | null;
+  suffix: string;
+  useDevanagari: boolean;
+} {
+  if (value.includes("/")) {
+    return { prefix: "", target: null, suffix: value, useDevanagari: false };
+  }
+
+  const match = value.match(/^([^\d०-९]*)([\d०-९]+)(.*)$/);
+  if (!match) return { prefix: "", target: null, suffix: value, useDevanagari: false };
+  const [, prefix, digits, suffix] = match;
+  const useDevanagari = DEVANAGARI_DIGITS.includes(digits[0]);
+  const normalized = useDevanagari
+    ? digits.replace(/[०-९]/g, (d) => String(DEVANAGARI_DIGITS.indexOf(d)))
+    : digits;
+  return { prefix, target: parseInt(normalized, 10), suffix, useDevanagari };
+}
+
+function AnimatedStatNumber({ value, start }: { value: string; start: boolean }) {
+  const initial = parseStatValue(value);
+  const [display, setDisplay] = useState(
+    initial.target === null ? value : `${initial.prefix}${toLocaleDigits(0, initial.useDevanagari)}${initial.suffix}`
+  );
+
+  useEffect(() => {
+    if (!start) return;
+
+    const { prefix, target, suffix, useDevanagari } = parseStatValue(value);
+    if (target === null) {
+      setDisplay(value);
+      return;
+    }
+
+    const reduceMotion =
+      typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+      setDisplay(value);
+      return;
+    }
+
+    const counter = { n: 0 };
+    const tween = gsap.to(counter, {
+      n: target,
+      duration: 1.6,
+      ease: "power2.out",
+      onUpdate: () => setDisplay(`${prefix}${toLocaleDigits(counter.n, useDevanagari)}${suffix}`),
+    });
+
+    return () => {
+      tween.kill();
+    };
+  }, [start, value]);
+
+  return <>{display}</>;
+}
+
 const Home = () => {
   const { language } = useLanguage();
 
-  // ---- Hero entrance refs (DOM-side GSAP timeline) ----
-  const heroRef = useRef<HTMLElement>(null);
-  const kickerRef = useRef<HTMLSpanElement>(null);
+  const textColumnRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const ruleRef = useRef<HTMLDivElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
   const buttonsRef = useRef<HTMLDivElement>(null);
+
+  const statsRef = useRef<HTMLDivElement>(null);
+  const [statsVisible, setStatsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!statsRef.current) return;
+    const statsObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setStatsVisible(true);
+            statsObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { root: null, rootMargin: "0px", threshold: 0.3 }
+    );
+    statsObserver.observe(statsRef.current);
+    return () => statsObserver.disconnect();
+  }, []);
 
   useEffect(() => {
     const observerOptions = { root: null, rootMargin: "0px", threshold: 0.12 };
@@ -47,46 +132,34 @@ const Home = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // Hero entrance: fades/rises the real DOM text in, timed to roughly
-    // overlap with the 3D statue's own rise-and-rotate (which the canvas
-    // component animates itself — see LadyJusticeStatue3D.tsx). Keeping
-    // these on separate GSAP timelines avoids a fragile cross-component
-    // ref bridge; both start on mount so they read as one sequence.
+  useLayoutEffect(() => {
     if (!headingRef.current) return;
+    const headingSpan = headingRef.current.querySelector("span");
+    const buttonElements = buttonsRef.current ? Array.from(buttonsRef.current.children) : [];
 
-    // Split the heading into per-line spans so it can appear line by line.
-    const headingEl = headingRef.current;
-    const originalText = headingEl.textContent ?? "";
-    headingEl.textContent = "";
-    const lineSpan = document.createElement("span");
-    lineSpan.textContent = originalText;
-    lineSpan.style.display = "inline-block";
-    headingEl.appendChild(lineSpan);
-
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-    tl.set(heroRef.current, { autoAlpha: 0 })
-      .to(heroRef.current, { autoAlpha: 1, duration: 0.5 })
-      .from(kickerRef.current, { y: 14, autoAlpha: 0, duration: 0.6 }, 0.1)
-      .from(lineSpan, { y: 24, autoAlpha: 0, duration: 0.7 }, 0.25)
-      .from(ruleRef.current, { scaleX: 0, transformOrigin: "left center", duration: 0.5 }, 0.55)
-      .from(subRef.current, { y: 16, autoAlpha: 0, duration: 0.6 }, 0.65)
-      .from(
-        buttonsRef.current ? Array.from(buttonsRef.current.children) : [],
-        { y: 22, autoAlpha: 0, duration: 0.6, stagger: 0.12 },
-        0.85
-      );
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      tl.set(textColumnRef.current, { autoAlpha: 0 })
+        .to(textColumnRef.current, { autoAlpha: 1, duration: 0.5 })
+        .fromTo(headingSpan, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7 }, 0.15)
+        .fromTo(ruleRef.current, { scaleX: 0 }, { scaleX: 1, transformOrigin: "left center", duration: 0.5 }, 0.4)
+        .fromTo(subRef.current, { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.6 }, 0.5)
+        .fromTo(
+          buttonElements,
+          { y: 22, autoAlpha: 0 },
+          { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.12, clearProps: "all" },
+          0.7
+        );
+    });
 
     return () => {
-      tl.kill();
+      ctx.revert();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language]);
 
   const content = {
     en: {
       firmName: "Bhasya Legal",
-      heroKicker: "Advocates & Legal Counsellors ·",
       heroSub: "Premier legal counsel with unwavering dedication to achieving the best outcomes for our clients across Nepal.",
       heroBtn: "Call For Consultation",
       heroBtnSecondary: "Explore Our Services",
@@ -107,7 +180,6 @@ const Home = () => {
     },
     np: {
       firmName: "भास्य कानून",
-      heroKicker: "अधिवक्ता तथा कानूनी परामर्शदाता · नेपाल",
       heroSub: "नेपालभरका हाम्रा ग्राहकहरूका लागि उत्तम परिणामहरू प्राप्त गर्न अटल समर्पणका साथ उत्कृष्ट कानूनी परामर्श।",
       heroBtn: "परामर्शको लागि कल गर्नुहोस्",
       heroBtnSecondary: "हाम्रा सेवाहरू हेर्नुहोस्",
@@ -118,7 +190,7 @@ const Home = () => {
       ],
       whoWeAreTitle: "हामी को हौं",
       whoWeAreHeading: "सार्वभौमिक न्यायप्रति समर्पित",
-      whoWeAreP1: "भास्य कानून नेपालको एक प्रमुख कानून फर्म हो, जो अखण्डता र व्यावसायिकताका साथ असाधारण कानूनी सेवाहरू प्रदान गर्न प्रतिबद्ध छ। हाम्रो अनुभवी अधिवक्ताहरूको टोलीले धेरै अभ्यास क्षेत्रहरूमा दशकौंको संयुक्त विशेषज्ञता ल्याउँछ।",
+      whoWeAreP1: "भास्य कानून नेपालको एक प्रमुख फर्म हो, जो अखण्डता र व्यावसायिकताका साथ असाधारण कानूनी सेवाहरू प्रदान गर्न प्रतिबद्ध छ। हाम्रो अनुभवी अधिवक्ताहरूको टोलीले धेरै अभ्यास क्षेत्रहरूमा दशकौंको संयुक्त विशेषज्ञता ल्याउँछ।",
       whoWeAreP2: "हामी पहुँचयोग्य न्याय र व्यक्तिगत ध्यानमा विश्वास गर्छौं। प्रत्येक ग्राहकले आफ्नो अद्वितीय परिस्थिति अनुसार समर्पित परामर्श प्राप्त गर्दछ। चाहे तपाईं जटिल कर्पोरेट मामिला वा व्यक्तिगत कानूनी मुद्दाको सामना गर्दै हुनुहुन्छ, भास्य कानून तपाईंको साथमा छ।",
       practiceTitle: "हाम्रा सेवा क्षेत्रहरू",
       practiceHeading: "कानूनी सक्षमताका क्षेत्रहरू",
@@ -132,8 +204,35 @@ const Home = () => {
 
   return (
     <div className="w-full max-w-full overflow-x-hidden min-h-screen">
-
       <style>{`
+        .hero-theme-vars {
+          --hero-bg: linear-gradient(to bottom, #FAF8F3 0%, #F3EFE7 50%, #ECE6DB 100%);
+          --hero-heading: #0F172A;
+          --hero-sub-text: #1E293B;
+          --hero-accent: #C59B27;
+          --hero-accent-line: #B8860B;
+          --hero-overlay: transparent;
+          --hero-overlay-xl: linear-gradient(to right, #FAF8F3 0%, rgba(250,248,243,0.45) 45%, transparent 80%);
+          --hero-stat-band-bg: linear-gradient(to bottom, #F7F5F0 0%, #FFFFFF 100%);
+          --hero-stat-card-bg: rgba(255, 255, 255, 0.7);
+          --hero-stat-border: rgba(197, 155, 39, 0.3);
+          --hero-stat-shadow: 0 20px 50px -18px rgba(15, 23, 42, 0.12);
+        }
+        .dark .hero-theme-vars {
+          --hero-bg: linear-gradient(to bottom, #050A14 0%, #09101D 50%, #0D1626 100%);
+          --hero-heading: #FFFFFF;
+          --hero-sub-text: #F1F5F9;
+          --hero-accent-line: #C59B27;
+          --hero-overlay: transparent;
+          --hero-overlay-xl: linear-gradient(to right, #050a14 0%, rgba(5,10,20,0.7) 50%, transparent 100%);
+          --hero-stat-band-bg: linear-gradient(to bottom, #0A1931 0%, #0F2347 100%);
+          --hero-stat-card-bg: rgba(255, 255, 255, 0.04);
+          --hero-stat-shadow: none;
+        }
+        .hero-theme-vars ::selection {
+          background: var(--hero-accent);
+          color: var(--hero-heading);
+        }
         html, body {
           max-width: 100% !important;
           overflow-x: hidden !important;
@@ -142,6 +241,30 @@ const Home = () => {
         .notch-friendly-padding {
           padding-left: max(1.5rem, env(safe-area-inset-left));
           padding-right: max(1.5rem, env(safe-area-inset-right));
+        }
+        .hero-notch-top {
+          padding-top: env(safe-area-inset-top);
+        }
+        .full-bleed-viewport {
+          height: 100vh;
+          height: 100svh;
+          height: 100dvh;
+        }
+        .hero-text-column {
+          padding-top: 5rem;
+          padding-bottom: 5rem;
+          max-height: 100vh;
+          max-height: 100svh;
+          max-height: 100dvh;
+          overflow-y: auto;
+          scrollbar-width: none;      
+          -ms-overflow-style: none;
+        }
+        .hero-text-column::-webkit-scrollbar {
+          display: none;
+        }
+        @media (min-width: 1280px) {
+          .hero-text-column { padding-top: 0; padding-bottom: 0; }
         }
         .reveal-on-scroll {
           opacity: 0;
@@ -154,101 +277,129 @@ const Home = () => {
           opacity: 1;
           transform: translateY(0);
         }
+        .stat-card {
+          transform: translateY(20px) scale(0.94);
+        }
+        .stat-card.reveal-active {
+          transform: translateY(0) scale(1);
+        }
         .delay-100 { transition-delay: 80ms; }
         .delay-200 { transition-delay: 160ms; }
         .delay-300 { transition-delay: 240ms; }
+        @keyframes cta-pulse-glow {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(197, 155, 39, 0.45); }
+          50% { box-shadow: 0 0 0 10px rgba(197, 155, 39, 0); }
+        }
+        .cta-pulse {
+          animation: cta-pulse-glow 2.4s ease-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .cta-pulse { animation: none; }
+          .reveal-on-scroll, .stat-card {
+            transition-duration: 0.01ms !important;
+          }
+        }
       `}</style>
 
-      {/* ============ HERO ============ */}
-      <section
-        ref={heroRef}
-        className="relative min-h-[100svh] w-full overflow-hidden bg-gradient-to-b from-[#050a14] to-[#0d1626] flex items-stretch notch-friendly-padding"
-      >
-        {/*
-          60/40 split via CSS grid, not 3D-space math:
-          - lg+: two explicit columns, text left / statue right.
-          - below lg: single column, statue becomes a background layer
-            behind the (centered) text, matching the old absolute-fill look.
-        */}
-        <div className="relative z-10 w-full grid grid-cols-1 lg:grid-cols-[40%_60%] items-center">
-
-          {/* Left 40% — text & CTAs, exclusively */}
-          <div className="relative z-10 max-w-2xl mx-auto lg:mx-0 py-24 lg:py-0 text-center lg:text-left">
-            <span
-              ref={kickerRef}
-              className="inline-block text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase text-[#C59B27]"
-            >
-              {c.heroKicker}
-            </span>
-
+      {/* Hero Section */}
+      <section className="hero-theme-vars relative full-bleed-viewport hero-notch-top w-full overflow-hidden bg-[image:var(--hero-bg)] flex items-stretch notch-friendly-padding">
+        <div className="relative z-10 w-full grid grid-cols-1 xl:grid-cols-[40%_60%] items-center pointer-events-none">
+          <div
+            ref={textColumnRef}
+            className="hero-text-column relative z-10 max-w-2xl mx-auto xl:mx-0 text-center xl:text-left flex flex-col justify-center"
+          >
             <h1
               ref={headingRef}
-              className="mt-5 text-5xl sm:text-6xl md:text-7xl font-serif font-bold tracking-tight text-white leading-[1.05]"
+              className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold tracking-tight text-[color:var(--hero-heading)] leading-[1.08]"
             >
-              {c.firmName}
+              <span className="inline-block">
+                {language === "en" ? (
+                  <>
+                    <span style={{ color: "#C59B27" }}>B</span>hasya{" "}
+                    <span style={{ color: "#C59B27" }}>L</span>egal
+                  </>
+                ) : (
+                  <>
+                    <span style={{ color: "#C59B27" }}>भा</span>स्य{" "}
+                    <span style={{ color: "#C59B27" }}>का</span>नून
+                  </>
+                )}
+              </span>
             </h1>
 
-            <div ref={ruleRef} className="mt-6 h-px w-16 bg-[#C59B27] mx-auto lg:mx-0" />
+            <div ref={ruleRef} className="mt-5 h-px w-16 bg-[color:var(--hero-accent-line)] mx-auto xl:mx-0" />
 
             <p
               ref={subRef}
-              className="mt-6 text-base sm:text-lg text-neutral-200 font-light leading-relaxed max-w-xl mx-auto lg:mx-0"
+              className="mt-5 text-sm sm:text-base text-[color:var(--hero-sub-text)] font-semibold leading-relaxed max-w-xl mx-auto xl:mx-0 drop-shadow-sm"
             >
               {c.heroSub}
             </p>
 
-            <div ref={buttonsRef} className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <div ref={buttonsRef} className="mt-8 flex flex-col sm:flex-row gap-3.5 justify-center xl:justify-start pointer-events-auto">
               <a
                 href="tel:+9779845047233"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-md bg-[#C59B27] text-[#12213C] font-semibold tracking-wide text-sm transition-colors hover:bg-[#D4AF37]"
+                className="cta-pulse group relative inline-flex items-center justify-center gap-2 px-7 py-3 rounded-md bg-[#1B0738] text-white font-semibold tracking-wide text-xs sm:text-sm transition-all duration-300 hover:bg-[#100421] hover:scale-[1.04] active:scale-95 shadow-md dark:bg-[#1B0738] dark:hover:bg-[#100421] dark:text-white"
               >
                 {c.heroBtn}
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
 
               <Link
                 to="/services"
-                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-md border border-white/25 text-white font-semibold tracking-wide text-sm transition-colors hover:border-white/60"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-md border bg-white border-[#1B0738] text-[#1B0738] font-semibold tracking-wide text-xs sm:text-sm transition-colors hover:bg-gray-50 dark:bg-transparent dark:border-white/25 dark:text-white dark:hover:border-white/60"
               >
                 {c.heroBtnSecondary}
               </Link>
             </div>
           </div>
 
-          {/* Right 60% — the statue, on its own reflective marble stage.
-              On mobile/tablet this column collapses and the statue instead
-              sits as a full-bleed background behind the text column above
-              (see the absolute layer below). */}
-          <div className="hidden lg:block relative h-full min-h-[100svh]">
+          <div className="hidden xl:block relative h-full min-h-[100svh] pointer-events-auto">
             <LadyJusticeStatue3D className="absolute inset-0 w-full h-full" />
           </div>
         </div>
 
-        {/* Mobile/tablet: statue as a full-bleed background layer */}
-        <div className="lg:hidden absolute inset-0 z-0">
-          <LadyJusticeStatue3D className="w-full h-full" />
+        <div className="xl:hidden absolute inset-0 z-0">
+          <LadyJusticeStatue3D className="w-full h-full pointer-events-auto" />
         </div>
 
-        {/* Legibility scrim — heavier on mobile (statue behind text), lighter
-            on desktop (statue has its own 60% column so needs less fading) */}
-        <div className="absolute inset-0 z-[5] pointer-events-none bg-gradient-to-b from-[#050a14]/80 via-[#050a14]/55 to-[#050a14]/80 lg:bg-gradient-to-r lg:from-[#050a14] lg:via-[#050a14]/70 lg:to-transparent" />
+        <div className="absolute inset-0 z-[5] pointer-events-none xl:bg-[image:var(--hero-overlay-xl)]" />
       </section>
 
-      {/* Stats Section */}
-      <section className="py-12 bg-white dark:bg-[#0A1931] border-b border-gray-100 dark:border-white/5 notch-friendly-padding">
-        <div className="max-w-7xl mx-auto reveal-on-scroll">
-          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-white/10">
-            {c.stats.map((stat, index) => (
-              <div key={index} className="flex flex-col items-center text-center py-6 sm:py-0 space-y-1.5">
-                <div className="flex items-center gap-2 text-[#C59B27]">
-                  {index === 0 && <Users className="w-4 h-4" />}
-                  {index === 1 && <Award className="w-4 h-4" />}
-                  {index === 2 && <Clock className="w-4 h-4" />}
-                  <h3 className="text-3xl font-serif font-bold text-[#1B365D] dark:text-white">{stat.number}</h3>
+      {/* Stats Band */}
+      <section
+        ref={statsRef}
+        className="hero-theme-vars relative overflow-hidden py-14 sm:py-16 bg-[image:var(--hero-stat-band-bg)] notch-friendly-padding"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-[0.15]"
+          style={{ background: "radial-gradient(60% 90% at 50% 0%, #C59B27 0%, transparent 70%)" }}
+        />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C59B27]/70 to-transparent" />
+
+        <div className="max-w-7xl mx-auto relative">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+            {c.stats.map((stat, index) => {
+              const delays = ["", "delay-100", "delay-200"];
+              const Icon = STAT_ICONS[index];
+              return (
+                <div
+                  key={index}
+                  className={`reveal-on-scroll stat-card group flex flex-col items-center text-center py-8 px-4 space-y-3 rounded-2xl border bg-[color:var(--hero-stat-card-bg)] border-[color:var(--hero-stat-border)] shadow-[var(--hero-stat-shadow)] backdrop-blur-sm transition-colors duration-300 ${delays[index]}`}
+                >
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#C59B27]/10 border border-[#C59B27]/30 text-[#C59B27] transition-colors duration-300 group-hover:bg-[#C59B27]/20">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-4xl sm:text-5xl font-serif font-bold text-[color:var(--hero-heading)] tabular-nums">
+                    <AnimatedStatNumber value={stat.number} start={statsVisible} />
+                  </h3>
+                  <p className="text-[color:var(--hero-accent)] font-semibold tracking-widest text-xs uppercase">
+                    {stat.label}
+                  </p>
                 </div>
-                <p className="text-gray-500 dark:text-gray-400 font-medium tracking-wide text-xs uppercase">{stat.label}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -260,7 +411,6 @@ const Home = () => {
       >
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
             <div className="space-y-6 reveal-on-scroll">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-px bg-[#C59B27]" />
@@ -284,7 +434,6 @@ const Home = () => {
                 className="rounded-lg w-full h-auto object-cover border border-gray-100 dark:border-white/10"
               />
             </div>
-
           </div>
         </div>
       </section>
@@ -295,7 +444,6 @@ const Home = () => {
         className="py-24 relative notch-friendly-padding bg-[#F7F5F0] dark:bg-[#081527] border-t border-gray-100 dark:border-white/5"
       >
         <div className="max-w-7xl mx-auto">
-
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-4 reveal-on-scroll">
             <span className="text-[#C59B27] font-semibold tracking-widest text-xs uppercase">{c.practiceTitle}</span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#1B365D] dark:text-white">
@@ -342,7 +490,7 @@ const Home = () => {
             <Button
               asChild
               size="lg"
-              className="bg-[#1B365D] hover:bg-[#13294B] dark:bg-[#C59B27] dark:hover:bg-[#b89327] text-white dark:text-[#1B365D] font-semibold px-9 py-6 text-sm rounded-md shadow-none"
+              className="bg-[#1B0738] hover:bg-[#100421] dark:bg-[#1B0738] dark:hover:bg-[#100421] text-white dark:text-white font-semibold px-9 py-6 text-sm rounded-md shadow-none"
             >
               <Link to="/services">{c.viewAllBtn}</Link>
             </Button>

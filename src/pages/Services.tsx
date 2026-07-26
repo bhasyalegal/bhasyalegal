@@ -110,7 +110,7 @@ const Services = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0f051d] transition-colors duration-300 relative">
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300 relative">
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-[#1b0738]/10 blur-[120px]" />

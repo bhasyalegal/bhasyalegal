@@ -135,7 +135,7 @@ const About = () => {
   const c = language === "en" ? content.en : content.np;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0f051d] py-20 transition-colors duration-300 relative">
+    <div className="min-h-screen bg-white dark:bg-gray-900 py-20 transition-colors duration-300 relative">
       
       {/* Background Aura Elements */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
