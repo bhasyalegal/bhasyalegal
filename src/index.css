@@ -1,0 +1,310 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   PHASE 1: ENHANCED PREMIUM DESIGN SYSTEM
+   Royal Blue & Golden Theme - Deep Matte Linen Upgrade
+   ============================================ */
+
+@layer base {
+  :root {
+    /* Ivory — warm, quiet-luxury base. Never stark white. */
+    --background: 42 42% 95%;
+
+    /* Primary text: deep charcoal-navy, not pure black */
+    --foreground: 221 38% 15%;
+
+    /* Cards sit one step lighter than the ivory background, on Warm White */
+    --card: 45 40% 98%;
+    --card-foreground: 221 38% 15%;
+
+    --popover: 45 40% 98%;
+    --popover-foreground: 221 38% 15%;
+
+    --primary: 214 68% 14%; /* Royal Blue #0B1F3A */
+    --primary-foreground: 45 40% 98%;
+
+    --secondary: 46 68% 47%; /* Rich Gold #C9A227 */
+    --secondary-foreground: 214 68% 14%;
+
+    --muted: 40 25% 91%;
+    --muted-foreground: 221 13% 46%; /* #667085 */
+
+    --accent: 45 55% 92%;
+    --accent-foreground: 214 68% 14%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 40 29% 86%; /* #E5DED0 */
+    --input: 40 29% 86%;
+    --ring: 46 68% 47%;
+
+    --radius: 0.45rem;
+
+    --sidebar-background: 42 35% 92%;
+    --sidebar-foreground: 214 68% 18%;
+    --sidebar-primary: 214 68% 14%;
+    --sidebar-primary-foreground: 45 40% 98%;
+    --sidebar-accent: 45 55% 90%;
+    --sidebar-accent-foreground: 214 68% 14%;
+    --sidebar-border: 40 29% 84%;
+    --sidebar-ring: 46 68% 47%;
+  }
+
+  .dark {
+    /* Deep royal mode: same Royal Blue + Gold + Ivory brand, inverted emphasis */
+    --background: 214 68% 14%; /* Royal Blue #0B1F3A */
+    --foreground: 42 42% 95%; /* Ivory */
+
+    --card: 213 64% 18%; /* one step lighter than page bg, for depth */
+    --card-foreground: 42 42% 95%;
+
+    --popover: 213 64% 18%;
+    --popover-foreground: 42 42% 95%;
+
+    --primary: 46 68% 47%; /* Gold reads best as the accent on a dark navy field */
+    --primary-foreground: 214 68% 14%;
+
+    --secondary: 212 64% 24%; /* Secondary Blue #163A63 */
+    --secondary-foreground: 42 42% 95%;
+
+    --muted: 213 45% 20%;
+    --muted-foreground: 42 15% 72%;
+
+    --accent: 213 45% 22%;
+    --accent-foreground: 42 42% 95%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 213 35% 25%;
+    --input: 213 35% 25%;
+    --ring: 46 68% 47%;
+
+    --sidebar-background: 216 71% 10%; /* Deep Royal Blue #07152A */
+    --sidebar-foreground: 42 30% 90%;
+    --sidebar-primary: 46 68% 47%;
+    --sidebar-primary-foreground: 214 68% 14%;
+    --sidebar-accent: 213 45% 18%;
+    --sidebar-accent-foreground: 42 42% 95%;
+    --sidebar-border: 213 35% 20%;
+    --sidebar-ring: 46 68% 47%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply text-foreground;
+    background-color: hsl(42, 42%, 95%);
+
+    /* Quiet ambient wash — gold and royal blue bleeding faintly across the ivory canvas */
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(201, 162, 39, 0.06) 0px, transparent 60%),
+      radial-gradient(at 100% 0%, rgba(11, 31, 58, 0.05) 0px, transparent 60%),
+      radial-gradient(at 50% 100%, rgba(201, 162, 39, 0.04) 0px, transparent 70%);
+    overflow-y: scroll;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .dark body {
+    background-color: hsl(214, 68%, 14%);
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(201, 162, 39, 0.05) 0px, transparent 40%),
+      radial-gradient(at 100% 100%, rgba(7, 21, 42, 0.4) 0px, transparent 50%);
+  }
+}
+
+@layer base {
+  html {
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+  }
+}
+
+/* ============================================
+   ENHANCED TRANSITIONS & ANIMATIONS
+   ============================================ */
+
+* {
+  transition-property: background-color, border-color, color, fill, stroke, transform, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 250ms;
+}
+
+button, a, [role="button"] {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:focus-visible {
+  outline: 2px solid #C9A227;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+::selection {
+  background-color: #C9A227;
+  color: #0B1F3A;
+}
+
+/* ============================================
+   SCROLLBAR TREATMENT
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(42, 30%, 90%);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #07152A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C9A227;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A8871F;
+}
+
+/* ============================================
+   UTILITY CLASSES & INTERACTIVE TOKENS
+   ============================================ */
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.shadow-elegant {
+  box-shadow: 0 4px 18px -2px rgba(7, 21, 42, 0.06),
+              0 2px 8px -1px rgba(7, 21, 42, 0.03);
+}
+
+.shadow-elegant-lg {
+  box-shadow: 0 10px 28px -4px rgba(7, 21, 42, 0.08),
+              0 4px 12px -2px rgba(7, 21, 42, 0.04);
+}
+
+.shadow-elegant-xl {
+  box-shadow: 0 20px 44px -10px rgba(7, 21, 42, 0.1),
+              0 8px 20px -6px rgba(7, 21, 42, 0.05);
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #DDBF63 0%, #C9A227 50%, #DDBF63 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient-royal {
+  background: linear-gradient(135deg, #07152A 0%, #0B1F3A 55%, #163A63 100%);
+}
+
+/* Recurring visual signature: thin gold rule + small diamond mark (see design spec §10) */
+.gold-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+}
+
+.gold-divider::before,
+.gold-divider::after {
+  content: '';
+  height: 1px;
+  width: 2.5rem;
+  background: #C9A227;
+  opacity: 0.55;
+}
+
+.gold-divider-mark {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  transform: rotate(45deg);
+  background: #C9A227;
+  flex-shrink: 0;
+}
+
+/* PREMIUM SURFACE — solid, restrained. No blur, no translucency. */
+.card-premium {
+  background: #FCFBF8;
+  border: 1px solid #E5DED0;
+  border-radius: 0.6rem;
+  box-shadow: 0 8px 30px rgba(7, 21, 42, 0.06);
+}
+
+.card-premium:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px rgba(7, 21, 42, 0.1);
+  border-color: rgba(201, 162, 39, 0.45);
+}
+
+.dark .card-premium {
+  background: #102A4A;
+  border: 1px solid rgba(201, 162, 39, 0.16);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+.dark .card-premium:hover {
+  border-color: rgba(201, 162, 39, 0.4);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

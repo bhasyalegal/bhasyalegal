@@ -1,0 +1,175 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import { Mail, Phone, MapPin, Clock, ShieldCheck } from "lucide-react";
+import LogoLight from "../img/logo-light.webp";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+const Footer = () => {
+  const { language } = useLanguage();
+
+  const content = {
+    en: {
+      companyDesc: "Providing exceptional legal counsel with integrity, dedication, and results-driven advocacy for clients across Nepal.",
+      quickLinks: "Quick Links",
+      practiceAreas: "Practice Areas",
+      contactInfo: "Contact Info",
+      address: "Babarmahal, Kathmandu, Nepal",
+      phone: "+977 9845047233",
+      email: "bhasyalegal@gmail.com",
+      hours: "Mon–Fri: 9:00 AM – 6:00 PM",
+      hoursSat: "Sat: 10:00 AM – 2:00 PM",
+      emergency: "Emergency: 24/7 Support",
+      copyright: "All rights reserved.",
+    },
+    np: {
+      companyDesc: "नेपालभरका ग्राहकहरूको लागि अखण्डता, समर्पण, र परिणाम-संचालित वकालतको साथ उत्कृष्ट कानूनी परामर्श प्रदान गर्दै।",
+      quickLinks: "द्रुत लिङ्कहरू",
+      practiceAreas: "सेवा क्षेत्रहरू",
+      contactInfo: "सम्पर्क जानकारी",
+      address: "बाबरमहल, काठमाडौं, नेपाल",
+      phone: "+९७७ ९८४५०४७२३३",
+      email: "bhasyalegal@gmail.com",
+      hours: "सोम–शुक्र: बिहान ९ – साँझ ६",
+      hoursSat: "शनि: बिहान १० – दिउँसो २",
+      emergency: "आपत्कालीन: २४/७ सहायता",
+      copyright: "सबै अधिकार सुरक्षित।",
+    },
+  };
+
+  const c = language === "en" ? content.en : content.np;
+  const t = (en: string, np: string) => (language === "en" ? en : np);
+
+  const quickLinks = [
+    { nameEn: "About Us", nameNp: "हाम्रो बारेमा", path: "/about" },
+    { nameEn: "Services", nameNp: "सेवाहरू", path: "/services" },
+    { nameEn: "Attorneys", nameNp: "कानून व्यवसायी", path: "/attorneys" },
+    { nameEn: "Blog", nameNp: "ब्लग", path: "/blog" },
+    { nameEn: "Contact", nameNp: "सम्पर्क", path: "/contact" },
+  ];
+
+  // Aligned with the 6 practice groups used on the homepage and /services page
+  // (src/pages/Services.tsx -> practiceGroups) so labels and anchors match everywhere.
+  const practiceAreas = [
+    { slug: "group-civil", nameEn: "Civil Litigation", nameNp: "दिवानी मुद्दा" },
+    { slug: "group-consumer", nameEn: "Consumer Protection", nameNp: "उपभोक्ता संरक्षण" },
+    { slug: "group-corporate", nameEn: "Corporate & Commercial", nameNp: "कर्पोरेट र व्यावसायिक" },
+    { slug: "group-criminal", nameEn: "Criminal Defense", nameNp: "आपराधिक प्रतिरक्षा" },
+    { slug: "group-family", nameEn: "Family & Matrimonial", nameNp: "पारिवारिक र वैवाहिक" },
+    { slug: "group-property", nameEn: "Property & Real Estate", nameNp: "सम्पत्ति र रियल इस्टेट" },
+  ];
+
+  return (
+    <footer className="text-gray-300 border-t border-white/5 relative z-30" style={{ backgroundColor: "#07152A" }}>
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+
+          {/* Company Branding Profile */}
+          <div className="space-y-6">
+            <img
+              src={LogoLight}
+              width={180}
+              alt="Bhasya Legal Logo"
+              className="drop-shadow-sm brightness-105"
+              loading="lazy"
+            />
+            <div className="flex items-center gap-3">
+              <span className="w-8 h-px bg-[#C9A227]/50" />
+              <span className="w-1.5 h-1.5 rotate-45 bg-[#C9A227]/50 inline-block" />
+            </div>
+            <p className="text-sm md:text-base text-gray-400 leading-relaxed font-light">
+              {c.companyDesc}
+            </p>
+          </div>
+
+          {/* Quick Links Map */}
+          <div className="space-y-6">
+            <h4 className="text-lg font-serif font-bold text-[#C9A227] tracking-wider uppercase text-sm">
+              {c.quickLinks}
+            </h4>
+            <ul className="space-y-3" role="navigation" aria-label="Footer Quick Links">
+              {quickLinks.map((link) => (
+                <li key={link.path}>
+                  <Link
+                    to={link.path}
+                    className="inline-block text-gray-400 hover:text-[#C9A227] transform hover:translate-x-1 text-[15px] transition-all duration-200"
+                  >
+                    {t(link.nameEn, link.nameNp)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Core Practice Fields */}
+          <div className="space-y-6">
+            <h4 className="text-lg font-serif font-bold text-[#C9A227] tracking-wider uppercase text-sm">
+              {c.practiceAreas}
+            </h4>
+            <ul className="space-y-3" role="navigation" aria-label="Footer Practice Disciplines">
+              {practiceAreas.map((area) => (
+                <li key={area.slug}>
+                  <Link
+                    to={`/services#${area.slug}`}
+                    className="inline-block text-gray-400 hover:text-[#C9A227] transform hover:translate-x-1 text-[15px] transition-all duration-200"
+                  >
+                    {t(area.nameEn, area.nameNp)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Organized Contact Channels */}
+          <div className="space-y-6">
+            <h4 className="text-lg font-serif font-bold text-[#C9A227] tracking-wider uppercase text-sm">
+              {c.contactInfo}
+            </h4>
+            <div className="space-y-4 text-[15px]">
+
+              <div className="flex items-start space-x-3 group">
+                <MapPin className="w-5 h-5 text-[#C9A227] mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <span className="text-gray-400 leading-relaxed">{c.address}</span>
+              </div>
+
+              <div className="flex items-center space-x-3 group">
+                <Phone className="w-5 h-5 text-[#C9A227] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <a href="tel:+9779845047233" className="text-gray-400 hover:text-[#C9A227] transition-colors">{c.phone}</a>
+              </div>
+
+              <div className="flex items-center space-x-3 group">
+                <Mail className="w-5 h-5 text-[#C9A227] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <a href={`mailto:${c.email}`} className="text-gray-400 hover:text-[#C9A227] transition-colors break-all">{c.email}</a>
+              </div>
+
+              <div className="flex items-start space-x-3 pt-2 border-t border-white/5">
+                <Clock className="w-5 h-5 text-[#C9A227] mt-0.5 flex-shrink-0" />
+                <div className="text-gray-400 text-sm space-y-1 font-light">
+                  <p>{c.hours}</p>
+                  <p>{c.hoursSat}</p>
+                  <div className="flex items-center space-x-1.5 text-[#C9A227] font-semibold mt-2 tracking-wide text-xs uppercase bg-[#C9A227]/10 px-2.5 py-1 rounded-md border border-[#C9A227]/20 w-fit">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    <span>{c.emergency}</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* Global Structural Copyright Frame */}
+        <div className="border-t border-white/10 mt-16 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-gray-500 text-sm text-center sm:text-left tracking-wide">
+            © {new Date().getFullYear()} Bhasya Legal. {c.copyright}
+          </p>
+          <div className="flex space-x-6 text-xs text-gray-500 font-light">
+            <a href="#privacy" className="hover:text-[#C9A227] transition-colors">Privacy Policy</a>
+            <a href="#terms" className="hover:text-[#C9A227] transition-colors">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
