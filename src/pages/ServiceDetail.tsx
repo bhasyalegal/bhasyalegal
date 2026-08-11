@@ -3,7 +3,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from 'react-router-dom'; // Make sure this import exists
+<<<<<<< HEAD
 import { ArrowRight } from "lucide-react";
+=======
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
 
 // Export this so Services.tsx can import it
 export const contentData: any = {
@@ -508,7 +511,11 @@ const ServiceDetail = () => {
 
   if (!current) {
     return (
+<<<<<<< HEAD
       <div className="min-h-screen bg-background flex items-center justify-center">
+=======
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         <button
           onClick={() => navigate("/services")}
           className="bg-law-gold hover:bg-law-gold/90 text-royal-blue font-semibold px-6 py-3 rounded-lg transition"
@@ -529,7 +536,11 @@ const ServiceDetail = () => {
         <meta name="description" content={content.substring(0, 160)} />
       </Helmet>
 
+<<<<<<< HEAD
       <div className="min-h-screen bg-background py-20">
+=======
+      <div className="min-h-screen bg-white dark:bg-gray-900 py-20">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         <div className="container mx-auto px-4 max-w-4xl">
           <button
             onClick={() => navigate("/services")}
@@ -542,10 +553,14 @@ const ServiceDetail = () => {
             {title}
           </h1>
 
+<<<<<<< HEAD
           <div className="flex items-center gap-3 mb-8">
             <span className="w-10 h-px bg-law-gold" />
             <span className="w-1.5 h-1.5 rotate-45 bg-law-gold inline-block" />
           </div>
+=======
+          <div className="w-20 h-1 bg-law-gold mb-8"></div>
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
 
           <div className="prose prose-lg dark:prose-invert max-w-none">
             {content.split('\n\n').map((paragraph: string, idx: number) => (
@@ -555,6 +570,7 @@ const ServiceDetail = () => {
             ))}
           </div>
 
+<<<<<<< HEAD
           <div className="mt-16 pt-10 border-t border-[#E5DED0] dark:border-white/10 text-center">
             <h3 className="text-xl font-serif font-bold text-royal-blue dark:text-white mb-5">
               {language === "en" ? "Need Legal Assistance?" : "कानूनी सहायता चाहियो?"}
@@ -567,6 +583,16 @@ const ServiceDetail = () => {
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
+=======
+          <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+  <Link
+    to="/contact"
+    className="bg-law-gold hover:bg-law-gold/90 text-royal-blue font-semibold px-8 py-3 rounded-lg transition inline-block"
+  >
+    {language === "en" ? "Schedule a Consultation" : "परामर्शको लागि सम्पर्क गर्नुहोस्"}
+  </Link>
+</div>
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         </div>
       </div>
     </>

@@ -59,7 +59,11 @@ const Footer = () => {
   ];
 
   return (
+<<<<<<< HEAD
     <footer className="text-gray-300 border-t border-white/5 relative z-30" style={{ backgroundColor: "#07152A" }}>
+=======
+    <footer className="text-gray-300 border-t border-white/5 relative z-30" style={{ backgroundColor: "#100422" }}>
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
 
@@ -72,10 +76,13 @@ const Footer = () => {
               className="drop-shadow-sm brightness-105"
               loading="lazy"
             />
+<<<<<<< HEAD
             <div className="flex items-center gap-3">
               <span className="w-8 h-px bg-[#C9A227]/50" />
               <span className="w-1.5 h-1.5 rotate-45 bg-[#C9A227]/50 inline-block" />
             </div>
+=======
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
             <p className="text-sm md:text-base text-gray-400 leading-relaxed font-light">
               {c.companyDesc}
             </p>
@@ -83,7 +90,11 @@ const Footer = () => {
 
           {/* Quick Links Map */}
           <div className="space-y-6">
+<<<<<<< HEAD
             <h4 className="text-lg font-serif font-bold text-[#C9A227] tracking-wider uppercase text-sm">
+=======
+            <h4 className="text-lg font-serif font-bold text-[#D4AF37] tracking-wider uppercase text-sm">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
               {c.quickLinks}
             </h4>
             <ul className="space-y-3" role="navigation" aria-label="Footer Quick Links">
@@ -91,7 +102,11 @@ const Footer = () => {
                 <li key={link.path}>
                   <Link
                     to={link.path}
+<<<<<<< HEAD
                     className="inline-block text-gray-400 hover:text-[#C9A227] transform hover:translate-x-1 text-[15px] transition-all duration-200"
+=======
+                    className="inline-block text-gray-400 hover:text-[#D4AF37] transform hover:translate-x-1 text-[15px] transition-all duration-200"
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                   >
                     {t(link.nameEn, link.nameNp)}
                   </Link>
@@ -102,7 +117,11 @@ const Footer = () => {
 
           {/* Core Practice Fields */}
           <div className="space-y-6">
+<<<<<<< HEAD
             <h4 className="text-lg font-serif font-bold text-[#C9A227] tracking-wider uppercase text-sm">
+=======
+            <h4 className="text-lg font-serif font-bold text-[#D4AF37] tracking-wider uppercase text-sm">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
               {c.practiceAreas}
             </h4>
             <ul className="space-y-3" role="navigation" aria-label="Footer Practice Disciplines">
@@ -110,7 +129,11 @@ const Footer = () => {
                 <li key={area.slug}>
                   <Link
                     to={`/services#${area.slug}`}
+<<<<<<< HEAD
                     className="inline-block text-gray-400 hover:text-[#C9A227] transform hover:translate-x-1 text-[15px] transition-all duration-200"
+=======
+                    className="inline-block text-gray-400 hover:text-[#D4AF37] transform hover:translate-x-1 text-[15px] transition-all duration-200"
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                   >
                     {t(area.nameEn, area.nameNp)}
                   </Link>
@@ -121,17 +144,26 @@ const Footer = () => {
 
           {/* Organized Contact Channels */}
           <div className="space-y-6">
+<<<<<<< HEAD
             <h4 className="text-lg font-serif font-bold text-[#C9A227] tracking-wider uppercase text-sm">
+=======
+            <h4 className="text-lg font-serif font-bold text-[#D4AF37] tracking-wider uppercase text-sm">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
               {c.contactInfo}
             </h4>
             <div className="space-y-4 text-[15px]">
 
               <div className="flex items-start space-x-3 group">
+<<<<<<< HEAD
                 <MapPin className="w-5 h-5 text-[#C9A227] mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+=======
+                <MapPin className="w-5 h-5 text-[#D4AF37] mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                 <span className="text-gray-400 leading-relaxed">{c.address}</span>
               </div>
 
               <div className="flex items-center space-x-3 group">
+<<<<<<< HEAD
                 <Phone className="w-5 h-5 text-[#C9A227] flex-shrink-0 group-hover:scale-110 transition-transform" />
                 <a href="tel:+9779845047233" className="text-gray-400 hover:text-[#C9A227] transition-colors">{c.phone}</a>
               </div>
@@ -147,6 +179,23 @@ const Footer = () => {
                   <p>{c.hours}</p>
                   <p>{c.hoursSat}</p>
                   <div className="flex items-center space-x-1.5 text-[#C9A227] font-semibold mt-2 tracking-wide text-xs uppercase bg-[#C9A227]/10 px-2.5 py-1 rounded-md border border-[#C9A227]/20 w-fit">
+=======
+                <Phone className="w-5 h-5 text-[#D4AF37] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <a href="tel:+9779845047233" className="text-gray-400 hover:text-[#D4AF37] transition-colors">{c.phone}</a>
+              </div>
+
+              <div className="flex items-center space-x-3 group">
+                <Mail className="w-5 h-5 text-[#D4AF37] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <a href={`mailto:${c.email}`} className="text-gray-400 hover:text-[#D4AF37] transition-colors break-all">{c.email}</a>
+              </div>
+
+              <div className="flex items-start space-x-3 pt-2 border-t border-white/5">
+                <Clock className="w-5 h-5 text-[#D4AF37] mt-0.5 flex-shrink-0" />
+                <div className="text-gray-400 text-sm space-y-1 font-light">
+                  <p>{c.hours}</p>
+                  <p>{c.hoursSat}</p>
+                  <div className="flex items-center space-x-1.5 text-[#D4AF37] font-semibold mt-2 tracking-wide text-xs uppercase bg-[#D4AF37]/10 px-2.5 py-1 rounded-md border border-[#D4AF37]/20 w-fit">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                     <ShieldCheck className="w-3.5 h-3.5" />
                     <span>{c.emergency}</span>
                   </div>
@@ -163,8 +212,13 @@ const Footer = () => {
             © {new Date().getFullYear()} Bhasya Legal. {c.copyright}
           </p>
           <div className="flex space-x-6 text-xs text-gray-500 font-light">
+<<<<<<< HEAD
             <a href="#privacy" className="hover:text-[#C9A227] transition-colors">Privacy Policy</a>
             <a href="#terms" className="hover:text-[#C9A227] transition-colors">Terms of Service</a>
+=======
+            <a href="#privacy" className="hover:text-[#D4AF37] transition-colors">Privacy Policy</a>
+            <a href="#terms" className="hover:text-[#D4AF37] transition-colors">Terms of Service</a>
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           </div>
         </div>
       </div>

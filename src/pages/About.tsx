@@ -135,12 +135,21 @@ const About = () => {
   const c = language === "en" ? content.en : content.np;
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-background py-20 transition-colors duration-300 relative">
       
       {/* Background Aura Elements */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-[#C9A227]/5 blur-[120px]" />
         <div className="absolute bottom-[10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-[#0B1F3A]/10 blur-[120px]" />
+=======
+    <div className="min-h-screen bg-white dark:bg-gray-900 py-20 transition-colors duration-300 relative">
+      
+      {/* Background Aura Elements */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px]" />
+        <div className="absolute bottom-[10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-[#1b0738]/10 blur-[120px]" />
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03]" />
       </div>
 
@@ -149,11 +158,19 @@ const About = () => {
         {/* Header */}
         <AnimatedSection>
           <div className="text-center mb-16">
+<<<<<<< HEAD
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#0B1F3A] dark:text-white mb-4 tracking-tight">
               {c.title}
             </h1>
             <p className="text-lg text-[#C9A227] font-medium mb-4">{c.subtitle}</p>
             <div className="w-24 h-1 bg-gradient-to-r from-[#C9A227] to-[#DDBF63] mx-auto mb-8 rounded-full"></div>
+=======
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#1b0738] dark:text-white mb-4 tracking-tight">
+              {c.title}
+            </h1>
+            <p className="text-lg text-[#D4AF37] font-medium mb-4">{c.subtitle}</p>
+            <div className="w-24 h-1 bg-gradient-to-r from-[#D4AF37] to-[#F4E3B2] mx-auto mb-8 rounded-full"></div>
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           </div>
         </AnimatedSection>
 
@@ -169,16 +186,26 @@ const About = () => {
         {/* Mission & Vision Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
           <AnimatedSection delay={300}>
+<<<<<<< HEAD
             <div className="bg-card p-8 rounded-lg border border-[#E5DED0] dark:border-white/5 shadow-soft h-full">
               <h2 className="text-2xl font-serif font-bold text-[#0B1F3A] dark:text-white mb-4">
+=======
+            <div className="bg-white/50 dark:bg-[#1b0738]/20 backdrop-blur-sm p-8 rounded-2xl border border-gray-200/50 dark:border-white/5 h-full">
+              <h2 className="text-2xl font-serif font-bold text-[#1b0738] dark:text-white mb-4">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                 {c.mission}
               </h2>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed font-light">{c.missionText}</p>
             </div>
           </AnimatedSection>
           <AnimatedSection delay={400}>
+<<<<<<< HEAD
             <div className="bg-card p-8 rounded-lg border border-[#E5DED0] dark:border-white/5 shadow-soft h-full">
               <h2 className="text-2xl font-serif font-bold text-[#0B1F3A] dark:text-white mb-4">
+=======
+            <div className="bg-white/50 dark:bg-[#1b0738]/20 backdrop-blur-sm p-8 rounded-2xl border border-gray-200/50 dark:border-white/5 h-full">
+              <h2 className="text-2xl font-serif font-bold text-[#1b0738] dark:text-white mb-4">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                 {c.vision}
               </h2>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed font-light">{c.visionText}</p>
@@ -189,16 +216,28 @@ const About = () => {
         {/* Core Values */}
         <AnimatedSection delay={500}>
           <div className="mb-20">
+<<<<<<< HEAD
             <h2 className="text-3xl font-serif font-bold text-[#0B1F3A] dark:text-white text-center mb-12">
+=======
+            <h2 className="text-3xl font-serif font-bold text-[#1b0738] dark:text-white text-center mb-12">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
               {c.valuesTitle}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {c.values.map((value, index) => (
+<<<<<<< HEAD
                 <div key={index} className="text-center p-6 bg-card rounded-md border border-[#E5DED0] dark:border-white/5 hover:border-[#C9A227]/50 transition-all">
                   <div className="w-16 h-16 bg-[#0B1F3A] rounded-full flex items-center justify-center mx-auto mb-4">
                     <value.icon className="w-8 h-8 text-[#C9A227]" />
                   </div>
                   <h3 className="text-xl font-semibold text-[#0B1F3A] dark:text-white mb-2">{value.title}</h3>
+=======
+                <div key={index} className="text-center p-6 bg-white/30 dark:bg-[#1b0738]/10 rounded-xl border border-gray-100 dark:border-white/5 hover:border-[#D4AF37]/50 transition-all">
+                  <div className="w-16 h-16 bg-[#1b0738] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <value.icon className="w-8 h-8 text-[#D4AF37]" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-[#1b0738] dark:text-white mb-2">{value.title}</h3>
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                   <p className="text-gray-600 dark:text-gray-400 text-sm">{value.desc}</p>
                 </div>
               ))}
@@ -209,11 +248,16 @@ const About = () => {
         {/* Practice Areas */}
         <AnimatedSection delay={600}>
           <div className="mb-20">
+<<<<<<< HEAD
             <h2 className="text-3xl font-serif font-bold text-[#0B1F3A] dark:text-white text-center mb-12">
+=======
+            <h2 className="text-3xl font-serif font-bold text-[#1b0738] dark:text-white text-center mb-12">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
               {c.practicesTitle}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {c.practices.map((practice, index) => (
+<<<<<<< HEAD
                 <div key={index} className="bg-card p-6 rounded-md border border-[#E5DED0] dark:border-white/5 hover:border-[#C9A227] transition-all">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-[#0B1F3A]/10 dark:bg-white/5 rounded-full flex items-center justify-center flex-shrink-0">
@@ -221,6 +265,15 @@ const About = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold text-[#0B1F3A] dark:text-white">{practice.name}</h4>
+=======
+                <div key={index} className="bg-white/50 dark:bg-[#1b0738]/20 p-6 rounded-xl border border-gray-200 dark:border-white/5 hover:border-[#D4AF37] transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-[#1b0738]/10 dark:bg-white/5 rounded-full flex items-center justify-center flex-shrink-0">
+                      <practice.icon className="w-6 h-6 text-[#D4AF37]" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-[#1b0738] dark:text-white">{practice.name}</h4>
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                       <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">{practice.desc}</p>
                     </div>
                   </div>
@@ -232,7 +285,11 @@ const About = () => {
 
         {/* Call to Action */}
         <AnimatedSection delay={700}>
+<<<<<<< HEAD
           <div className="text-center bg-[#0B1F3A] rounded-lg p-10 shadow-soft-lg overflow-hidden relative">
+=======
+          <div className="text-center bg-[#1b0738] rounded-2xl p-10 shadow-xl overflow-hidden relative">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
             <h3 className="text-2xl font-serif font-bold text-white mb-4 relative z-10">
               {language === "en" ? "Ready to Work With Us?" : "हामीसँग काम गर्न तयार हुनुहुन्छ?"}
             </h3>
@@ -241,7 +298,11 @@ const About = () => {
                 ? "Contact us today for a confidential consultation. Our team is here to help you navigate any legal challenge." 
                 : "गोप्य परामर्शको लागि आज हामीलाई सम्पर्क गर्नुहोस्। हाम्रो टोली कुनै पनि कानूनी चुनौतीमा तपाईंको सहायता गर्न यहाँ छ।"}
             </p>
+<<<<<<< HEAD
             <Button asChild className="bg-[#C9A227] text-[#0B1F3A] hover:bg-[#DDBF63] font-semibold px-8 py-3 rounded-lg relative z-10">
+=======
+            <Button asChild className="bg-[#D4AF37] text-[#1b0738] hover:bg-[#F4E3B2] font-semibold px-8 py-3 rounded-lg relative z-10">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
               <Link to="/contact">{c.cta}</Link>
             </Button>
           </div>

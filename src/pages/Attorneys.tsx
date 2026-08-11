@@ -82,16 +82,25 @@ const Attorneys = () => {
   const c = language === "en" ? content.en : content.np;
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-background py-20">
+=======
+    <div className="min-h-screen bg-white dark:bg-gray-900 py-20">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-royal-blue dark:text-white mb-4">
             {c.title}
           </h1>
+<<<<<<< HEAD
           <p className="text-lg text-law-gold font-medium mb-6">{c.subtitle}</p>
           <div className="gold-divider mb-8">
             <span className="gold-divider-mark" />
           </div>
+=======
+          <p className="text-lg text-law-gold font-medium mb-4">{c.subtitle}</p>
+          <div className="w-24 h-1 bg-law-gold mx-auto mb-8"></div>
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           <p className="text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">{c.description}</p>
         </div>
 
@@ -99,6 +108,7 @@ const Attorneys = () => {
           {c.members.map((member, idx) => (
             <div
               key={idx}
+<<<<<<< HEAD
               className="bg-card rounded-lg shadow-soft overflow-hidden hover:shadow-soft-lg transition-all hover:-translate-y-1 border border-[#E5DED0] dark:border-white/10 hover:border-[#C9A227]/50"
             >
               {/* Fixed aspect ratio + object-cover so every portrait shares the same crop, regardless of source image dimensions */}
@@ -107,14 +117,30 @@ const Attorneys = () => {
                   src={member.image}
                   alt={member.name}
                   className="w-full h-full object-cover object-top grayscale-[12%] sepia-[6%] saturate-[0.92]"
+=======
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700"
+            >
+              {/* Image container - taller aspect ratio for portraits, object-contain to show full photo */}
+              <div className="bg-gradient-to-br from-royal-blue/10 to-law-gold/10 flex items-center justify-center p-4">
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  className="w-full h-auto max-h-96 object-contain rounded-lg"
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                 />
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-serif font-bold text-royal-blue dark:text-white">{member.name}</h3>
+<<<<<<< HEAD
                 <p className="text-law-gold font-semibold text-xs uppercase tracking-wide mt-1">{member.role}</p>
                 <div className="w-10 h-px bg-law-gold my-4" />
                 <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4">{member.bio}</p>
                 <div className="space-y-2 text-sm border-t border-[#E5DED0] dark:border-white/10 pt-4">
+=======
+                <p className="text-law-gold font-semibold text-sm mb-3">{member.role}</p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4">{member.bio}</p>
+                <div className="space-y-2 text-sm border-t border-gray-100 dark:border-gray-700 pt-4">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                   <div className="flex items-start gap-2">
                     <GraduationCap className="w-4 h-4 text-law-gold mt-0.5 flex-shrink-0" />
                     <span className="text-gray-600 dark:text-gray-300">{member.education}</span>
@@ -129,11 +155,19 @@ const Attorneys = () => {
           ))}
         </div>
 
+<<<<<<< HEAD
         <div className="text-center bg-[#0B1F3A] rounded-lg p-10 shadow-soft-lg">
           <h3 className="text-2xl font-serif font-bold text-white mb-4">
             {language === "en" ? "Ready to Work With Us?" : "हामीसँग काम गर्न तयार हुनुहुन्छ?"}
           </h3>
           <Button asChild className="bg-[#C9A227] text-[#0B1F3A] hover:bg-[#DDBF63] font-semibold px-8 py-3 rounded-md">
+=======
+        <div className="text-center bg-gradient-to-r from-royal-blue to-law-gold/80 rounded-xl p-10 shadow-lg">
+          <h3 className="text-2xl font-serif font-bold text-white mb-4">
+            {language === "en" ? "Ready to Work With Us?" : "हामीसँग काम गर्न तयार हुनुहुन्छ?"}
+          </h3>
+          <Button asChild className="bg-white text-royal-blue hover:bg-gray-100 font-semibold px-8 py-3 rounded-lg">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
             <Link to="/contact">{c.cta}</Link>
           </Button>
         </div>

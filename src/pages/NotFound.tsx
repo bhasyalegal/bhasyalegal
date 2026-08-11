@@ -6,7 +6,11 @@ import { Button } from '@/components/ui/button';
 const NotFound = () => {
   const { language } = useLanguage();
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4 py-20">
+=======
+    <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col items-center justify-center px-4 py-20">
+>>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       <h1 className="text-6xl md:text-8xl font-serif font-bold text-law-gold mb-4">404</h1>
       <h2 className="text-2xl md:text-3xl font-serif text-royal-blue dark:text-white mb-4">
         {language === 'en' ? 'Page Not Found' : 'पृष्ठ फेला परेन'}
