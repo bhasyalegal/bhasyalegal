@@ -110,34 +110,20 @@ const Services = () => {
   };
 
   return (
-<<<<<<< HEAD
     <div className="min-h-screen bg-background transition-colors duration-300 relative">
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-[#C9A227]/5 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-[#0B1F3A]/10 blur-[120px]" />
-=======
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300 relative">
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-[#1b0738]/10 blur-[120px]" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-28">
         <div ref={headerRef as any} className="text-center max-w-2xl mx-auto mb-12 space-y-4 opacity-0 translate-y-12 transition-all duration-700 ease-out">
-<<<<<<< HEAD
           <h1 className="text-4xl md:text-6xl font-serif font-bold text-[#0B1F3A] dark:text-white tracking-tight">
             {language === "en" ? "Practice Expertise" : "हाम्रा सेवा क्षेत्रहरू"}
           </h1>
           <div className="gold-divider">
             <span className="gold-divider-mark" />
           </div>
-=======
-          <h1 className="text-4xl md:text-6xl font-serif font-bold text-[#1b0738] dark:text-white tracking-tight">
-            {language === "en" ? "Practice Expertise" : "हाम्रा सेवा क्षेत्रहरू"}
-          </h1>
-          <div className="w-20 h-1 bg-gradient-to-r from-[#D4AF37] to-[#F4E3B2] mx-auto rounded-full" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           <p className="text-base md:text-lg text-gray-500 dark:text-gray-400 font-light leading-relaxed">
             {language === "en" ? "Explore our comprehensive legal services across multiple practice areas managed by specialized lawyers." : "हाम्रा विविध अभ्यास क्षेत्रहरूमा व्यापक कानूनी सेवाहरू अन्वेषण गर्नुहोस्।"}
           </p>
@@ -151,21 +137,13 @@ const Services = () => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t("Search a legal issue — e.g. \"divorce\", \"cyber crime\"...", "कानूनी समस्या खोज्नुहोस् — जस्तै \"सम्बन्ध विच्छेद\"...")}
-<<<<<<< HEAD
             className="w-full bg-white dark:bg-[#102A4A] border border-gray-200/70 dark:border-white/10 focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] outline-none rounded-full pl-11 pr-11 py-3 text-sm text-[#0B1F3A] dark:text-white placeholder:text-gray-400 shadow-sm"
-=======
-            className="w-full bg-white dark:bg-[#160a2e] border border-gray-200/70 dark:border-white/10 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] outline-none rounded-full pl-11 pr-11 py-3 text-sm text-[#1b0738] dark:text-white placeholder:text-gray-400 shadow-sm"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           />
           {query && (
             <button
               onClick={() => setQuery("")}
               aria-label={t("Clear search", "खोज हटाउनुहोस्")}
-<<<<<<< HEAD
               className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#C9A227] transition-colors"
-=======
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#D4AF37] transition-colors"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
             >
               <X className="w-4 h-4" />
             </button>
@@ -173,11 +151,7 @@ const Services = () => {
         </div>
 
         {/* Sticky quick-jump group nav */}
-<<<<<<< HEAD
         <div className="sticky top-0 z-20 -mx-6 px-6 py-3 mb-14 bg-gray-50/90 dark:bg-[#07152A]/90 backdrop-blur border-b border-gray-200/60 dark:border-white/5">
-=======
-        <div className="sticky top-0 z-20 -mx-6 px-6 py-3 mb-14 bg-gray-50/90 dark:bg-[#0f051d]/90 backdrop-blur border-b border-gray-200/60 dark:border-white/5">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           <div className="flex gap-2 overflow-x-auto no-scrollbar">
             {practiceGroups.map((g) => {
               const GIcon = g.icon;
@@ -191,11 +165,7 @@ const Services = () => {
                   className={`flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold tracking-wide border transition-all
                     ${disabled
                       ? "opacity-30 cursor-not-allowed border-gray-200 dark:border-white/5 text-gray-400"
-<<<<<<< HEAD
                       : "border-gray-200 dark:border-white/10 text-[#0B1F3A] dark:text-white hover:border-[#C9A227] hover:text-[#C9A227]"}`}
-=======
-                      : "border-gray-200 dark:border-white/10 text-[#1b0738] dark:text-white hover:border-[#D4AF37] hover:text-[#D4AF37]"}`}
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                 >
                   <GIcon className="w-3.5 h-3.5" />
                   {t(g.titleEn, g.titleNp)}
@@ -211,11 +181,7 @@ const Services = () => {
             <Search className="w-8 h-8 mx-auto opacity-40" />
             <p className="text-sm">
               {t(`No matches for "${query}". Try a different term, or `, `"${query}" को लागि कुनै नतिजा भेटिएन। फरक शब्द प्रयास गर्नुहोस्, वा `)}
-<<<<<<< HEAD
               <Link to="/contact" className="text-[#C9A227] font-semibold hover:underline">
-=======
-              <Link to="/contact" className="text-[#D4AF37] font-semibold hover:underline">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                 {t("ask us directly", "सिधै सोध्नुहोस्")}
               </Link>.
             </p>
@@ -231,19 +197,11 @@ const Services = () => {
               <section key={group.id} id={`group-${group.id}`} className="scroll-mt-32">
                 <AnimatedSection>
                   <div className="flex items-center gap-4 mb-8">
-<<<<<<< HEAD
                     <div className="w-12 h-12 rounded-md bg-gradient-to-br from-[#0B1F3A] to-[#163A63] border border-[#C9A227]/30 flex items-center justify-center shadow-elegant">
                       <GroupIcon className="w-6 h-6 text-[#C9A227]" />
                     </div>
                     <div>
                       <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#0B1F3A] dark:text-white">
-=======
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1b0738] to-[#2d1056] border border-[#D4AF37]/30 flex items-center justify-center shadow-elegant">
-                      <GroupIcon className="w-6 h-6 text-[#D4AF37]" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#1b0738] dark:text-white">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                         {t(group.titleEn, group.titleNp)}
                       </h2>
                       <p className="text-sm text-gray-500 dark:text-gray-400 font-light">{t(group.descriptionEn, group.descriptionNp)}</p>
@@ -264,7 +222,6 @@ const Services = () => {
                               <CardContent className="p-8 space-y-5 flex flex-col h-full justify-between">
                                 <div className="space-y-4">
                                   <div className="flex items-center justify-between">
-<<<<<<< HEAD
                                     <div className="w-12 h-12 rounded-md bg-gradient-to-br from-[#0B1F3A] to-[#163A63] border border-[#C9A227]/30 flex items-center justify-center group-hover:border-[#C9A227] transition-colors">
                                       <IconComponent className="w-6 h-6 text-[#C9A227]" />
                                     </div>
@@ -272,15 +229,6 @@ const Services = () => {
                                   </div>
                                   <div>
                                     <h3 className="text-xl font-serif font-semibold text-[#0B1F3A] dark:text-white group-hover:text-[#C9A227] transition-colors">
-=======
-                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1b0738] to-[#2d1056] border border-[#D4AF37]/30 flex items-center justify-center group-hover:border-[#D4AF37] transition-colors">
-                                      <IconComponent className="w-6 h-6 text-[#D4AF37]" />
-                                    </div>
-                                    <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-[#D4AF37] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
-                                  </div>
-                                  <div>
-                                    <h3 className="text-xl font-serif font-semibold text-[#1b0738] dark:text-white group-hover:text-[#D4AF37] transition-colors">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                                       {t(service.titleEn, service.titleNp)}
                                     </h3>
                                     <p className="text-sm text-gray-500 dark:text-gray-400 font-light leading-relaxed mt-2">
@@ -290,20 +238,12 @@ const Services = () => {
 
                                   {/* Practice Expertise inside each title */}
                                   <div className="pt-2 border-t border-gray-100 dark:border-white/5">
-<<<<<<< HEAD
                                     <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#C9A227] mb-2">
-=======
-                                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#D4AF37] mb-2">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                                       {language === "en" ? "Practice Expertise" : "अभ्यास विशेषज्ञता"}
                                     </p>
                                     <ul className="flex flex-wrap gap-2">
                                       {expertise.map((e) => (
-<<<<<<< HEAD
                                         <li key={e} className="text-[12px] text-gray-600 dark:text-gray-300 bg-[#C9A227]/10 border border-[#C9A227]/20 rounded-full px-3 py-1">
-=======
-                                        <li key={e} className="text-[12px] text-gray-600 dark:text-gray-300 bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-full px-3 py-1">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                                           {e}
                                         </li>
                                       ))}
@@ -324,11 +264,7 @@ const Services = () => {
         </div>
 
         {/* Closing CTA — bridges browsing to contact */}
-<<<<<<< HEAD
         <div className="mt-24 text-center rounded-lg border border-[#C9A227]/20 bg-gradient-to-br from-[#0B1F3A] to-[#163A63] py-14 px-8">
-=======
-        <div className="mt-24 text-center rounded-2xl border border-[#D4AF37]/20 bg-gradient-to-br from-[#1b0738] to-[#2d1056] py-14 px-8">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           <h3 className="text-2xl md:text-3xl font-serif font-bold text-white mb-3">
             {t("Not sure which practice area fits your case?", "तपाईंको मुद्दा कुन अभ्यास क्षेत्रमा पर्छ थाहा छैन?")}
           </h3>
@@ -337,11 +273,7 @@ const Services = () => {
           </p>
           <Link
             to="/contact"
-<<<<<<< HEAD
             className="inline-flex items-center gap-2 rounded-md bg-[#C9A227] hover:bg-[#A8871F] text-[#0B1F3A] font-bold px-8 py-3.5 text-sm uppercase tracking-widest transition-colors"
-=======
-            className="inline-flex items-center gap-2 rounded-xl bg-[#D4AF37] hover:bg-[#c49f2e] text-[#1b0738] font-bold px-8 py-3.5 text-sm uppercase tracking-widest transition-colors"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           >
             {t("Talk to a Lawyer", "अधिवक्तासँग कुरा गर्नुहोस्")}
             <ArrowUpRight className="w-4 h-4" />

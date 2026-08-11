@@ -26,11 +26,7 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-<<<<<<< HEAD
 					DEFAULT: '#0B1F3A',
-=======
-					DEFAULT: '#1b0738',
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
 					foreground: '#FFFFFF'
 				},
 				secondary: {
@@ -67,7 +63,6 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-<<<<<<< HEAD
 				'royal-blue': '#0B1F3A',
 				'royal-blue-deep': '#07152A',
 				'royal-blue-secondary': '#163A63',
@@ -77,11 +72,6 @@ export default {
 				'law-light-blue': '#F8F5EE',
 				'ivory': '#F8F5EE',
 				'warm-white': '#FCFBF8'
-=======
-				'royal-blue': '#1b0738',
-				'law-gold': '#D4AF37',
-				'law-light-blue': '#F8FAFC'
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -133,7 +123,6 @@ export default {
 				'slide-in': 'slide-in 0.5s ease-out'
 			},
 			fontFamily: {
-<<<<<<< HEAD
 				'serif': ['Cormorant Garamond', 'Noto Serif Devanagari', 'Georgia', 'serif'],
 				'sans': ['Inter', 'Noto Sans Devanagari', 'system-ui', 'sans-serif']
 			},
@@ -141,10 +130,6 @@ export default {
 				'soft': '0 8px 30px rgba(7, 21, 42, 0.08)',
 				'soft-lg': '0 20px 50px rgba(7, 21, 42, 0.12)',
 				'soft-gold': '0 8px 24px rgba(201, 162, 39, 0.18)'
-=======
-				'serif': ['Playfair Display', 'Georgia', 'serif'],
-				'sans': ['Inter', 'system-ui', 'sans-serif']
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
 			}
 		}
 	},

@@ -18,31 +18,18 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
         outline:
-<<<<<<< HEAD
           "border-2 border-law-gold/60 bg-transparent text-royal-blue dark:text-white hover:bg-royal-blue hover:text-white hover:border-royal-blue dark:hover:bg-law-gold dark:hover:text-royal-blue dark:hover:border-law-gold shadow-sm",
         secondary:
           "bg-ivory text-royal-blue border-2 border-law-gold hover:bg-royal-blue hover:text-white hover:border-royal-blue dark:bg-transparent dark:text-white dark:border-law-gold/60 dark:hover:bg-law-gold dark:hover:text-royal-blue shadow-elegant hover:shadow-elegant-lg font-bold",
         ghost: "hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-law-gold",
         link: "text-royal-blue dark:text-law-gold underline-offset-4 hover:underline",
         premium: "bg-gradient-to-r from-royal-blue to-[#163A63] text-white hover:shadow-elegant-xl shadow-elegant-lg border border-law-gold/20",
-=======
-          "border-2 border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-law-gold/50 shadow-sm",
-        secondary:
-          "bg-law-gold text-royal-blue hover:bg-law-gold/90 shadow-elegant hover:shadow-elegant-lg font-bold",
-        ghost: "hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-law-gold",
-        link: "text-royal-blue dark:text-law-gold underline-offset-4 hover:underline",
-        premium: "bg-gradient-to-r from-royal-blue to-[#2d1056] text-white hover:shadow-elegant-xl shadow-elegant-lg border border-law-gold/20",
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       },
       size: {
         default: "h-11 px-6 py-2.5",
         sm: "h-9 rounded-lg px-4 text-xs",
         lg: "h-12 rounded-lg px-8 text-base",
-<<<<<<< HEAD
         xl: "h-14 rounded-lg px-10 text-lg",
-=======
-        xl: "h-14 rounded-xl px-10 text-lg",
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         icon: "h-10 w-10",
       },
     },

@@ -161,11 +161,7 @@ const Home = () => {
     en: {
       firmName: "Bhasya Legal",
       heroSub: "Premier legal counsel with unwavering dedication to achieving the best outcomes for our clients across Nepal.",
-<<<<<<< HEAD
       heroBtn: "Book a Consultation",
-=======
-      heroBtn: "Call For Consultation",
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       heroBtnSecondary: "Explore Our Services",
       stats: [
         { number: "100+", label: "Cases Won" },
@@ -185,11 +181,7 @@ const Home = () => {
     np: {
       firmName: "भास्य कानून",
       heroSub: "नेपालभरका हाम्रा ग्राहकहरूका लागि उत्तम परिणामहरू प्राप्त गर्न अटल समर्पणका साथ उत्कृष्ट कानूनी परामर्श।",
-<<<<<<< HEAD
       heroBtn: "परामर्श बुक गर्नुहोस्",
-=======
-      heroBtn: "परामर्शको लागि कल गर्नुहोस्",
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       heroBtnSecondary: "हाम्रा सेवाहरू हेर्नुहोस्",
       stats: [
         { number: "१००+", label: "मुद्दा जित" },
@@ -214,7 +206,6 @@ const Home = () => {
     <div className="w-full max-w-full overflow-x-hidden min-h-screen">
       <style>{`
         .hero-theme-vars {
-<<<<<<< HEAD
           --hero-bg: linear-gradient(180deg, #07152A 0%, #0B1F3A 55%, #102D4D 100%);
           --hero-heading: #F8F5EE;
           --hero-sub-text: rgba(248, 245, 238, 0.78);
@@ -237,30 +228,6 @@ const Home = () => {
           --hero-stat-band-bg: linear-gradient(to bottom, #07152A 0%, #0B1F3A 100%);
           --hero-stat-card-bg: rgba(248, 245, 238, 0.04);
           --hero-stat-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.45);
-=======
-          --hero-bg: linear-gradient(to bottom, #FAF8F3 0%, #F3EFE7 50%, #ECE6DB 100%);
-          --hero-heading: #0F172A;
-          --hero-sub-text: #1E293B;
-          --hero-accent: #C59B27;
-          --hero-accent-line: #B8860B;
-          --hero-overlay: transparent;
-          --hero-overlay-xl: linear-gradient(to right, #FAF8F3 0%, rgba(250,248,243,0.45) 45%, transparent 80%);
-          --hero-stat-band-bg: linear-gradient(to bottom, #F7F5F0 0%, #FFFFFF 100%);
-          --hero-stat-card-bg: rgba(255, 255, 255, 0.7);
-          --hero-stat-border: rgba(197, 155, 39, 0.3);
-          --hero-stat-shadow: 0 20px 50px -18px rgba(15, 23, 42, 0.12);
-        }
-        .dark .hero-theme-vars {
-          --hero-bg: linear-gradient(to bottom, #050A14 0%, #09101D 50%, #0D1626 100%);
-          --hero-heading: #FFFFFF;
-          --hero-sub-text: #F1F5F9;
-          --hero-accent-line: #C59B27;
-          --hero-overlay: transparent;
-          --hero-overlay-xl: linear-gradient(to right, #050a14 0%, rgba(5,10,20,0.7) 50%, transparent 100%);
-          --hero-stat-band-bg: linear-gradient(to bottom, #0A1931 0%, #0F2347 100%);
-          --hero-stat-card-bg: rgba(255, 255, 255, 0.04);
-          --hero-stat-shadow: none;
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         }
         .hero-theme-vars ::selection {
           background: var(--hero-accent);
@@ -320,13 +287,8 @@ const Home = () => {
         .delay-200 { transition-delay: 160ms; }
         .delay-300 { transition-delay: 240ms; }
         @keyframes cta-pulse-glow {
-<<<<<<< HEAD
           0%, 100% { box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.35); }
           50% { box-shadow: 0 0 0 10px rgba(201, 162, 39, 0); }
-=======
-          0%, 100% { box-shadow: 0 0 0 0 rgba(197, 155, 39, 0.45); }
-          50% { box-shadow: 0 0 0 10px rgba(197, 155, 39, 0); }
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         }
         .cta-pulse {
           animation: cta-pulse-glow 2.4s ease-out infinite;
@@ -353,7 +315,6 @@ const Home = () => {
               <span className="inline-block">
                 {language === "en" ? (
                   <>
-<<<<<<< HEAD
                     <span style={{ color: "#C9A227" }}>B</span>hasya{" "}
                     <span style={{ color: "#C9A227" }}>L</span>egal
                   </>
@@ -361,15 +322,6 @@ const Home = () => {
                   <>
                     <span style={{ color: "#C9A227" }}>भा</span>स्य{" "}
                     <span style={{ color: "#C9A227" }}>का</span>नून
-=======
-                    <span style={{ color: "#C59B27" }}>B</span>hasya{" "}
-                    <span style={{ color: "#C59B27" }}>L</span>egal
-                  </>
-                ) : (
-                  <>
-                    <span style={{ color: "#C59B27" }}>भा</span>स्य{" "}
-                    <span style={{ color: "#C59B27" }}>का</span>नून
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                   </>
                 )}
               </span>
@@ -387,11 +339,7 @@ const Home = () => {
             <div ref={buttonsRef} className="mt-8 flex flex-col sm:flex-row gap-3.5 justify-center xl:justify-start pointer-events-auto">
               <a
                 href="tel:+9779845047233"
-<<<<<<< HEAD
                 className="cta-pulse group relative inline-flex items-center justify-center gap-2 px-7 py-3 rounded-md bg-[#0B1F3A] text-white font-semibold tracking-wide text-xs sm:text-sm transition-all duration-300 hover:bg-[#C9A227] hover:text-[#0B1F3A] hover:scale-[1.04] active:scale-95 shadow-soft dark:bg-[#0B1F3A] dark:hover:bg-[#C9A227] dark:hover:text-[#0B1F3A] dark:text-white"
-=======
-                className="cta-pulse group relative inline-flex items-center justify-center gap-2 px-7 py-3 rounded-md bg-[#1B0738] text-white font-semibold tracking-wide text-xs sm:text-sm transition-all duration-300 hover:bg-[#100421] hover:scale-[1.04] active:scale-95 shadow-md dark:bg-[#1B0738] dark:hover:bg-[#100421] dark:text-white"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
               >
                 {c.heroBtn}
                 <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -399,11 +347,7 @@ const Home = () => {
 
               <Link
                 to="/services"
-<<<<<<< HEAD
                 className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-md border-2 border-[#C9A227] bg-[#FCFBF8] text-[#0B1F3A] font-semibold tracking-wide text-xs sm:text-sm transition-colors hover:bg-[#0B1F3A] hover:text-white hover:border-[#0B1F3A] dark:bg-transparent dark:border-[#C9A227]/50 dark:text-white dark:hover:bg-[#C9A227] dark:hover:text-[#0B1F3A] dark:hover:border-[#C9A227]"
-=======
-                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-md border bg-white border-[#1B0738] text-[#1B0738] font-semibold tracking-wide text-xs sm:text-sm transition-colors hover:bg-gray-50 dark:bg-transparent dark:border-white/25 dark:text-white dark:hover:border-white/60"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
               >
                 {c.heroBtnSecondary}
               </Link>
@@ -430,15 +374,9 @@ const Home = () => {
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 opacity-[0.15]"
-<<<<<<< HEAD
           style={{ background: "radial-gradient(60% 90% at 50% 0%, #C9A227 0%, transparent 70%)" }}
         />
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A227]/70 to-transparent" />
-=======
-          style={{ background: "radial-gradient(60% 90% at 50% 0%, #C59B27 0%, transparent 70%)" }}
-        />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C59B27]/70 to-transparent" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
 
         <div className="max-w-7xl mx-auto relative">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
@@ -448,15 +386,9 @@ const Home = () => {
               return (
                 <div
                   key={index}
-<<<<<<< HEAD
                   className={`reveal-on-scroll stat-card group flex flex-col items-center text-center py-8 px-4 space-y-3 rounded-lg border bg-[color:var(--hero-stat-card-bg)] border-[color:var(--hero-stat-border)] shadow-[var(--hero-stat-shadow)] transition-colors duration-300 ${delays[index]}`}
                 >
                   <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#C9A227]/10 border border-[#C9A227]/30 text-[#C9A227] transition-colors duration-300 group-hover:bg-[#C9A227]/20">
-=======
-                  className={`reveal-on-scroll stat-card group flex flex-col items-center text-center py-8 px-4 space-y-3 rounded-2xl border bg-[color:var(--hero-stat-card-bg)] border-[color:var(--hero-stat-border)] shadow-[var(--hero-stat-shadow)] backdrop-blur-sm transition-colors duration-300 ${delays[index]}`}
-                >
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[#C59B27]/10 border border-[#C59B27]/30 text-[#C59B27] transition-colors duration-300 group-hover:bg-[#C59B27]/20">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                     <Icon className="w-5 h-5" />
                   </div>
                   <h3 className="text-4xl sm:text-5xl font-serif font-bold text-[color:var(--hero-heading)] tabular-nums">
@@ -475,7 +407,6 @@ const Home = () => {
       {/* Who We Are Section */}
       <section
         id="about"
-<<<<<<< HEAD
         className="py-24 relative notch-friendly-padding bg-background"
       >
         <div className="max-w-7xl mx-auto">
@@ -490,18 +421,6 @@ const Home = () => {
                 <span className="text-[#C9A227] font-semibold tracking-widest text-xs uppercase">{c.whoWeAreTitle}</span>
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#0B1F3A] dark:text-white leading-tight">
-=======
-        className="py-24 relative notch-friendly-padding bg-white dark:bg-[#0A1931]"
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-6 reveal-on-scroll">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-px bg-[#C59B27]" />
-                <span className="text-[#C59B27] font-semibold tracking-widest text-xs uppercase">{c.whoWeAreTitle}</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#1B365D] dark:text-white leading-tight">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                 {c.whoWeAreHeading}
               </h2>
               <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed font-light">
@@ -516,11 +435,7 @@ const Home = () => {
               <img
                 src={WhoWeAreImg}
                 alt="Bhasya Legal Team"
-<<<<<<< HEAD
                 className="rounded-lg w-full h-auto object-cover border border-[#E5DED0] dark:border-white/10"
-=======
-                className="rounded-lg w-full h-auto object-cover border border-gray-100 dark:border-white/10"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
               />
             </div>
           </div>
@@ -530,21 +445,12 @@ const Home = () => {
       {/* Practice Areas Section */}
       <section
         id="services"
-<<<<<<< HEAD
         className="py-24 relative notch-friendly-padding bg-[#FCFBF8] dark:bg-[#07152A] border-t border-[#E5DED0] dark:border-white/5"
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-4 reveal-on-scroll">
             <span className="text-[#C9A227] font-semibold tracking-widest text-xs uppercase">{c.practiceTitle}</span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#0B1F3A] dark:text-white">
-=======
-        className="py-24 relative notch-friendly-padding bg-[#F7F5F0] dark:bg-[#081527] border-t border-gray-100 dark:border-white/5"
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-16 space-y-4 reveal-on-scroll">
-            <span className="text-[#C59B27] font-semibold tracking-widest text-xs uppercase">{c.practiceTitle}</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#1B365D] dark:text-white">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
               {c.practiceHeading}
             </h2>
             <p className="text-base md:text-lg text-gray-500 dark:text-gray-400 font-light">
@@ -562,7 +468,6 @@ const Home = () => {
                   to={`/services#group-${group.id}`}
                   className={`block group w-full reveal-on-scroll ${delays[index % 3]}`}
                 >
-<<<<<<< HEAD
                   <Card className="h-full rounded-lg border border-[#E5DED0] dark:border-[#C9A227]/15 bg-[#F8F5EE] dark:bg-[#102A4A] shadow-none hover:shadow-soft hover:-translate-y-1 hover:border-[#C9A227]/55 transition-all duration-300">
                     <CardContent className="p-8 flex flex-col items-start h-full justify-between">
                       <div className="space-y-4 w-full">
@@ -573,13 +478,6 @@ const Home = () => {
                           <Icon className="w-6 h-6 text-[#C9A227]" strokeWidth={1.5} />
                         </div>
                         <h3 className="text-xl font-serif font-bold text-[#0B1F3A] dark:text-white">
-=======
-                  <Card className="h-full border border-gray-200 dark:border-white/10 bg-white dark:bg-[#0F2347] shadow-none hover:border-[#C59B27]/60 transition-colors duration-300">
-                    <CardContent className="p-8 flex flex-col items-start h-full justify-between">
-                      <div className="space-y-4">
-                        <Icon className="w-7 h-7 text-[#C59B27]" strokeWidth={1.5} />
-                        <h3 className="text-xl font-serif font-bold text-[#1B365D] dark:text-white">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                           {language === "en" ? group.titleEn : group.titleNp}
                         </h3>
                         <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed font-light">
@@ -587,11 +485,7 @@ const Home = () => {
                         </p>
                       </div>
 
-<<<<<<< HEAD
                       <div className="pt-6 flex items-center text-[#0B1F3A] dark:text-[#C9A227] font-semibold text-xs tracking-wider uppercase opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
-=======
-                      <div className="pt-6 flex items-center text-[#1B365D] dark:text-[#C59B27] font-semibold text-xs tracking-wider uppercase opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                         {c.exploreDiscipline} <ArrowRight className="w-3.5 h-3.5 ml-2" />
                       </div>
                     </CardContent>
@@ -605,11 +499,7 @@ const Home = () => {
             <Button
               asChild
               size="lg"
-<<<<<<< HEAD
               className="bg-[#0B1F3A] hover:bg-[#C9A227] hover:text-[#0B1F3A] dark:bg-[#0B1F3A] dark:hover:bg-[#C9A227] dark:hover:text-[#0B1F3A] text-white dark:text-white font-semibold px-9 py-6 text-sm rounded-md shadow-none transition-colors"
-=======
-              className="bg-[#1B0738] hover:bg-[#100421] dark:bg-[#1B0738] dark:hover:bg-[#100421] text-white dark:text-white font-semibold px-9 py-6 text-sm rounded-md shadow-none"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
             >
               <Link to="/services">{c.viewAllBtn}</Link>
             </Button>

@@ -16,11 +16,7 @@ const Tools = () => {
   };
 
   return (
-<<<<<<< HEAD
     <div className="min-h-screen bg-background py-20">
-=======
-    <div className="min-h-screen bg-white dark:bg-gray-900 py-20">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       <div className="container mx-auto px-4 max-w-2xl">
         <h1 className="text-4xl font-serif font-bold text-royal-blue dark:text-white mb-6">
           {language === 'en' ? 'Legal Tools' : 'कानूनी उपकरणहरू'}

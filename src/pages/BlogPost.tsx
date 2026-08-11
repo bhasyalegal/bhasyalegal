@@ -27,13 +27,8 @@ const BlogPost = () => {
   if (loading) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
-<<<<<<< HEAD
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#C9A227]"></div>
         <Scale className="w-5 h-5 text-[#C9A227]/40 animate-pulse absolute" />
-=======
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#D4AF37]"></div>
-        <Scale className="w-5 h-5 text-[#D4AF37]/40 animate-pulse absolute" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       </div>
     );
   }
@@ -52,11 +47,7 @@ const BlogPost = () => {
           </p>
           <Button 
             onClick={() => navigate('/blog')} 
-<<<<<<< HEAD
             className="bg-[#C9A227] hover:bg-[#A8871F] text-[#0B1F3A] font-semibold tracking-wide px-6"
-=======
-            className="bg-[#D4AF37] hover:bg-[#b89327] text-[#1b0738] font-semibold tracking-wide px-6"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           >
             {language === 'en' ? 'Return to Journal' : 'ब्लगमा फर्कनुहोस्'}
           </Button>
@@ -72,11 +63,7 @@ const BlogPost = () => {
         {/* Back Link Row */}
         <Link 
           to="/blog" 
-<<<<<<< HEAD
           className="inline-flex items-center text-sm font-medium text-[#C9A227] hover:text-[#A8871F] transition-colors mb-8 group"
-=======
-          className="inline-flex items-center text-sm font-medium text-[#D4AF37] hover:text-[#b89327] transition-colors mb-8 group"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         >
           <ArrowLeft className="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform" /> 
           {language === 'en' ? 'Back to Publications' : 'सबै पोस्टहरूमा फर्कनुहोस्'}
@@ -84,13 +71,8 @@ const BlogPost = () => {
 
         {/* Article Cover Frame */}
         {post.coverImage && (
-<<<<<<< HEAD
           <div className="w-full rounded-lg overflow-hidden shadow-elegant-lg border border-[#C9A227]/10 mb-10 relative group">
             <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A]/30 to-transparent z-10" />
-=======
-          <div className="w-full rounded-2xl overflow-hidden shadow-elegant-lg border border-[#D4AF37]/10 mb-10 relative group">
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1b0738]/30 to-transparent z-10" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
             <img 
               src={post.coverImage} 
               alt={post.title} 
@@ -107,19 +89,11 @@ const BlogPost = () => {
 
           <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground pt-4 border-b border-border/60 pb-4">
             <span className="flex items-center gap-2 font-light">
-<<<<<<< HEAD
               <Calendar className="w-4 h-4 text-[#C9A227]" />
               {new Date(post.date).toLocaleDateString(language === 'en' ? 'en-US' : 'ne-NP')}
             </span>
             <span className="flex items-center gap-2 font-light">
               <User className="w-4 h-4 text-[#C9A227]" />
-=======
-              <Calendar className="w-4 h-4 text-[#D4AF37]" />
-              {new Date(post.date).toLocaleDateString(language === 'en' ? 'en-US' : 'ne-NP')}
-            </span>
-            <span className="flex items-center gap-2 font-light">
-              <User className="w-4 h-4 text-[#D4AF37]" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
               {post.author}
             </span>
           </div>
@@ -129,13 +103,8 @@ const BlogPost = () => {
         <div className="prose prose-lg dark:prose-invert max-w-none 
           prose-headings:font-serif prose-headings:font-bold prose-headings:text-foreground
           prose-p:leading-relaxed prose-p:text-foreground/90
-<<<<<<< HEAD
           prose-a:text-[#C9A227] prose-a:no-underline hover:prose-a:underline
           prose-blockquote:border-l-4 prose-blockquote:border-[#C9A227] prose-blockquote:bg-[#C9A227]/5 prose-blockquote:px-6 prose-blockquote:py-2 prose-blockquote:rounded-r-md"
-=======
-          prose-a:text-[#D4AF37] prose-a:no-underline hover:prose-a:underline
-          prose-blockquote:border-l-4 prose-blockquote:border-[#D4AF37] prose-blockquote:bg-[#D4AF37]/5 prose-blockquote:px-6 prose-blockquote:py-2 prose-blockquote:rounded-r-xl"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         >
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
         </div>

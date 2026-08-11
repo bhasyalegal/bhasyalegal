@@ -40,13 +40,8 @@ const Blog = () => {
   if (loading) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
-<<<<<<< HEAD
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#C9A227]"></div>
         <Scale className="w-5 h-5 text-[#C9A227]/40 animate-pulse absolute" />
-=======
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#D4AF37]"></div>
-        <Scale className="w-5 h-5 text-[#D4AF37]/40 animate-pulse absolute" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       </div>
     );
   }
@@ -60,17 +55,10 @@ const Blog = () => {
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-foreground tracking-tight">
             {c.title}
           </h1>
-<<<<<<< HEAD
           <p className="text-sm md:text-base text-[#C9A227] font-medium uppercase tracking-widest">
             {c.subtitle}
           </p>
           <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-[#C9A227] to-transparent mx-auto my-4" />
-=======
-          <p className="text-sm md:text-base text-[#D4AF37] font-medium uppercase tracking-widest">
-            {c.subtitle}
-          </p>
-          <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent mx-auto my-4" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           <p className="text-muted-foreground font-light leading-relaxed">
             {c.description}
           </p>
@@ -90,11 +78,7 @@ const Blog = () => {
               >
                 {/* Embedded Illustration Shell */}
                 {post.coverImage && (
-<<<<<<< HEAD
                   <div className="w-full h-52 overflow-hidden relative border-b border-[#C9A227]/10">
-=======
-                  <div className="w-full h-52 overflow-hidden relative border-b border-[#D4AF37]/10">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                     <img
                       src={post.coverImage}
                       alt={post.title}
@@ -111,31 +95,19 @@ const Blog = () => {
                     {/* Inline Content Metadata Row */}
                     <div className="flex items-center gap-4 text-xs text-muted-foreground font-light">
                       <span className="flex items-center gap-1.5">
-<<<<<<< HEAD
                         <Calendar className="w-3.5 h-3.5 text-[#C9A227]" />
-=======
-                        <Calendar className="w-3.5 h-3.5 text-[#D4AF37]" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                         {new Date(post.date).toLocaleDateString(
                           language === 'en' ? 'en-US' : 'ne-NP'
                         )}
                       </span>
                       <span className="flex items-center gap-1.5">
-<<<<<<< HEAD
                         <User className="w-3.5 h-3.5 text-[#C9A227]" />
-=======
-                        <User className="w-3.5 h-3.5 text-[#D4AF37]" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                         {post.author}
                       </span>
                     </div>
 
                     {/* Heading Component Links */}
-<<<<<<< HEAD
                     <h2 className="text-xl font-serif font-bold text-foreground leading-snug group-hover:text-[#C9A227] transition-colors duration-200">
-=======
-                    <h2 className="text-xl font-serif font-bold text-foreground leading-snug group-hover:text-[#D4AF37] transition-colors duration-200">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                       <Link to={`/blog/${post.slug}`} className="focus:outline-none">
                         {post.title}
                       </Link>
@@ -151,11 +123,7 @@ const Blog = () => {
                   <div className="pt-4 border-t border-border/40">
                     <Link
                       to={`/blog/${post.slug}`}
-<<<<<<< HEAD
                       className="inline-flex items-center text-xs uppercase tracking-wider font-semibold text-[#C9A227] hover:text-[#A8871F] transition-colors group/btn"
-=======
-                      className="inline-flex items-center text-xs uppercase tracking-wider font-semibold text-[#D4AF37] hover:text-[#b89327] transition-colors group/btn"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                     >
                       <span>{c.readMore}</span> 
                       <ArrowRight className="w-3.5 h-3.5 ml-1.5 transform group-hover/btn:translate-x-1.5 transition-transform" />

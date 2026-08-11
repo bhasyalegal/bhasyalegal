@@ -11,10 +11,7 @@ import { Environment, useGLTF, OrbitControls, Html, Preload } from "@react-three
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import * as THREE from "three";
 import gsap from "gsap";
-<<<<<<< HEAD
-=======
 import { useTheme } from "next-themes";
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
 
 
 type RenderTier = "efficient" | "balanced" | "premium";
@@ -404,23 +401,14 @@ function LightingRig({ shadowMapSize, isDark }: { shadowMapSize: number; isDark:
         angle={0.6}
         penumbra={0.8}
         intensity={isDark ? 1.4 : 1.1} 
-<<<<<<< HEAD
         color="#0B1F3A"
-=======
-        color="#1B0738"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       />
       <spotLight
         position={[2.5, 4, 1.8]}
         angle={0.4}
         penumbra={0.5}
-<<<<<<< HEAD
         intensity={isDark ? 1.55 : 1.1}
         color="#C9A227"
-=======
-        intensity={isDark ? 1.3 : 1.1}
-        color="#C59B27"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       />
       <pointLight position={[0, 1.2, 2]} intensity={isDark ? 0.35 : 0.3} color="#fff3d6" />
     </>
@@ -497,17 +485,10 @@ function Scene({ renderTier, isDark }: { renderTier: RenderTier; isDark: boolean
           <Bloom
             luminanceThreshold={isDark ? 0.75 : 0.88}
             luminanceSmoothing={0.25}
-<<<<<<< HEAD
             intensity={isDark ? 0.38 : 0.25}
             mipmapBlur
           />
           <Vignette eskil={false} offset={0.2} darkness={isDark ? 0.75 : 0.3} />
-=======
-            intensity={isDark ? 0.45 : 0.25}
-            mipmapBlur
-          />
-          <Vignette eskil={false} offset={0.2} darkness={isDark ? 0.7 : 0.3} />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         </EffectComposer>
       )}
     </>
@@ -523,17 +504,12 @@ const INITIAL_CAMERA_FALLBACK: [number, number, number] = [0, 0, 8];
 const LadyJusticeStatue3D: React.FC<LadyJusticeStatue3DProps> = ({ className = "" }) => {
   const renderTier = useRenderTier();
   const settings = RENDER_SETTINGS[renderTier];
-<<<<<<< HEAD
   // The hero backdrop is now a consistent deep royal-blue gradient in both
   // site themes (see Home.tsx .hero-theme-vars), so the statue's lighting,
   // bloom/vignette, and transparent Canvas background — previously tied to
   // the light/dark theme toggle — always use the moodier "dark backdrop"
   // treatment that used to be reserved for dark theme only.
   const isDark = true;
-=======
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
 
   return (
     <div className={className}>

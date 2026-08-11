@@ -2,10 +2,7 @@ import React, { useState, useEffect, useCallback, useRef, useLayoutEffect, useMe
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Moon, Sun, ChevronDown, Phone, Scale, Building2, Gavel, Users, ArrowRight } from "lucide-react";
 import Logo from "../img/logo.webp";
-<<<<<<< HEAD
-=======
 import LogoDark from "../img/logo-dark.webp";
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
 import { useTheme } from "next-themes";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -160,7 +157,6 @@ const Navigation = () => {
   const isHome = location.pathname === "/";
   const effectiveScrolled = isScrolled || !isHome;
   const isDark = theme === "dark";
-<<<<<<< HEAD
   // The homepage hero is a fixed dark-navy gradient in *both* themes, so
   // while the nav is floating over it transparently (top of homepage,
   // pre-scroll) its text/icons need to stay light regardless of theme.
@@ -170,14 +166,6 @@ const Navigation = () => {
   const navButtonColorClass = effectiveScrolled
     ? "text-[#1B365D] dark:text-white"
     : "text-white";
-=======
-  // Previously this only flipped on scroll ("text-white" whenever floating
-  // over the hero), which worked because the hero was always dark. Now the
-  // hero adapts to the theme too, so nav text just tracks the theme itself
-  // — dark navy on the light hero/navbar, white on the dark hero/navbar —
-  // in both the floating and scrolled states.
-  const navButtonColorClass = "text-[#1B365D] dark:text-white";
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
 
   const navItems = useMemo(
     () => [
@@ -402,18 +390,10 @@ const Navigation = () => {
   const logoImgClass =
   "h-full w-full object-contain object-left motion-reduce:transition-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]";
 
-<<<<<<< HEAD
   // The homepage hero (Home.tsx --hero-bg) is a dark-navy gradient in both
   // themes, so the light/reversed logo lockup is always the right pick here
   // — it's no longer swapped for the navy lockup in light mode.
   const activeLogoSrc = Logo;
-=======
-  // Logo (light/reversed lockup) sits over the dark hero; LogoDark (navy
-  // lockup) sits over the light hero. Both share logoImgClass verbatim —
-  // same box, same object-contain/object-left fit — so they render at
-  // identical size regardless of any difference in their source canvases.
-  const activeLogoSrc = isDark ? Logo : LogoDark;
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
   const showImageLogo = !effectiveScrolled;
 
   const logoImgWrapClass = `absolute inset-0 flex items-center overflow-hidden transition-all duration-300 ease-out motion-reduce:transition-none motion-reduce:duration-0 ${
@@ -430,11 +410,7 @@ const Navigation = () => {
   const mobileTriggerClass = `flex h-12 w-12 items-center justify-center rounded-xl border transition-colors duration-200 ${
     effectiveScrolled
       ? "border-slate-200/70 dark:border-white/10"
-<<<<<<< HEAD
       : "border-white/30 backdrop-blur-sm"
-=======
-      : "border-[#1B365D]/20 dark:border-white/30 backdrop-blur-sm"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
   } ${navButtonColorClass} ${FOCUS_RING}`;
 
   const mobileDrawerClass = `lg:hidden fixed inset-x-0 bg-white dark:bg-[#0A1931] border-b border-slate-200 dark:border-white/10 overflow-y-auto transition-all duration-300 ease-out origin-top motion-reduce:transition-none ${
