@@ -18,8 +18,6 @@ import {
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import * as THREE from "three";
 import gsap from "gsap";
-import { useTheme } from "next-themes";
-
 
 type RenderTier = "efficient" | "balanced" | "premium";
 
@@ -33,20 +31,6 @@ type RenderSettings = {
   dpr: [number, number];
 };
 
-// "efficient" targets phones. The statue model was optimized from ~2.3M to
-// ~400K vertices (see public/models/lady-justice.glb), so shadow casting —
-// re-processing the full mesh a second time from the light's POV every
-// frame — is no longer the dominant cost it used to be, but it's still the
-// single most expensive *per-frame* operation available (a whole extra
-// render pass), so it stays off here to protect frame time. dpr and
-// antialias are cheap by comparison once the vertex/GPU-memory cost is this
-// low, and both were the actual source of the "low quality/blurry" look on
-// phones: dpr locked to 1 renders below native resolution on every
-// modern (2x-3x) phone screen and the browser then upscales the result.
-// PerformanceMonitor (in Scene, below) acts as a runtime safety net,
-// stepping dpr back down toward the tier minimum if a particular device
-// can't sustain frame rate at the max, so this baseline can afford to be
-// more ambitious than a static lowest-common-denominator setting.
 const RENDER_SETTINGS: Record<RenderTier, RenderSettings> = {
   efficient: {
     shadowMapSize: 512,
@@ -129,7 +113,7 @@ const GROUND_Y = -1.8;
 const ASSEMBLY_OFFSET_Y = GROUND_Y - (PEDESTAL.centerY - PEDESTAL.height / 2);
 
 const CAMERA_FOV_DEG = 32;
-const FRAME_PADDING = 1.15;
+const TARGET_VERTICAL_COVERAGE = 0.70; // Forces statue to take up exactly 70% of screen height
 const VERTICAL_BIAS = 0;
 const ENTRANCE_ZOOM_FACTOR = 1.4;
 
@@ -158,12 +142,13 @@ function getCombinedFrameBox(statueWidth: number): FrameBox {
 
 function computeFitDistance(box: FrameBox, aspect: number, fovDeg: number = CAMERA_FOV_DEG): number {
   const vFov = THREE.MathUtils.degToRad(fovDeg);
-  const hFov = 2 * Math.atan(Math.tan(vFov / 2) * aspect);
+  
+  // Calculate distance so the statue takes up exactly TARGET_VERTICAL_COVERAGE (70%) 
+  // of the screen height. We ignore width constraints to prevent the camera 
+  // from zooming out too far on narrow mobile devices.
+  const distanceForHeight = box.height / 2 / (Math.tan(vFov / 2) * TARGET_VERTICAL_COVERAGE);
 
-  const distanceForHeight = box.height / 2 / Math.tan(vFov / 2);
-  const distanceForWidth = box.width / 2 / Math.tan(hFov / 2);
-
-  return Math.max(distanceForHeight, distanceForWidth) * FRAME_PADDING;
+  return distanceForHeight;
 }
 
 type ModelFit = {
@@ -195,10 +180,11 @@ function useModelFit(url: string, targetHeight: number): ModelFit {
   }, [scene, targetHeight]);
 }
 
-function StatueModel({ fit, precision }: { fit: ModelFit; precision: "mediump" | "highp" }) {
+function StatueModel({ fit, precision, enableControls }: { fit: ModelFit; precision: "mediump" | "highp"; enableControls: (enabled: boolean) => void }) {
   const outer = useRef<THREE.Group>(null);
   const floatGroup = useRef<THREE.Group>(null);
   const inner = useRef<THREE.Group>(null);
+  const isDragging = useRef(false);
 
   const [activeQuote, setActiveQuote] = useState<string | null>(null);
   const [displayQuote, setDisplayQuote] = useState<string>("");
@@ -213,6 +199,62 @@ function StatueModel({ fit, precision }: { fit: ModelFit; precision: "mediump" |
       return () => clearTimeout(timer);
     }
   }, [activeQuote]);
+
+  // Directional touch lock logic & global pointer up listener
+  useEffect(() => {
+    let startX = 0;
+    let startY = 0;
+    let directionLocked = false;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (window.innerWidth < 1024) return;
+      if (isDragging.current && e.touches.length > 0) {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        directionLocked = false;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (window.innerWidth < 1024) return;
+      if (!isDragging.current || directionLocked) return;
+      if (e.touches.length > 0) {
+        const dx = e.touches[0].clientX - startX;
+        const dy = e.touches[0].clientY - startY;
+        
+        // Lock direction after moving a few pixels
+        if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+          directionLocked = true;
+          if (Math.abs(dx) > Math.abs(dy)) {
+            // Horizontal swipe -> Enable rotation
+            enableControls(true);
+          } else {
+            // Vertical swipe -> Disable controls so the page scrolls natively
+            enableControls(false);
+          }
+        }
+      }
+    };
+
+    const handleGlobalUp = () => {
+      if (isDragging.current) {
+        isDragging.current = false;
+        enableControls(false);
+      }
+    };
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleGlobalUp);
+    window.addEventListener('pointerup', handleGlobalUp);
+    
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleGlobalUp);
+      window.removeEventListener('pointerup', handleGlobalUp);
+    };
+  }, [enableControls]);
 
   const legalQuotes = useMemo(() => [
     "Justice delayed is justice denied.",
@@ -316,20 +358,21 @@ function StatueModel({ fit, precision }: { fit: ModelFit; precision: "mediump" |
     <group ref={outer} position={[0, 0, 0]} dispose={null}>
       <group ref={floatGroup}>
         <group ref={inner} scale={fit.scale} position={fit.position}>
-          <primitive object={clonedScene} raycast={() => null} />
+          <primitive object={clonedScene} raycast={() => {}} />
         </group>
 
         {/* Tightly wrapped proxy collider for smooth clicking and dragging */}
         <mesh
           position={[0, TARGET_HEIGHT / 2, 0]}
           onClick={handleStatueClick}
-          onPointerEnter={() => (document.body.style.cursor = 'grab')}
-          onPointerLeave={() => (document.body.style.cursor = 'auto')}
-          onPointerDown={() => (document.body.style.cursor = 'grabbing')}
-          onPointerUp={() => (document.body.style.cursor = 'grab')}
+          onPointerEnter={(e) => { e.stopPropagation(); if (e.pointerType !== 'touch' || window.innerWidth >= 1024) enableControls(true); document.body.style.cursor = 'grab'; }}
+          onPointerLeave={(e) => { e.stopPropagation(); if (!isDragging.current) enableControls(false); document.body.style.cursor = 'auto'; }}
+          onPointerDown={(e) => { e.stopPropagation(); if (e.pointerType === 'touch' && window.innerWidth < 1024) return; isDragging.current = true; enableControls(true); document.body.style.cursor = 'grabbing'; }}
+          onPointerUp={() => { document.body.style.cursor = 'grab'; }}
         >
-          <cylinderGeometry args={[0.25, 0.38, TARGET_HEIGHT * 0.98, 12]} />
-          <meshBasicMaterial visible={false} />
+          {/* Widened slightly for better touch targets on mobile */}
+          <cylinderGeometry args={[0.55, 0.65, TARGET_HEIGHT * 0.95, 16]} />
+          <meshBasicMaterial transparent opacity={0} depthWrite={false} />
         </mesh>
 
         <Html position={[0, TARGET_HEIGHT + 0.35, 0]} center zIndexRange={[100, 0]}>
@@ -385,7 +428,7 @@ function CameraRig({ pointer, frameBox }: { pointer: PointerRef; frameBox: Frame
     });
 
     return () => ctx.revert();
-  }, [camera]);
+  }, [camera, frameBox.centerY, fittedZ]);
 
   useFrame((state, delta) => {
     const idleFor = performance.now() - pointer.current.lastMove;
@@ -448,7 +491,7 @@ function LightingRig({ shadowMapSize, isDark, useShadows }: { shadowMapSize: num
   );
 }
 
-function FramedStatue({ pointer, useHDRI, frameBox, precision }: { pointer: PointerRef; useHDRI: boolean; frameBox: FrameBox; precision: "mediump" | "highp" }) {
+function FramedStatue({ pointer, useHDRI, frameBox, precision, enableControls }: { pointer: PointerRef; useHDRI: boolean; frameBox: FrameBox; precision: "mediump" | "highp"; enableControls: (enabled: boolean) => void }) {
   const fit = useModelFit(MODEL_URL, TARGET_HEIGHT);
 
   const [isDesktop, setIsDesktop] = useState(false);
@@ -465,23 +508,21 @@ function FramedStatue({ pointer, useHDRI, frameBox, precision }: { pointer: Poin
     <>
       <CameraRig pointer={pointer} frameBox={frameBox} />
       <group position={[0, ASSEMBLY_OFFSET_Y + desktopYOffset, 0]}>
-        <StatueModel fit={fit} precision={precision} />
+        <StatueModel fit={fit} precision={precision} enableControls={enableControls} />
       </group>
       {useHDRI && <Environment preset="city" />}
     </>
   );
 }
 
-function Scene({ renderTier, isDark }: { renderTier: RenderTier; isDark: boolean }) {
+function Scene({ renderTier, isDark, enableControls, controlsEnabled, controlsRef }: { renderTier: RenderTier; isDark: boolean; enableControls: (enabled: boolean) => void; controlsEnabled: boolean; controlsRef: React.MutableRefObject<any> }) {
   const settings = RENDER_SETTINGS[renderTier];
   const pointer = usePointerState();
   const fit = useModelFit(MODEL_URL, TARGET_HEIGHT);
   const frameBox = useMemo(() => getCombinedFrameBox(fit.width), [fit.width]);
-  const targetLookAt = useMemo(() => new THREE.Vector3(0, frameBox.centerY, 0), [frameBox.centerY]);
 
   const { gl } = useThree();
   const setDpr = useThree((state) => state.setDpr);
-  const controlsRef = useRef<any>(null);
 
   // Re-apply touchAction="pan-y" after OrbitControls mounts and sets touchAction="none"
   useEffect(() => {
@@ -489,16 +530,10 @@ function Scene({ renderTier, isDark }: { renderTier: RenderTier; isDark: boolean
       controlsRef.current.domElement.style.touchAction = "pan-y";
     }
     gl.domElement.style.touchAction = "pan-y";
-  }, [gl]);
+  }, [gl, controlsRef]);
 
   return (
     <>
-      {/* Runtime safety net: Canvas mounts at settings.dpr[1] (clamped to the
-          device's real pixel ratio), so most phones already render at full
-          tier quality. If sustained FPS drops (older/thermal-throttled
-          devices), this steps dpr back down to the tier floor instead of
-          every device paying the cost of the weakest one; it steps back up
-          if performance recovers. */}
       <PerformanceMonitor
         factor={1}
         onDecline={() => setDpr(settings.dpr[0])}
@@ -508,23 +543,19 @@ function Scene({ renderTier, isDark }: { renderTier: RenderTier; isDark: boolean
       <LightingRig shadowMapSize={settings.shadowMapSize} isDark={isDark} useShadows={settings.useShadows} />
 
       <Suspense fallback={null}>
-        <FramedStatue pointer={pointer} useHDRI={settings.useHDRI} frameBox={frameBox} precision={settings.precision} />
+        <FramedStatue pointer={pointer} useHDRI={settings.useHDRI} frameBox={frameBox} precision={settings.precision} enableControls={enableControls} />
         <Preload all />
       </Suspense>
 
-      {/* OrbitControls enables seamless mobile touch rotation & desktop dragging without blocking page scrolling */}
+      {/* OrbitControls is disabled by default and only enabled synchronously when hovering/touching the statue */}
       <OrbitControls
-  ref={(controls) => {
-    if (controls && controls.domElement) {
-      // Overwrite Three.js's default 'none' after it attaches to the DOM
-      controls.domElement.style.touchAction = "pan-y";
-    }
-  }}
-  enableZoom={false}
-  enablePan={false}
-  minPolarAngle={Math.PI / 2 - 0.10}
-  maxPolarAngle={Math.PI / 2 + 0.10}
-/>
+        ref={controlsRef}
+        enabled={controlsEnabled}
+        enableZoom={false}
+        enablePan={false}
+        minPolarAngle={Math.PI / 2 - 0.10}
+        maxPolarAngle={Math.PI / 2 + 0.10}
+      />
 
       {settings.usePostFX && (
         <EffectComposer>
@@ -550,22 +581,21 @@ const INITIAL_CAMERA_FALLBACK: [number, number, number] = [0, 0, 8];
 const LadyJusticeStatue3D: React.FC<LadyJusticeStatue3DProps> = ({ className = "" }) => {
   const renderTier = useRenderTier();
   const settings = RENDER_SETTINGS[renderTier];
-  // The hero backdrop is now a consistent deep royal-blue gradient in both
-  // site themes (see Home.tsx .hero-theme-vars), so the statue's lighting,
-  // bloom/vignette, and transparent Canvas background — previously tied to
-  // the light/dark theme toggle — always use the moodier "dark backdrop"
-  // treatment that used to be reserved for dark theme only.
   const isDark = true;
-<<<<<<< HEAD
 
-  // The canvas keeps rendering every frame (idle breathing animation, damped
-  // controls) even while scrolled far off-screen unless told otherwise.
-  // Pausing the frameloop when it's out of view costs nothing visually
-  // (nobody can see it) and gives back GPU/battery on mobile while reading
-  // the rest of the page. Defaults to "always" so nothing changes until the
-  // observer has real data.
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(true);
+  
+  const controlsRef = useRef<any>(null);
+  const [controlsEnabled, setControlsEnabled] = useState(false);
+
+  const enableControls = (enabled: boolean) => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) enabled = false;
+    if (controlsRef.current) {
+      controlsRef.current.enabled = enabled;
+    }
+    setControlsEnabled(enabled);
+  };
 
   useEffect(() => {
     const node = containerRef.current;
@@ -577,8 +607,6 @@ const LadyJusticeStatue3D: React.FC<LadyJusticeStatue3DProps> = ({ className = "
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
-=======
->>>>>>> a8e75302a9017834819cf3be456983e7c1a84612
 
   return (
     <div ref={containerRef} className={className}>
@@ -593,14 +621,22 @@ const LadyJusticeStatue3D: React.FC<LadyJusticeStatue3DProps> = ({ className = "
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: isDark ? 1.1 : 1.05,
         }}
+        onPointerMissed={() => enableControls(false)}
         style={{
+          pointerEvents: typeof window !== "undefined" && window.innerWidth < 1024 ? "none" : "auto",
           background: isDark
             ? "transparent"
             : "radial-gradient(circle at center, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0) 70%)",
           touchAction: "pan-y",
         }}
       >
-        <Scene renderTier={renderTier} isDark={isDark} />
+        <Scene 
+          renderTier={renderTier} 
+          isDark={isDark} 
+          enableControls={enableControls} 
+          controlsEnabled={controlsEnabled}
+          controlsRef={controlsRef}
+        />
       </Canvas>
     </div>
   );

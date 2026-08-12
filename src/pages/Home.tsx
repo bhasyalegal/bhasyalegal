@@ -91,12 +91,6 @@ function AnimatedStatNumber({ value, start }: { value: string; start: boolean })
 const Home = () => {
   const { language } = useLanguage();
 
-  // The hero mounts the 3D statue in two different wrapper layouts — one for
-  // the xl:+ desktop split layout, one for the mobile full-bleed background —
-  // toggled with Tailwind's `hidden`/`xl:hidden`. CSS visibility doesn't stop
-  // WebGL from rendering though, so without this gate both instances run
-  // their full render loop (shadows, lights, animation) at all times, even
-  // though only one is ever visible. This makes sure only one is ever mounted.
   const [isDesktopHero, setIsDesktopHero] = useState(
     () => typeof window !== "undefined" && window.innerWidth >= 1280
   );
@@ -176,14 +170,14 @@ const Home = () => {
     return () => {
       ctx.revert();
     };
-  }, [language]);
+  }, [language, isDesktopHero]);
 
   const content = {
     en: {
       firmName: "Bhasya Legal",
       heroSub: "Premier legal counsel with unwavering dedication to achieving the best outcomes for our clients across Nepal.",
       heroBtn: "Book a Consultation",
-      heroBtnSecondary: "Explore Our Services",
+      heroBtnSecondary: "Explore Our Services", 
       stats: [
         { number: "100+", label: "Cases Won" },
         { number: "2+", label: "Years Experience" },
@@ -229,7 +223,7 @@ const Home = () => {
         .hero-theme-vars {
           --hero-bg: linear-gradient(180deg, #07152A 0%, #0B1F3A 55%, #102D4D 100%);
           --hero-heading: #F8F5EE;
-          --hero-sub-text: rgba(248, 245, 238, 0.78);
+          --hero-sub-text: rgba(248, 245, 238, 0.95);
           --hero-accent: #C9A227;
           --hero-accent-line: #C9A227;
           --hero-overlay: transparent;
@@ -242,7 +236,7 @@ const Home = () => {
         .dark .hero-theme-vars {
           --hero-bg: linear-gradient(180deg, #05101F 0%, #07152A 55%, #0B1F3A 100%);
           --hero-heading: #F8F5EE;
-          --hero-sub-text: rgba(248, 245, 238, 0.75);
+          --hero-sub-text: rgba(248, 245, 238, 0.95);
           --hero-accent-line: #C9A227;
           --hero-overlay: transparent;
           --hero-overlay-xl: linear-gradient(to right, #05101F 0%, rgba(5,16,31,0.7) 50%, transparent 100%);
@@ -271,22 +265,6 @@ const Home = () => {
           height: 100svh;
           height: 100dvh;
         }
-        .hero-text-column {
-          padding-top: 5rem;
-          padding-bottom: 5rem;
-          max-height: 100vh;
-          max-height: 100svh;
-          max-height: 100dvh;
-          overflow-y: auto;
-          scrollbar-width: none;      
-          -ms-overflow-style: none;
-        }
-        .hero-text-column::-webkit-scrollbar {
-          display: none;
-        }
-        @media (min-width: 1280px) {
-          .hero-text-column { padding-top: 0; padding-bottom: 0; }
-        }
         .reveal-on-scroll {
           opacity: 0;
           transform: translateY(24px);
@@ -308,8 +286,12 @@ const Home = () => {
         .delay-200 { transition-delay: 160ms; }
         .delay-300 { transition-delay: 240ms; }
         @keyframes cta-pulse-glow {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.35); }
-          50% { box-shadow: 0 0 0 10px rgba(201, 162, 39, 0); }
+          0%, 100% { 
+            box-shadow: 0 8px 24px -6px rgba(201, 162, 39, 0.5), 0 0 0 0 rgba(201, 162, 39, 0.4); 
+          }
+          50% { 
+            box-shadow: 0 8px 24px -6px rgba(201, 162, 39, 0.5), 0 0 0 12px rgba(201, 162, 39, 0); 
+          }
         }
         .cta-pulse {
           animation: cta-pulse-glow 2.4s ease-out infinite;
@@ -324,73 +306,132 @@ const Home = () => {
 
       {/* Hero Section */}
       <section className="hero-theme-vars relative full-bleed-viewport hero-notch-top w-full overflow-hidden bg-[image:var(--hero-bg)] flex items-stretch notch-friendly-padding">
-        <div className="relative z-10 w-full grid grid-cols-1 xl:grid-cols-[40%_60%] items-center pointer-events-none">
-          <div
-            ref={textColumnRef}
-            className="hero-text-column relative z-10 max-w-2xl mx-auto xl:mx-0 text-center xl:text-left flex flex-col justify-center"
-          >
-            <h1
-              ref={headingRef}
-              className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold tracking-tight text-[color:var(--hero-heading)] leading-[1.08]"
+        
+        {/* ========================================= */}
+        {/* DESKTOP LAYOUT (Centered Left, Statue Right) */}
+        {/* ========================================= */}
+        {isDesktopHero ? (
+          <div className="relative z-10 w-full h-full max-w-7xl mx-auto grid grid-cols-[40%_60%] items-center gap-8 px-8 pointer-events-none">
+            <div
+              ref={textColumnRef}
+              className="relative z-10 text-left flex flex-col justify-center h-full"
             >
-              <span className="inline-block">
-                {language === "en" ? (
-                  <>
-                    <span style={{ color: "#C9A227" }}>B</span>hasya{" "}
-                    <span style={{ color: "#C9A227" }}>L</span>egal
-                  </>
-                ) : (
-                  <>
-                    <span style={{ color: "#C9A227" }}>भा</span>स्य{" "}
-                    <span style={{ color: "#C9A227" }}>का</span>नून
-                  </>
-                )}
-              </span>
-            </h1>
-
-            <div ref={ruleRef} className="mt-5 h-px w-16 bg-[color:var(--hero-accent-line)] mx-auto xl:mx-0" />
-
-            <p
-              ref={subRef}
-              className="mt-5 text-sm sm:text-base text-[color:var(--hero-sub-text)] font-semibold leading-relaxed max-w-xl mx-auto xl:mx-0 drop-shadow-sm"
-            >
-              {c.heroSub}
-            </p>
-
-            <div ref={buttonsRef} className="mt-8 flex flex-col sm:flex-row gap-3.5 justify-center xl:justify-start pointer-events-auto">
-              <a
-                href="tel:+9779845047233"
-                className="cta-pulse group relative inline-flex items-center justify-center gap-2 px-7 py-3 rounded-md bg-[#0B1F3A] text-white font-semibold tracking-wide text-xs sm:text-sm transition-all duration-300 hover:bg-[#C9A227] hover:text-[#0B1F3A] hover:scale-[1.04] active:scale-95 shadow-soft dark:bg-[#0B1F3A] dark:hover:bg-[#C9A227] dark:hover:text-[#0B1F3A] dark:text-white"
+              <h1
+                ref={headingRef}
+                className="text-5xl md:text-6xl font-serif font-bold tracking-tight text-[color:var(--hero-heading)] leading-[1.08] drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]"
               >
-                {c.heroBtn}
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
+                <span className="inline-block">
+                  {language === "en" ? (
+                    <>
+                      <span style={{ color: "#C9A227" }}>B</span>hasya{" "}
+                      <span style={{ color: "#C9A227" }}>L</span>egal
+                    </>
+                  ) : (
+                    <>
+                      <span style={{ color: "#C9A227" }}>भा</span>स्य{" "}
+                      <span style={{ color: "#C9A227" }}>का</span>नून
+                    </>
+                  )}
+                </span>
+              </h1>
 
-              <Link
-                to="/services"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-md border-2 border-[#C9A227] bg-[#FCFBF8] text-[#0B1F3A] font-semibold tracking-wide text-xs sm:text-sm transition-colors hover:bg-[#0B1F3A] hover:text-white hover:border-[#0B1F3A] dark:bg-transparent dark:border-[#C9A227]/50 dark:text-white dark:hover:bg-[#C9A227] dark:hover:text-[#0B1F3A] dark:hover:border-[#C9A227]"
-              >
-                {c.heroBtnSecondary}
-              </Link>
+              <div ref={ruleRef} className="mt-5 h-px w-16 bg-[color:var(--hero-accent-line)]" />
+              
+              <p ref={subRef} className="mt-5 text-base text-[color:var(--hero-sub-text)] font-semibold leading-relaxed max-w-xl drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)]">
+                {c.heroSub}
+              </p>
+
+              <div ref={buttonsRef} className="mt-8 flex flex-col sm:flex-row gap-4 pointer-events-auto w-full sm:w-auto">
+                <a
+                  href="tel:+9779845047233"
+                  className="cta-pulse group relative inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#C9A227] text-[#0B1F3A] font-bold tracking-wide text-sm transition-all duration-300 hover:bg-[#F8D869] hover:scale-[1.03] active:scale-95"
+                >
+                  {c.heroBtn}
+                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+
+                <Link
+                  to="/services"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border-2 border-[#C9A227]/60 bg-[#07152A]/40 backdrop-blur-sm text-[#F8F5EE] font-bold tracking-wide text-sm transition-all duration-300 hover:bg-[#C9A227] hover:text-[#0B1F3A] hover:border-[#C9A227] hover:scale-[1.03] active:scale-95"
+                >
+                  {c.heroBtnSecondary}
+                </Link>
+              </div>
             </div>
-          </div>
 
-          <div className="hidden xl:block relative h-full min-h-[100svh] pointer-events-auto">
-            {isDesktopHero && (
+            <div className="relative h-full min-h-[100svh] pointer-events-auto">
               <Suspense fallback={null}>
                 <LadyJusticeStatue3D className="absolute inset-0 w-full h-full" />
               </Suspense>
-            )}
+            </div>
           </div>
-        </div>
+        ) : (
+          /* ========================================= */
+          /* MOBILE LAYOUT (Title Top, Buttons Bottom, No Dark Hue) */
+          /* ========================================= */
+          <>
+            {/* Mobile Canvas Background (No dark hue overlay) */}
+            <div className="absolute inset-0 z-0">
+              <Suspense fallback={null}>
+                <LadyJusticeStatue3D className="w-full h-full pointer-events-none" />
+              </Suspense>
+            </div>
 
-        <div className="xl:hidden absolute inset-0 z-0">
-          {!isDesktopHero && (
-            <Suspense fallback={null}>
-              <LadyJusticeStatue3D className="w-full h-full pointer-events-auto" />
-            </Suspense>
-          )}
-        </div>
+            {/* Mobile Text Overlay */}
+            <div
+              ref={textColumnRef}
+              className="relative z-10 w-full h-full flex flex-col items-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] px-4 pointer-events-none"
+            >
+              {/* Top - Title */}
+              <div className="absolute top-0 left-0 right-0 text-center pt-16">
+                <h1
+                  ref={headingRef}
+                  className="text-4xl font-serif font-bold tracking-tight text-[color:var(--hero-heading)] leading-[1.08] drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]"
+                >
+                  <span className="inline-block">
+                    {language === "en" ? (
+                      <>
+                        <span style={{ color: "#C9A227" }}>B</span>hasya{" "}
+                        <span style={{ color: "#C9A227" }}>L</span>egal
+                      </>
+                    ) : (
+                      <>
+                        <span style={{ color: "#C9A227" }}>भा</span>स्य{" "}
+                        <span style={{ color: "#C9A227" }}>का</span>नून
+                      </>
+                    )}
+                  </span>
+                </h1>
+              </div>
+
+              {/* Center - Copy and CTAs over the middle/lower-middle of the statue */}
+              <div className="absolute left-1/2 top-[54%] -translate-x-1/2 -translate-y-1/2 text-center flex flex-col items-center gap-4 pointer-events-auto w-full max-w-xs">
+                <div ref={ruleRef} className="h-px w-16 bg-[color:var(--hero-accent-line)]" />
+                
+                <p ref={subRef} className="text-sm text-[color:var(--hero-sub-text)] font-semibold leading-relaxed max-w-xs px-3 drop-shadow-[0_4px_10px_rgba(0,0,0,0.95)]">
+                  {c.heroSub}
+                </p>
+
+                <div ref={buttonsRef} className="flex flex-col gap-3 w-full max-w-xs">
+                  <a
+                    href="tel:+9779845047233"
+                    className="cta-pulse group relative inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#C9A227] text-[#0B1F3A] font-bold tracking-wide text-sm transition-all duration-300 hover:bg-[#F8D869] hover:scale-[1.03] active:scale-95"
+                  >
+                    {c.heroBtn}
+                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </a>
+
+                  <Link
+                    to="/services"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border-2 border-[#C9A227]/60 bg-[#07152A]/40 backdrop-blur-sm text-[#F8F5EE] font-bold tracking-wide text-sm transition-all duration-300 hover:bg-[#C9A227] hover:text-[#0B1F3A] hover:border-[#C9A227] hover:scale-[1.03] active:scale-95"
+                  >
+                    {c.heroBtnSecondary}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="absolute inset-0 z-[5] pointer-events-none xl:bg-[image:var(--hero-overlay-xl)]" />
       </section>
