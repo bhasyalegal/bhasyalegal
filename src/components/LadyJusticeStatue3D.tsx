@@ -556,6 +556,7 @@ const LadyJusticeStatue3D: React.FC<LadyJusticeStatue3DProps> = ({ className = "
   // the light/dark theme toggle — always use the moodier "dark backdrop"
   // treatment that used to be reserved for dark theme only.
   const isDark = true;
+<<<<<<< HEAD
 
   // The canvas keeps rendering every frame (idle breathing animation, damped
   // controls) even while scrolled far off-screen unless told otherwise.
@@ -576,6 +577,8 @@ const LadyJusticeStatue3D: React.FC<LadyJusticeStatue3DProps> = ({ className = "
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
+=======
+>>>>>>> a8e75302a9017834819cf3be456983e7c1a84612
 
   return (
     <div ref={containerRef} className={className}>
