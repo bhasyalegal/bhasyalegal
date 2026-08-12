@@ -53,11 +53,7 @@ const Contact = () => {
 
   const content = {
     en: {
-<<<<<<< HEAD
       title: "Let's Discuss Your Legal Matter",
-=======
-      title: "Contact Us",
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       subtitle: "Get in Touch with Bhasya Legal",
       description: "Have a legal question or need representation? Our team is ready to assist you. Fill out the form or reach us directly.",
       contactInfo: "Contact Information",
@@ -89,11 +85,7 @@ const Contact = () => {
       error: "Something went wrong. Please try again or call us directly.",
     },
     np: {
-<<<<<<< HEAD
       title: "तपाईंको कानूनी विषयमा छलफल गरौं",
-=======
-      title: "सम्पर्क गर्नुहोस्",
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       subtitle: "भास्य कानूनसँग सम्पर्कमा रहनुहोस्",
       description: "कानूनी प्रश्न वा प्रतिनिधित्व चाहिन्छ? हाम्रो टोली तपाईंको सहायताको लागि तयार छ। फारम भर्नुहोस् वा सीधै सम्पर्क गर्नुहोस्।",
       contactInfo: "सम्पर्क जानकारी",
@@ -132,26 +124,17 @@ const Contact = () => {
   const emailHref = `mailto:${c.email}`;
 
   return (
-<<<<<<< HEAD
     <div className="min-h-screen bg-background py-24 md:py-28 relative overflow-hidden transition-colors duration-300">
       {/* Decorative ambient backdrop, consistent with the site's premium theme */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-[#C9A227]/5 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-[#0B1F3A]/10 blur-[120px]" />
-=======
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0A192F] py-24 md:py-28 relative overflow-hidden transition-colors duration-300">
-      {/* Decorative ambient backdrop, consistent with the site's premium theme */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] rounded-full bg-[#D4AF37]/5 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] rounded-full bg-[#1b0738]/10 blur-[120px]" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03]" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
-<<<<<<< HEAD
           <span className="text-[#C9A227] font-bold tracking-widest text-sm uppercase">{c.subtitle}</span>
           <h1 className="mt-3 text-4xl md:text-6xl font-serif font-bold text-[#0B1F3A] dark:text-white tracking-tight">
             {c.title}
@@ -159,13 +142,6 @@ const Contact = () => {
           <div className="gold-divider mt-6 mb-8">
             <span className="gold-divider-mark" />
           </div>
-=======
-          <span className="text-[#D4AF37] font-bold tracking-widest text-sm uppercase">{c.subtitle}</span>
-          <h1 className="mt-3 text-4xl md:text-6xl font-serif font-bold text-[#1b0738] dark:text-white tracking-tight">
-            {c.title}
-          </h1>
-          <div className="w-20 h-1 bg-gradient-to-r from-[#D4AF37] to-[#F4E3B2] mx-auto rounded-full mt-6 mb-8" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           <p className="text-base md:text-lg text-gray-500 dark:text-gray-400 font-light leading-relaxed max-w-2xl mx-auto">
             {c.description}
           </p>
@@ -176,20 +152,12 @@ const Contact = () => {
           {/* Contact Info Sidebar */}
           <div className="space-y-8">
             <div className="card-premium p-8 shadow-elegant">
-<<<<<<< HEAD
               <h2 className="text-2xl font-serif font-bold text-[#0B1F3A] dark:text-white mb-6">
-=======
-              <h2 className="text-2xl font-serif font-bold text-[#1b0738] dark:text-white mb-6">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                 {c.contactInfo}
               </h2>
 
               <div className="flex items-start gap-4 mb-6">
-<<<<<<< HEAD
                 <MapPin className="w-5 h-5 text-[#C9A227] mt-0.5 flex-shrink-0" />
-=======
-                <MapPin className="w-5 h-5 text-[#D4AF37] mt-0.5 flex-shrink-0" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                 <p className="font-medium text-gray-700 dark:text-gray-200 leading-relaxed">{c.address}</p>
               </div>
 
@@ -197,17 +165,10 @@ const Contact = () => {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
                 <a
                   href={phoneHref}
-<<<<<<< HEAD
                   className="flex flex-col items-center justify-center gap-2 rounded-md border border-[#C9A227]/25 bg-[#0B1F3A]/[0.03] dark:bg-white/5 px-4 py-4 text-center hover:bg-[#0B1F3A] hover:border-[#0B1F3A] dark:hover:bg-[#C9A227] dark:hover:border-[#C9A227] transition-all duration-300 group"
                 >
                   <Phone className="w-5 h-5 text-[#0B1F3A] dark:text-[#C9A227] group-hover:text-[#C9A227] dark:group-hover:text-[#0B1F3A] transition-colors" />
                   <span className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] dark:text-white group-hover:text-white dark:group-hover:text-[#0B1F3A] transition-colors">
-=======
-                  className="flex flex-col items-center justify-center gap-2 rounded-xl border border-[#D4AF37]/25 bg-[#1b0738]/[0.03] dark:bg-white/5 px-4 py-4 text-center hover:bg-[#1b0738] hover:border-[#1b0738] dark:hover:bg-[#D4AF37] dark:hover:border-[#D4AF37] transition-all duration-300 group"
-                >
-                  <Phone className="w-5 h-5 text-[#1b0738] dark:text-[#D4AF37] group-hover:text-[#D4AF37] dark:group-hover:text-[#1b0738] transition-colors" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#1b0738] dark:text-white group-hover:text-white dark:group-hover:text-[#1b0738] transition-colors">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                     {c.callBtn}
                   </span>
                 </a>
@@ -216,34 +177,20 @@ const Contact = () => {
                   href={whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
-<<<<<<< HEAD
                   className="flex flex-col items-center justify-center gap-2 rounded-md border border-[#25D366]/30 bg-[#25D366]/[0.06] dark:bg-white/5 px-4 py-4 text-center hover:bg-[#25D366] hover:border-[#25D366] transition-all duration-300 group"
                 >
                   <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:text-white transition-colors" />
                   <span className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] dark:text-white group-hover:text-white transition-colors">
-=======
-                  className="flex flex-col items-center justify-center gap-2 rounded-xl border border-[#25D366]/30 bg-[#25D366]/[0.06] dark:bg-white/5 px-4 py-4 text-center hover:bg-[#25D366] hover:border-[#25D366] transition-all duration-300 group"
-                >
-                  <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:text-white transition-colors" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#1b0738] dark:text-white group-hover:text-white transition-colors">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                     {c.whatsappBtn}
                   </span>
                 </a>
 
                 <a
                   href={emailHref}
-<<<<<<< HEAD
                   className="flex flex-col items-center justify-center gap-2 rounded-md border border-[#C9A227]/25 bg-[#0B1F3A]/[0.03] dark:bg-white/5 px-4 py-4 text-center hover:bg-[#0B1F3A] hover:border-[#0B1F3A] dark:hover:bg-[#C9A227] dark:hover:border-[#C9A227] transition-all duration-300 group"
                 >
                   <Mail className="w-5 h-5 text-[#0B1F3A] dark:text-[#C9A227] group-hover:text-[#C9A227] dark:group-hover:text-[#0B1F3A] transition-colors" />
                   <span className="text-xs font-bold uppercase tracking-wider text-[#0B1F3A] dark:text-white group-hover:text-white dark:group-hover:text-[#0B1F3A] transition-colors">
-=======
-                  className="flex flex-col items-center justify-center gap-2 rounded-xl border border-[#D4AF37]/25 bg-[#1b0738]/[0.03] dark:bg-white/5 px-4 py-4 text-center hover:bg-[#1b0738] hover:border-[#1b0738] dark:hover:bg-[#D4AF37] dark:hover:border-[#D4AF37] transition-all duration-300 group"
-                >
-                  <Mail className="w-5 h-5 text-[#1b0738] dark:text-[#D4AF37] group-hover:text-[#D4AF37] dark:group-hover:text-[#1b0738] transition-colors" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#1b0738] dark:text-white group-hover:text-white dark:group-hover:text-[#1b0738] transition-colors">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                     {c.emailBtn}
                   </span>
                 </a>
@@ -255,19 +202,11 @@ const Contact = () => {
               </div>
 
               <div className="flex items-start gap-4 pt-5 border-t border-gray-100 dark:border-white/5">
-<<<<<<< HEAD
                 <Clock className="w-5 h-5 text-[#C9A227] mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="font-medium text-gray-700 dark:text-gray-200">{c.hours}</p>
                   <p className="text-gray-500 dark:text-gray-400">{c.hoursSat}</p>
                   <p className="text-[#C9A227] font-semibold mt-1">{c.emergency}</p>
-=======
-                <Clock className="w-5 h-5 text-[#D4AF37] mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="font-medium text-gray-700 dark:text-gray-200">{c.hours}</p>
-                  <p className="text-gray-500 dark:text-gray-400">{c.hoursSat}</p>
-                  <p className="text-[#D4AF37] font-semibold mt-1">{c.emergency}</p>
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                 </div>
               </div>
             </div>
@@ -283,18 +222,13 @@ const Contact = () => {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Bhasya Legal Location"
-<<<<<<< HEAD
                 className="rounded-md grayscale-[15%] contrast-[1.05]"
-=======
-                className="rounded-xl grayscale-[15%] contrast-[1.05]"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
               ></iframe>
             </div>
           </div>
 
           {/* Contact Form */}
           <div className="card-premium shadow-elegant-lg p-8">
-<<<<<<< HEAD
             {submitStatus !== "success" && (
               <div className="mb-6 pb-6 border-b border-[#E5DED0] dark:border-white/10">
                 <span className="text-[#C9A227] font-semibold tracking-widest text-xs uppercase">
@@ -302,28 +236,18 @@ const Contact = () => {
                 </span>
               </div>
             )}
-=======
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
             {submitStatus === "success" ? (
               <div className="text-center py-12">
                 <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
                 </div>
-<<<<<<< HEAD
                 <h3 className="text-xl font-serif font-semibold text-[#0B1F3A] dark:text-white mb-2">
-=======
-                <h3 className="text-xl font-serif font-semibold text-[#1b0738] dark:text-white mb-2">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                   {language === "en" ? "Message Sent!" : "सन्देश पठाइयो!"}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">{c.success}</p>
                 <Button
                   onClick={() => setSubmitStatus("idle")}
-<<<<<<< HEAD
                   className="mt-6 bg-[#C9A227] text-[#0B1F3A] hover:bg-[#C9A227]/90 font-semibold"
-=======
-                  className="mt-6 bg-[#D4AF37] text-[#1b0738] hover:bg-[#D4AF37]/90 font-semibold"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                 >
                   {language === "en" ? "Send Another Message" : "अर्को सन्देश पठाउनुहोस्"}
                 </Button>
@@ -341,11 +265,7 @@ const Contact = () => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-<<<<<<< HEAD
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition"
-=======
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent transition"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                       placeholder={c.form.namePlaceholder}
                     />
                   </div>
@@ -359,11 +279,7 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-<<<<<<< HEAD
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition"
-=======
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent transition"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                       placeholder={c.form.emailPlaceholder}
                     />
                   </div>
@@ -378,11 +294,7 @@ const Contact = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-<<<<<<< HEAD
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition"
-=======
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent transition"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                       placeholder={c.form.phonePlaceholder}
                     />
                   </div>
@@ -396,11 +308,7 @@ const Contact = () => {
                       value={formData.subject}
                       onChange={handleChange}
                       required
-<<<<<<< HEAD
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition"
-=======
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent transition"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                       placeholder={c.form.subjectPlaceholder}
                     />
                   </div>
@@ -415,11 +323,7 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleChange}
                     required
-<<<<<<< HEAD
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent transition resize-none"
-=======
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent transition resize-none"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                     placeholder={c.form.messagePlaceholder}
                   />
                 </div>
@@ -434,19 +338,11 @@ const Contact = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-<<<<<<< HEAD
                   className="w-full bg-[#0B1F3A] hover:bg-[#C9A227] text-white hover:text-[#0B1F3A] font-bold py-3 rounded-md transition-all duration-200 flex items-center justify-center gap-2 shadow-soft"
                 >
                   {isSubmitting ? (
                     <>
                       <div className="w-5 h-5 border-2 border-[#0B1F3A] border-t-transparent rounded-full animate-spin"></div>
-=======
-                  className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1b0738] font-bold py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-[0_0_25px_rgba(212,175,55,0.35)]"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-[#1b0738] border-t-transparent rounded-full animate-spin"></div>
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
                       {c.form.submitting}
                     </>
                   ) : (

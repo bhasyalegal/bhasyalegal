@@ -25,21 +25,13 @@ const Layout = ({ children }: LayoutProps) => {
   }, [location.pathname]);
 
   return (
-<<<<<<< HEAD
     <div className="min-h-screen flex flex-col bg-background selection:bg-[#C9A227] selection:text-[#0B1F3A] relative">
-=======
-    <div className="min-h-screen flex flex-col bg-background selection:bg-[#D4AF37] selection:text-[#1b0738] relative">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       
       {/* --- BACKGROUND TEXTURE --- */}
       <div 
         className="pointer-events-none fixed inset-0 z-0 opacity-[0.15] dark:opacity-[0.05]"
         style={{
-<<<<<<< HEAD
           backgroundImage: 'radial-gradient(#C9A227 1px, transparent 1px)',
-=======
-          backgroundImage: 'radial-gradient(#D4AF37 1px, transparent 1px)',
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           backgroundSize: '32px 32px'
         }}
       />

@@ -82,28 +82,16 @@ const GavelLoader = ({ message }: GavelLoaderProps) => {
       `}</style>
 
       {/* Layered Premium Ambient Lighting Background */}
-<<<<<<< HEAD
       <div className="absolute w-[350px] h-[350px] bg-[#C9A227]/10 dark:bg-[#C9A227]/5 rounded-full blur-[80px] pointer-events-none animate-ambient-glow" />
       <div className="absolute w-[200px] h-[200px] bg-[#0B1F3A]/5 dark:bg-white/5 rounded-full blur-[60px] pointer-events-none translate-y-12" />
 
       {/* Main Glassmorphic Animation Core */}
       <div className="relative p-10 rounded-lg card-premium flex flex-col items-center max-w-sm w-full mx-4 border border-[#C9A227]/20 shadow-elegant-xl">
-=======
-      <div className="absolute w-[350px] h-[350px] bg-[#D4AF37]/10 dark:bg-[#D4AF37]/5 rounded-full blur-[80px] pointer-events-none animate-ambient-glow" />
-      <div className="absolute w-[200px] h-[200px] bg-[#1b0738]/5 dark:bg-white/5 rounded-full blur-[60px] pointer-events-none translate-y-12" />
-
-      {/* Main Glassmorphic Animation Core */}
-      <div className="relative p-10 rounded-2xl card-premium flex flex-col items-center max-w-sm w-full mx-4 border border-[#D4AF37]/20 shadow-elegant-xl">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         
         {/* Vector Canvas */}
         <svg 
           viewBox="0 0 100 100" 
-<<<<<<< HEAD
           className="w-32 h-32 text-[#0B1F3A] dark:text-gray-100 drop-shadow-md"
-=======
-          className="w-32 h-32 text-[#1b0738] dark:text-gray-100 drop-shadow-md"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
           fill="none" 
           stroke="currentColor" 
           strokeWidth="2.5" 
@@ -115,27 +103,18 @@ const GavelLoader = ({ message }: GavelLoaderProps) => {
             cx="45" 
             cy="64" 
             r="16" 
-<<<<<<< HEAD
             className="stroke-[#C9A227] animate-ripple" 
-=======
-            className="stroke-[#D4AF37] animate-ripple" 
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
             strokeWidth="1.5"
             strokeDasharray="3 3"
           />
 
           {/* 2. Stationary Judicial Sound Block */}
-<<<<<<< HEAD
           <g className="text-[#C9A227]">
-=======
-          <g className="text-[#D4AF37]">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
             <path d="M25 68h40" strokeWidth="3" />
             <rect x="33" y="61" width="24" height="7" rx="1.5" fill="currentColor" fillOpacity="0.1" />
           </g>
 
           {/* 3. Dynamic Animated Wooden Hammer Assembly */}
-<<<<<<< HEAD
           <g className="animate-gavel text-[#0B1F3A] dark:text-white">
             <line x1="45" y1="42" x2="72" y2="55" strokeWidth="3" />
             <circle cx="72" cy="55" r="2" fill="#C9A227" stroke="none" />
@@ -146,29 +125,13 @@ const GavelLoader = ({ message }: GavelLoaderProps) => {
               <line x1="37" y1="48" x2="53" y2="48" className="stroke-[#C9A227]" strokeWidth="1" />
               <path d="M37 34.5c-2 2-2 11 0 13V34.5z" fill="#C9A227" />
               <path d="M53 34.5c2 2 2 11 0 13V34.5z" fill="#C9A227" />
-=======
-          <g className="animate-gavel text-[#1b0738] dark:text-white">
-            <line x1="45" y1="42" x2="72" y2="55" strokeWidth="3" />
-            <circle cx="72" cy="55" r="2" fill="#D4AF37" stroke="none" />
-            
-            <g transform="rotate(26, 45, 42)">
-              <rect x="37" y="32" width="16" height="20" rx="2" fill="currentColor" />
-              <line x1="37" y1="36" x2="53" y2="36" className="stroke-[#D4AF37]" strokeWidth="1" />
-              <line x1="37" y1="48" x2="53" y2="48" className="stroke-[#D4AF37]" strokeWidth="1" />
-              <path d="M37 34.5c-2 2-2 11 0 13V34.5z" fill="#D4AF37" />
-              <path d="M53 34.5c2 2 2 11 0 13V34.5z" fill="#D4AF37" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
             </g>
           </g>
         </svg>
 
         {/* Branding Signifier Footer */}
         <div className="mt-6 text-center space-y-3 relative z-10 w-full">
-<<<<<<< HEAD
           <div className="flex items-center justify-center gap-2 text-[#C9A227] tracking-widest text-xs uppercase font-semibold">
-=======
-          <div className="flex items-center justify-center gap-2 text-[#D4AF37] tracking-widest text-xs uppercase font-semibold">
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
             <Scale className="w-3.5 h-3.5" />
             <span>BHASYA LEGAL</span>
           </div>
@@ -180,17 +143,10 @@ const GavelLoader = ({ message }: GavelLoaderProps) => {
         </div>
 
         {/* Luxury Corner Border Accents */}
-<<<<<<< HEAD
         <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-[#C9A227]/30 rounded-tl" />
         <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-[#C9A227]/30 rounded-tr" />
         <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-[#C9A227]/30 rounded-bl" />
         <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-[#C9A227]/30 rounded-br" />
-=======
-        <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-[#D4AF37]/30 rounded-tl" />
-        <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-[#D4AF37]/30 rounded-tr" />
-        <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-[#D4AF37]/30 rounded-bl" />
-        <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-[#D4AF37]/30 rounded-br" />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       </div>
     </div>
   );

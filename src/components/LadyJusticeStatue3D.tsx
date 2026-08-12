@@ -7,14 +7,18 @@ import React, {
   useState,
 } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, useGLTF, OrbitControls, Html, Preload } from "@react-three/drei";
+import {
+  Environment,
+  useGLTF,
+  OrbitControls,
+  Html,
+  Preload,
+  PerformanceMonitor,
+} from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import * as THREE from "three";
 import gsap from "gsap";
-<<<<<<< HEAD
-=======
 import { useTheme } from "next-themes";
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
 
 
 type RenderTier = "efficient" | "balanced" | "premium";
@@ -23,26 +27,52 @@ type RenderSettings = {
   shadowMapSize: number;
   useHDRI: boolean;
   usePostFX: boolean;
+  useShadows: boolean;
+  antialias: boolean;
+  precision: "mediump" | "highp";
   dpr: [number, number];
 };
 
+// "efficient" targets phones. The statue model was optimized from ~2.3M to
+// ~400K vertices (see public/models/lady-justice.glb), so shadow casting —
+// re-processing the full mesh a second time from the light's POV every
+// frame — is no longer the dominant cost it used to be, but it's still the
+// single most expensive *per-frame* operation available (a whole extra
+// render pass), so it stays off here to protect frame time. dpr and
+// antialias are cheap by comparison once the vertex/GPU-memory cost is this
+// low, and both were the actual source of the "low quality/blurry" look on
+// phones: dpr locked to 1 renders below native resolution on every
+// modern (2x-3x) phone screen and the browser then upscales the result.
+// PerformanceMonitor (in Scene, below) acts as a runtime safety net,
+// stepping dpr back down toward the tier minimum if a particular device
+// can't sustain frame rate at the max, so this baseline can afford to be
+// more ambitious than a static lowest-common-denominator setting.
 const RENDER_SETTINGS: Record<RenderTier, RenderSettings> = {
   efficient: {
     shadowMapSize: 512,
-    useHDRI: false,
+    useHDRI: true,
     usePostFX: false,
-    dpr: [1, 1.5],
+    useShadows: false,
+    antialias: true,
+    precision: "highp",
+    dpr: [1, 2],
   },
   balanced: {
     shadowMapSize: 1024,
     useHDRI: true,
     usePostFX: false,
+    useShadows: true,
+    antialias: true,
+    precision: "highp",
     dpr: [1, 1.5],
   },
   premium: {
     shadowMapSize: 2048,
     useHDRI: true,
     usePostFX: true,
+    useShadows: true,
+    antialias: true,
+    precision: "highp",
     dpr: [1, 2],
   },
 };
@@ -165,7 +195,7 @@ function useModelFit(url: string, targetHeight: number): ModelFit {
   }, [scene, targetHeight]);
 }
 
-function StatueModel({ fit }: { fit: ModelFit }) {
+function StatueModel({ fit, precision }: { fit: ModelFit; precision: "mediump" | "highp" }) {
   const outer = useRef<THREE.Group>(null);
   const floatGroup = useRef<THREE.Group>(null);
   const inner = useRef<THREE.Group>(null);
@@ -243,13 +273,13 @@ function StatueModel({ fit }: { fit: ModelFit }) {
           (mesh.material as THREE.Material).side = THREE.FrontSide;
           const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
           mats.forEach((mat) => {
-            mat.precision = "highp";
+            mat.precision = precision;
           });
         }
       }
     });
     return clone;
-  }, [scene]);
+  }, [scene, precision]);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -380,7 +410,7 @@ function CameraRig({ pointer, frameBox }: { pointer: PointerRef; frameBox: Frame
   return null;
 }
 
-function LightingRig({ shadowMapSize, isDark }: { shadowMapSize: number; isDark: boolean }) {
+function LightingRig({ shadowMapSize, isDark, useShadows }: { shadowMapSize: number; isDark: boolean; useShadows: boolean }) {
   return (
     <>
       <ambientLight intensity={isDark ? 0.25 : 0.45} color={isDark ? "#3a3222" : "#eae4d8"} />
@@ -388,7 +418,7 @@ function LightingRig({ shadowMapSize, isDark }: { shadowMapSize: number; isDark:
         position={[3.5, 5, 3]}
         intensity={isDark ? 1.7 : 1.8}
         color={isDark ? "#f4d998" : "#fff8ee"}
-        castShadow
+        castShadow={useShadows}
         shadow-mapSize-width={shadowMapSize}
         shadow-mapSize-height={shadowMapSize}
         shadow-camera-far={12}
@@ -404,30 +434,21 @@ function LightingRig({ shadowMapSize, isDark }: { shadowMapSize: number; isDark:
         angle={0.6}
         penumbra={0.8}
         intensity={isDark ? 1.4 : 1.1} 
-<<<<<<< HEAD
         color="#0B1F3A"
-=======
-        color="#1B0738"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       />
       <spotLight
         position={[2.5, 4, 1.8]}
         angle={0.4}
         penumbra={0.5}
-<<<<<<< HEAD
         intensity={isDark ? 1.55 : 1.1}
         color="#C9A227"
-=======
-        intensity={isDark ? 1.3 : 1.1}
-        color="#C59B27"
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
       />
       <pointLight position={[0, 1.2, 2]} intensity={isDark ? 0.35 : 0.3} color="#fff3d6" />
     </>
   );
 }
 
-function FramedStatue({ pointer, useHDRI, frameBox }: { pointer: PointerRef; useHDRI: boolean; frameBox: FrameBox }) {
+function FramedStatue({ pointer, useHDRI, frameBox, precision }: { pointer: PointerRef; useHDRI: boolean; frameBox: FrameBox; precision: "mediump" | "highp" }) {
   const fit = useModelFit(MODEL_URL, TARGET_HEIGHT);
 
   const [isDesktop, setIsDesktop] = useState(false);
@@ -444,7 +465,7 @@ function FramedStatue({ pointer, useHDRI, frameBox }: { pointer: PointerRef; use
     <>
       <CameraRig pointer={pointer} frameBox={frameBox} />
       <group position={[0, ASSEMBLY_OFFSET_Y + desktopYOffset, 0]}>
-        <StatueModel fit={fit} />
+        <StatueModel fit={fit} precision={precision} />
       </group>
       {useHDRI && <Environment preset="city" />}
     </>
@@ -459,6 +480,7 @@ function Scene({ renderTier, isDark }: { renderTier: RenderTier; isDark: boolean
   const targetLookAt = useMemo(() => new THREE.Vector3(0, frameBox.centerY, 0), [frameBox.centerY]);
 
   const { gl } = useThree();
+  const setDpr = useThree((state) => state.setDpr);
   const controlsRef = useRef<any>(null);
 
   // Re-apply touchAction="pan-y" after OrbitControls mounts and sets touchAction="none"
@@ -471,10 +493,22 @@ function Scene({ renderTier, isDark }: { renderTier: RenderTier; isDark: boolean
 
   return (
     <>
-      <LightingRig shadowMapSize={settings.shadowMapSize} isDark={isDark} />
+      {/* Runtime safety net: Canvas mounts at settings.dpr[1] (clamped to the
+          device's real pixel ratio), so most phones already render at full
+          tier quality. If sustained FPS drops (older/thermal-throttled
+          devices), this steps dpr back down to the tier floor instead of
+          every device paying the cost of the weakest one; it steps back up
+          if performance recovers. */}
+      <PerformanceMonitor
+        factor={1}
+        onDecline={() => setDpr(settings.dpr[0])}
+        onIncline={() => setDpr(settings.dpr[1])}
+      />
+
+      <LightingRig shadowMapSize={settings.shadowMapSize} isDark={isDark} useShadows={settings.useShadows} />
 
       <Suspense fallback={null}>
-        <FramedStatue pointer={pointer} useHDRI={settings.useHDRI} frameBox={frameBox} />
+        <FramedStatue pointer={pointer} useHDRI={settings.useHDRI} frameBox={frameBox} precision={settings.precision} />
         <Preload all />
       </Suspense>
 
@@ -497,17 +531,10 @@ function Scene({ renderTier, isDark }: { renderTier: RenderTier; isDark: boolean
           <Bloom
             luminanceThreshold={isDark ? 0.75 : 0.88}
             luminanceSmoothing={0.25}
-<<<<<<< HEAD
             intensity={isDark ? 0.38 : 0.25}
             mipmapBlur
           />
           <Vignette eskil={false} offset={0.2} darkness={isDark ? 0.75 : 0.3} />
-=======
-            intensity={isDark ? 0.45 : 0.25}
-            mipmapBlur
-          />
-          <Vignette eskil={false} offset={0.2} darkness={isDark ? 0.7 : 0.3} />
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
         </EffectComposer>
       )}
     </>
@@ -523,27 +550,43 @@ const INITIAL_CAMERA_FALLBACK: [number, number, number] = [0, 0, 8];
 const LadyJusticeStatue3D: React.FC<LadyJusticeStatue3DProps> = ({ className = "" }) => {
   const renderTier = useRenderTier();
   const settings = RENDER_SETTINGS[renderTier];
-<<<<<<< HEAD
   // The hero backdrop is now a consistent deep royal-blue gradient in both
   // site themes (see Home.tsx .hero-theme-vars), so the statue's lighting,
   // bloom/vignette, and transparent Canvas background — previously tied to
   // the light/dark theme toggle — always use the moodier "dark backdrop"
   // treatment that used to be reserved for dark theme only.
   const isDark = true;
-=======
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
->>>>>>> 6bf9ce78c924901f37302c226cdd55588be69d37
+
+  // The canvas keeps rendering every frame (idle breathing animation, damped
+  // controls) even while scrolled far off-screen unless told otherwise.
+  // Pausing the frameloop when it's out of view costs nothing visually
+  // (nobody can see it) and gives back GPU/battery on mobile while reading
+  // the rest of the page. Defaults to "always" so nothing changes until the
+  // observer has real data.
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { rootMargin: "200px 0px" }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className={className}>
+    <div ref={containerRef} className={className}>
       <Canvas
-        shadows="soft"
+        frameloop={isVisible ? "always" : "never"}
+        shadows={settings.useShadows ? "soft" : false}
         dpr={settings.dpr}
         camera={{ position: INITIAL_CAMERA_FALLBACK, fov: CAMERA_FOV_DEG }}
         gl={{
           alpha: true,
-          antialias: true,
+          antialias: settings.antialias,
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: isDark ? 1.1 : 1.05,
         }}
