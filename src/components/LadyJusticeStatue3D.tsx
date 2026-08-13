@@ -117,6 +117,13 @@ const TARGET_VERTICAL_COVERAGE = 0.70; // Forces statue to take up exactly 70% o
 const VERTICAL_BIAS = 0;
 const ENTRANCE_ZOOM_FACTOR = 1.4;
 
+// Compositional Y shifts applied on top of the fixed camera frame (camera target
+// doesn't move, so these just slide the statue up/down within the shot).
+// Roughly, 0.05 units ≈ 1% of screen height at the default fit distance —
+// nudge these to match the exact framing you want.
+const DESKTOP_Y_OFFSET = -0.6;
+const MOBILE_Y_OFFSET = 0.29;
+
 type FrameBox = { width: number; height: number; centerY: number };
 
 function clamp(value: number, min: number, max: number): number {
@@ -207,7 +214,6 @@ function StatueModel({ fit, precision, enableControls }: { fit: ModelFit; precis
     let directionLocked = false;
 
     const handleTouchStart = (e: TouchEvent) => {
-      if (window.innerWidth < 1024) return;
       if (isDragging.current && e.touches.length > 0) {
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
@@ -216,7 +222,6 @@ function StatueModel({ fit, precision, enableControls }: { fit: ModelFit; precis
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (window.innerWidth < 1024) return;
       if (!isDragging.current || directionLocked) return;
       if (e.touches.length > 0) {
         const dx = e.touches[0].clientX - startX;
@@ -365,9 +370,9 @@ function StatueModel({ fit, precision, enableControls }: { fit: ModelFit; precis
         <mesh
           position={[0, TARGET_HEIGHT / 2, 0]}
           onClick={handleStatueClick}
-          onPointerEnter={(e) => { e.stopPropagation(); if (e.pointerType !== 'touch' || window.innerWidth >= 1024) enableControls(true); document.body.style.cursor = 'grab'; }}
+          onPointerEnter={(e) => { e.stopPropagation(); if (e.pointerType !== 'touch') enableControls(true); document.body.style.cursor = 'grab'; }}
           onPointerLeave={(e) => { e.stopPropagation(); if (!isDragging.current) enableControls(false); document.body.style.cursor = 'auto'; }}
-          onPointerDown={(e) => { e.stopPropagation(); if (e.pointerType === 'touch' && window.innerWidth < 1024) return; isDragging.current = true; enableControls(true); document.body.style.cursor = 'grabbing'; }}
+          onPointerDown={(e) => { e.stopPropagation(); isDragging.current = true; if (e.pointerType !== 'touch') enableControls(true); document.body.style.cursor = 'grabbing'; }}
           onPointerUp={() => { document.body.style.cursor = 'grab'; }}
         >
           {/* Widened slightly for better touch targets on mobile */}
@@ -502,12 +507,12 @@ function FramedStatue({ pointer, useHDRI, frameBox, precision, enableControls }:
     return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
-  const desktopYOffset = isDesktop ? -0.6 : 0;
+  const verticalOffset = isDesktop ? DESKTOP_Y_OFFSET : MOBILE_Y_OFFSET;
 
   return (
     <>
       <CameraRig pointer={pointer} frameBox={frameBox} />
-      <group position={[0, ASSEMBLY_OFFSET_Y + desktopYOffset, 0]}>
+      <group position={[0, ASSEMBLY_OFFSET_Y + verticalOffset, 0]}>
         <StatueModel fit={fit} precision={precision} enableControls={enableControls} />
       </group>
       {useHDRI && <Environment preset="city" />}
@@ -590,7 +595,6 @@ const LadyJusticeStatue3D: React.FC<LadyJusticeStatue3DProps> = ({ className = "
   const [controlsEnabled, setControlsEnabled] = useState(false);
 
   const enableControls = (enabled: boolean) => {
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) enabled = false;
     if (controlsRef.current) {
       controlsRef.current.enabled = enabled;
     }
@@ -623,7 +627,7 @@ const LadyJusticeStatue3D: React.FC<LadyJusticeStatue3DProps> = ({ className = "
         }}
         onPointerMissed={() => enableControls(false)}
         style={{
-          pointerEvents: typeof window !== "undefined" && window.innerWidth < 1024 ? "none" : "auto",
+          pointerEvents: "auto",
           background: isDark
             ? "transparent"
             : "radial-gradient(circle at center, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0) 70%)",

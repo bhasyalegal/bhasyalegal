@@ -373,7 +373,7 @@ const Home = () => {
             {/* Mobile Canvas Background (No dark hue overlay) */}
             <div className="absolute inset-0 z-0">
               <Suspense fallback={null}>
-                <LadyJusticeStatue3D className="w-full h-full pointer-events-none" />
+                <LadyJusticeStatue3D className="w-full h-full" />
               </Suspense>
             </div>
 
@@ -404,8 +404,8 @@ const Home = () => {
                 </h1>
               </div>
 
-              {/* Center - Copy and CTAs over the middle/lower-middle of the statue */}
-              <div className="absolute left-1/2 top-[54%] -translate-x-1/2 -translate-y-1/2 text-center flex flex-col items-center gap-4 pointer-events-auto w-full max-w-xs">
+              {/* Bottom - Copy and CTAs, below the statue/pedestal */}
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-[8%] text-center flex flex-col items-center gap-4 pointer-events-auto w-full max-w-xs">
                 <div ref={ruleRef} className="h-px w-16 bg-[color:var(--hero-accent-line)]" />
                 
                 <p ref={subRef} className="text-sm text-[color:var(--hero-sub-text)] font-semibold leading-relaxed max-w-xs px-3 drop-shadow-[0_4px_10px_rgba(0,0,0,0.95)]">
