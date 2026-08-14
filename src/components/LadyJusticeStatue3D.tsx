@@ -10,7 +10,6 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
   Environment,
   useGLTF,
-  OrbitControls,
   Html,
   Preload,
   PerformanceMonitor,
@@ -61,15 +60,35 @@ const RENDER_SETTINGS: Record<RenderTier, RenderSettings> = {
   },
 };
 
-function useRenderTier(): RenderTier {
+function useRenderTier(containerRef: React.RefObject<HTMLElement>): RenderTier {
   const [tier, setTier] = useState<RenderTier>("premium");
+
   useEffect(() => {
-    const compute = () => {
-      const w = window.innerWidth;
-      if (w < 640) setTier("efficient");
-      else if (w < 1280) setTier("balanced");
-      else setTier("premium");
+    const tierForWidth = (w: number): RenderTier => {
+      if (w < 640) return "efficient";
+      if (w < 1280) return "balanced";
+      return "premium";
     };
+
+    const node = containerRef.current;
+
+    // Measure the statue's own container rather than the whole window, so
+    // the render tier reflects how much space this component actually gets
+    // on the current device — still correct if it's ever embedded somewhere
+    // narrower than the full viewport (a split layout, a card, etc).
+    if (node && typeof ResizeObserver !== "undefined") {
+      setTier(tierForWidth(node.getBoundingClientRect().width || window.innerWidth));
+      const observer = new ResizeObserver((entries) => {
+        const width = entries[0]?.contentRect.width;
+        if (width) setTier(tierForWidth(width));
+      });
+      observer.observe(node);
+      return () => observer.disconnect();
+    }
+
+    // Fallback for browsers without ResizeObserver, or if this runs before
+    // the container ref has mounted.
+    const compute = () => setTier(tierForWidth(window.innerWidth));
     compute();
     window.addEventListener("resize", compute);
     window.addEventListener("orientationchange", compute);
@@ -77,7 +96,8 @@ function useRenderTier(): RenderTier {
       window.removeEventListener("resize", compute);
       window.removeEventListener("orientationchange", compute);
     };
-  }, []);
+  }, [containerRef]);
+
   return tier;
 }
 
@@ -93,6 +113,147 @@ function usePointerState() {
     return () => window.removeEventListener("pointermove", onMove);
   }, []);
   return state;
+}
+
+function useIsTouchDevice(): boolean {
+  const [isTouch, setIsTouch] = useState(false);
+  useEffect(() => {
+    setIsTouch(
+      typeof window !== "undefined" &&
+        ("ontouchstart" in window || navigator.maxTouchPoints > 0)
+    );
+  }, []);
+  return isTouch;
+}
+
+// Browsers don't expose an exact Windows device model the way they do on
+// Android, so "Surface Pro" can't be detected with certainty. This is a
+// best-effort heuristic (Windows + multi-touch, refined by UA Client Hints
+// where the browser supports them) — it may also match other touch-enabled
+// Windows 2-in-1 laptops, so treat it as "probably a Surface Pro" rather
+// than a guarantee.
+function useIsSurfacePro(): boolean {
+  const [isSurfacePro, setIsSurfacePro] = useState(false);
+  useEffect(() => {
+    const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
+    const isWindows = /Windows NT/i.test(ua);
+    const hasMultiTouch =
+      typeof navigator !== "undefined" && navigator.maxTouchPoints > 1;
+    setIsSurfacePro(isWindows && hasMultiTouch);
+
+    const uaData = (navigator as any)?.userAgentData;
+    if (uaData?.getHighEntropyValues) {
+      uaData
+        .getHighEntropyValues(["model"])
+        .then((values: { model?: string }) => {
+          if (values.model && /surface pro/i.test(values.model)) {
+            setIsSurfacePro(true);
+          }
+        })
+        .catch(() => {});
+    }
+  }, []);
+  return isSurfacePro;
+}
+
+// Reads device tilt via the Device Orientation API into a ref (not state) so
+// useFrame can sample it every tick without triggering React re-renders.
+// iOS only grants motion/orientation access from inside a user gesture, so
+// `requestPermission` is exposed separately for a click/tap handler to call.
+function useDeviceTilt(enabled: boolean) {
+  const tilt = useRef({ x: 0, y: 0 });
+  const [permissionGranted, setPermissionGranted] = useState(false);
+
+  const needsPermission =
+    typeof window !== "undefined" &&
+    typeof (window as any).DeviceOrientationEvent !== "undefined" &&
+    typeof (window as any).DeviceOrientationEvent.requestPermission === "function";
+
+  useEffect(() => {
+    if (!enabled || (needsPermission && !permissionGranted)) return;
+
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      // gamma: left-right tilt (-90..90). beta: front-back tilt (-180..180) —
+      // ~45° is a natural resting angle for a handheld phone/tablet, so that
+      // is treated as neutral rather than 0.
+      const gamma = THREE.MathUtils.clamp(e.gamma ?? 0, -45, 45);
+      const beta = THREE.MathUtils.clamp((e.beta ?? 45) - 45, -45, 45);
+      tilt.current.x = gamma / 45;
+      tilt.current.y = beta / 45;
+    };
+
+    window.addEventListener("deviceorientation", handleOrientation);
+    return () => window.removeEventListener("deviceorientation", handleOrientation);
+  }, [enabled, needsPermission, permissionGranted]);
+
+  const requestPermission = async () => {
+    if (!needsPermission || permissionGranted) return;
+    try {
+      const result = await (window as any).DeviceOrientationEvent.requestPermission();
+      if (result === "granted") setPermissionGranted(true);
+    } catch {
+      // Denied, or called outside a user gesture — fail silently and leave
+      // the statue static rather than throwing.
+    }
+  };
+
+  return { tilt, requestPermission };
+}
+
+
+function useDesktopDragRotation(enabled: boolean) {
+  const rotation = useRef({ x: 0, y: 0 });
+  const dragging = useRef(false);
+  const moved = useRef(false);
+  const last = useRef({ x: 0, y: 0 });
+
+  const beginDrag = (e: any) => {
+    if (!enabled) return;
+    dragging.current = true;
+    moved.current = false;
+    last.current.x = e.clientX;
+    last.current.y = e.clientY;
+    e.stopPropagation();
+    e.target?.setPointerCapture?.(e.pointerId);
+  };
+
+  const drag = (e: any) => {
+    if (!enabled || !dragging.current) return;
+
+    const dx = e.clientX - last.current.x;
+    const dy = e.clientY - last.current.y;
+
+    if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
+      moved.current = true;
+    }
+
+    rotation.current.y += dx * 0.012;
+    rotation.current.x += dy * 0.007;
+    rotation.current.x = THREE.MathUtils.clamp(
+      rotation.current.x,
+      -THREE.MathUtils.degToRad(12),
+      THREE.MathUtils.degToRad(12)
+    );
+
+    last.current.x = e.clientX;
+    last.current.y = e.clientY;
+    e.stopPropagation();
+  };
+
+  const endDrag = (e?: any) => {
+    if (!enabled) return;
+    dragging.current = false;
+    e?.target?.releasePointerCapture?.(e.pointerId);
+    e?.stopPropagation?.();
+  };
+
+  const consumeClick = () => {
+    const wasDragged = moved.current;
+    moved.current = false;
+    return wasDragged;
+  };
+
+  return { rotation, beginDrag, drag, endDrag, consumeClick };
 }
 
 const MODEL_URL = "/models/lady-justice.glb";
@@ -114,6 +275,12 @@ const ASSEMBLY_OFFSET_Y = GROUND_Y - (PEDESTAL.centerY - PEDESTAL.height / 2);
 
 const CAMERA_FOV_DEG = 32;
 const TARGET_VERTICAL_COVERAGE = 0.70; // Forces statue to take up exactly 70% of screen height
+// Ceiling on how much of the viewport WIDTH the statue may fill. Only kicks in
+// on unusually narrow/tall viewports (foldable cover screens, a browser window
+// resized very narrow, split-screen multitasking) where fitting to height
+// alone would let the statue overflow the sides. Tune like the coverage value
+// above if you want it snugger or looser on those devices.
+const TARGET_HORIZONTAL_COVERAGE = 0.88;
 const VERTICAL_BIAS = 0;
 const ENTRANCE_ZOOM_FACTOR = 1.4;
 
@@ -121,13 +288,41 @@ const ENTRANCE_ZOOM_FACTOR = 1.4;
 // doesn't move, so these just slide the statue up/down within the shot).
 // Roughly, 0.05 units ≈ 1% of screen height at the default fit distance —
 // nudge these to match the exact framing you want.
-const DESKTOP_Y_OFFSET = -0.6;
+const DESKTOP_Y_OFFSET = -3; // existing desktop framing + exactly 1 inch lower
 const MOBILE_Y_OFFSET = 0.29;
+
+// Below this canvas width: full mobile composition. At/above this width: full
+// desktop composition. In between (the typical tablet range), the two offsets
+// above are blended smoothly so rotating a tablet or resizing the window
+// doesn't pop the statue's position.
+const MOBILE_WIDTH_BREAKPOINT = 640;
+const DESKTOP_WIDTH_BREAKPOINT = 1024;
+
+// Assumes the glTF model (and this scene) are authored in meters, the
+// glTF/Three.js convention. If "an inch" ends up looking too small or too
+// large for your asset's actual scale, this is the constant to adjust.
+const INCH_IN_SCENE_UNITS = 0.0254;
+const SURFACE_PRO_Y_LIFT = INCH_IN_SCENE_UNITS; // ~1 inch upward, specifically for Surface Pro
+
+// How far the statue turns/nods in response to device tilt. Yaw covers a
+// similar range to the old drag-to-rotate; pitch stays subtle, matching the
+// old OrbitControls polar-angle limit (±0.10 rad) so it never looks like
+// the statue is toppling forward/back.
+const MAX_TILT_YAW = THREE.MathUtils.degToRad(22);
+const MAX_TILT_PITCH = THREE.MathUtils.degToRad(6);
+const TILT_SMOOTHING = 0.0008;
 
 type FrameBox = { width: number; height: number; centerY: number };
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
+}
+
+// Smooth 0→1 ramp between edge0 and edge1, used to blend a framing value
+// across a breakpoint range instead of flipping it at a single width.
+function smoothstep(x: number, edge0: number, edge1: number): number {
+  const t = clamp((x - edge0) / (edge1 - edge0), 0, 1);
+  return t * t * (3 - 2 * t);
 }
 
 function getCombinedFrameBox(statueWidth: number): FrameBox {
@@ -149,13 +344,24 @@ function getCombinedFrameBox(statueWidth: number): FrameBox {
 
 function computeFitDistance(box: FrameBox, aspect: number, fovDeg: number = CAMERA_FOV_DEG): number {
   const vFov = THREE.MathUtils.degToRad(fovDeg);
-  
-  // Calculate distance so the statue takes up exactly TARGET_VERTICAL_COVERAGE (70%) 
-  // of the screen height. We ignore width constraints to prevent the camera 
-  // from zooming out too far on narrow mobile devices.
-  const distanceForHeight = box.height / 2 / (Math.tan(vFov / 2) * TARGET_VERTICAL_COVERAGE);
+  const tanHalfVFov = Math.tan(vFov / 2);
 
-  return distanceForHeight;
+  // Primary fit: statue takes up exactly TARGET_VERTICAL_COVERAGE (70%) of
+  // the screen height. This drives framing on nearly all devices — we
+  // deliberately don't fit tightly to width so the statue doesn't zoom out
+  // too far on typical narrow-but-tall phone screens.
+  const distanceForHeight = box.height / 2 / (tanHalfVFov * TARGET_VERTICAL_COVERAGE);
+
+  // Safety fit: on unusually narrow viewports, height-only fitting can leave
+  // the statue wider than the visible frame. tan(halfHFov) = tan(halfVFov) *
+  // aspect, so this derives the distance needed to also keep the statue
+  // within TARGET_HORIZONTAL_COVERAGE of the width.
+  const distanceForWidth = box.width / 2 / (tanHalfVFov * aspect * TARGET_HORIZONTAL_COVERAGE);
+
+  // The larger distance wins: normal aspect ratios are unaffected (height
+  // already contains the width there), and only genuinely narrow screens get
+  // pulled back further — exactly as far as needed, no more.
+  return Math.max(distanceForHeight, distanceForWidth);
 }
 
 type ModelFit = {
@@ -187,11 +393,17 @@ function useModelFit(url: string, targetHeight: number): ModelFit {
   }, [scene, targetHeight]);
 }
 
-function StatueModel({ fit, precision, enableControls }: { fit: ModelFit; precision: "mediump" | "highp"; enableControls: (enabled: boolean) => void }) {
+function StatueModel({ fit, precision }: { fit: ModelFit; precision: "mediump" | "highp" }) {
   const outer = useRef<THREE.Group>(null);
+  const tiltGroup = useRef<THREE.Group>(null);
   const floatGroup = useRef<THREE.Group>(null);
   const inner = useRef<THREE.Group>(null);
-  const isDragging = useRef(false);
+  const hasEntered = useRef(false);
+
+  const isTouchDevice = useIsTouchDevice();
+  const { tilt, requestPermission } = useDeviceTilt(isTouchDevice);
+  const isDesktopMouse = !isTouchDevice;
+  const desktopDrag = useDesktopDragRotation(isDesktopMouse);
 
   const [activeQuote, setActiveQuote] = useState<string | null>(null);
   const [displayQuote, setDisplayQuote] = useState<string>("");
@@ -206,60 +418,6 @@ function StatueModel({ fit, precision, enableControls }: { fit: ModelFit; precis
       return () => clearTimeout(timer);
     }
   }, [activeQuote]);
-
-  // Directional touch lock logic & global pointer up listener
-  useEffect(() => {
-    let startX = 0;
-    let startY = 0;
-    let directionLocked = false;
-
-    const handleTouchStart = (e: TouchEvent) => {
-      if (isDragging.current && e.touches.length > 0) {
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        directionLocked = false;
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!isDragging.current || directionLocked) return;
-      if (e.touches.length > 0) {
-        const dx = e.touches[0].clientX - startX;
-        const dy = e.touches[0].clientY - startY;
-        
-        // Lock direction after moving a few pixels
-        if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
-          directionLocked = true;
-          if (Math.abs(dx) > Math.abs(dy)) {
-            // Horizontal swipe -> Enable rotation
-            enableControls(true);
-          } else {
-            // Vertical swipe -> Disable controls so the page scrolls natively
-            enableControls(false);
-          }
-        }
-      }
-    };
-
-    const handleGlobalUp = () => {
-      if (isDragging.current) {
-        isDragging.current = false;
-        enableControls(false);
-      }
-    };
-
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
-    window.addEventListener('touchend', handleGlobalUp);
-    window.addEventListener('pointerup', handleGlobalUp);
-    
-    return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleGlobalUp);
-      window.removeEventListener('pointerup', handleGlobalUp);
-    };
-  }, [enableControls]);
 
   const legalQuotes = useMemo(() => [
     "Justice delayed is justice denied.",
@@ -339,62 +497,122 @@ function StatueModel({ fit, precision, enableControls }: { fit: ModelFit; precis
         gsap.fromTo(
           outer.current.rotation,
           { y: -Math.PI * 0.65 },
-          { y: 0, duration: 2.0, ease: "power3.out", delay: 0.5 }
+          {
+            y: 0,
+            duration: 2.0,
+            ease: "power3.out",
+            delay: 0.5,
+            // Tilt-driven rotation lives on a separate nested group (see
+            // tiltGroup below) and only starts once this is done, so the two
+            // never fight over the same frame.
+            onComplete: () => {
+              hasEntered.current = true;
+            },
+          }
         );
       }
     });
     return () => ctx.revert();
   }, [clonedScene]);
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     if (!outer.current || !floatGroup.current) return;
     const breathe = 1 + Math.sin(state.clock.elapsedTime * 0.9) * 0.006;
     floatGroup.current.scale.set(breathe, 1, breathe);
     floatGroup.current.position.y = Math.sin(state.clock.elapsedTime * 0.6) * 0.02;
+
+    // Phones / iPads / tablets: gyro-driven movement.
+    // Desktop / laptops: mouse-drag rotation.
+    if (tiltGroup.current && hasEntered.current) {
+      if (isTouchDevice) {
+        const damp = 1 - Math.pow(TILT_SMOOTHING, delta);
+        const targetYaw = tilt.current.x * MAX_TILT_YAW;
+        const targetPitch = tilt.current.y * MAX_TILT_PITCH;
+
+        tiltGroup.current.rotation.y += (targetYaw - tiltGroup.current.rotation.y) * damp;
+        tiltGroup.current.rotation.x += (targetPitch - tiltGroup.current.rotation.x) * damp;
+      } else {
+        const desktopDamp = 1 - Math.pow(0.0008, delta);
+        const targetYaw = desktopDrag.rotation.current.y;
+        const targetPitch = desktopDrag.rotation.current.x;
+
+        tiltGroup.current.rotation.y += (targetYaw - tiltGroup.current.rotation.y) * desktopDamp;
+        tiltGroup.current.rotation.x += (targetPitch - tiltGroup.current.rotation.x) * desktopDamp;
+      }
+    }
   });
 
   const handleStatueClick = (e: any) => {
     e.stopPropagation();
+
+    // iOS only grants motion/orientation access from inside a user gesture.
+    requestPermission();
+
+    // A desktop drag rotates the statue and should not also trigger a quote.
+    if (isDesktopMouse && desktopDrag.consumeClick()) return;
+
     setActiveQuote(legalQuotes[clickCount % legalQuotes.length]);
     setClickCount((prev) => prev + 1);
   };
 
   return (
     <group ref={outer} position={[0, 0, 0]} dispose={null}>
-      <group ref={floatGroup}>
-        <group ref={inner} scale={fit.scale} position={fit.position}>
-          <primitive object={clonedScene} raycast={() => {}} />
-        </group>
+      {/* Tilt-driven rotation lives on its own group, separate from the
+          entrance-animation group above and untouched by any pointer event. */}
+      <group ref={tiltGroup}>
+        <group ref={floatGroup}>
+          <group ref={inner} scale={fit.scale} position={fit.position}>
+            <primitive object={clonedScene} raycast={() => {}} />
+          </group>
 
-        {/* Tightly wrapped proxy collider for smooth clicking and dragging */}
-        <mesh
-          position={[0, TARGET_HEIGHT / 2, 0]}
-          onClick={handleStatueClick}
-          onPointerEnter={(e) => { e.stopPropagation(); if (e.pointerType !== 'touch') enableControls(true); document.body.style.cursor = 'grab'; }}
-          onPointerLeave={(e) => { e.stopPropagation(); if (!isDragging.current) enableControls(false); document.body.style.cursor = 'auto'; }}
-          onPointerDown={(e) => { e.stopPropagation(); isDragging.current = true; if (e.pointerType !== 'touch') enableControls(true); document.body.style.cursor = 'grabbing'; }}
-          onPointerUp={() => { document.body.style.cursor = 'grab'; }}
-        >
-          {/* Widened slightly for better touch targets on mobile */}
-          <cylinderGeometry args={[0.55, 0.65, TARGET_HEIGHT * 0.95, 16]} />
-          <meshBasicMaterial transparent opacity={0} depthWrite={false} />
-        </mesh>
-
-        <Html position={[0, TARGET_HEIGHT + 0.35, 0]} center zIndexRange={[100, 0]}>
-          <div
-            style={{
-              opacity: activeQuote ? 1 : 0,
-              transform: activeQuote ? 'translateY(0) scale(1)' : 'translateY(12px) scale(0.95)',
-              transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-              pointerEvents: 'none'
+          {/* Tightly wrapped proxy collider — tap-to-reveal-quote only, non-grabbable */}
+          <mesh
+            position={[0, TARGET_HEIGHT / 2, 0]}
+            onClick={handleStatueClick}
+            onPointerDown={(e) => {
+              if (isDesktopMouse) desktopDrag.beginDrag(e);
+              else requestPermission();
             }}
-            className="w-64 sm:w-80 bg-black/90 text-white/90 p-4 rounded-xl shadow-2xl border border-white/20 text-center"
+            onPointerMove={(e) => {
+              if (isDesktopMouse) desktopDrag.drag(e);
+            }}
+            onPointerUp={(e) => {
+              if (isDesktopMouse) desktopDrag.endDrag(e);
+            }}
+            onPointerCancel={(e) => {
+              if (isDesktopMouse) desktopDrag.endDrag(e);
+            }}
+            onPointerEnter={(e) => {
+              e.stopPropagation();
+              document.body.style.cursor = isDesktopMouse ? 'grab' : 'pointer';
+            }}
+            onPointerLeave={(e) => {
+              e.stopPropagation();
+              if (isDesktopMouse) desktopDrag.endDrag(e);
+              document.body.style.cursor = 'auto';
+            }}
           >
-            <p className="font-serif italic text-sm sm:text-base leading-relaxed">
-              "{displayQuote}"
-            </p>
-          </div>
-        </Html>
+            {/* Widened slightly for better touch targets on mobile */}
+            <cylinderGeometry args={[0.55, 0.65, TARGET_HEIGHT * 0.95, 16]} />
+            <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+          </mesh>
+
+          <Html position={[0, TARGET_HEIGHT + 0.35, 0]} center zIndexRange={[100, 0]}>
+            <div
+              style={{
+                opacity: activeQuote ? 1 : 0,
+                transform: activeQuote ? 'translateY(0) scale(1)' : 'translateY(12px) scale(0.95)',
+                transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                pointerEvents: 'none'
+              }}
+              className="w-64 sm:w-80 bg-black/90 text-white/90 p-4 rounded-xl shadow-2xl border border-white/20 text-center"
+            >
+              <p className="font-serif italic text-sm sm:text-base leading-relaxed">
+                "{displayQuote}"
+              </p>
+            </div>
+          </Html>
+        </group>
       </group>
     </group>
   );
@@ -496,31 +714,32 @@ function LightingRig({ shadowMapSize, isDark, useShadows }: { shadowMapSize: num
   );
 }
 
-function FramedStatue({ pointer, useHDRI, frameBox, precision, enableControls }: { pointer: PointerRef; useHDRI: boolean; frameBox: FrameBox; precision: "mediump" | "highp"; enableControls: (enabled: boolean) => void }) {
+function FramedStatue({ pointer, useHDRI, frameBox, precision }: { pointer: PointerRef; useHDRI: boolean; frameBox: FrameBox; precision: "mediump" | "highp" }) {
   const fit = useModelFit(MODEL_URL, TARGET_HEIGHT);
+  const isSurfacePro = useIsSurfacePro();
 
-  const [isDesktop, setIsDesktop] = useState(false);
-  useEffect(() => {
-    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
-    checkDesktop();
-    window.addEventListener("resize", checkDesktop);
-    return () => window.removeEventListener("resize", checkDesktop);
-  }, []);
+  // Framing is based on the actual rendered canvas width. Desktop is lowered
+  // by one inch, while the Surface Pro receives a separate one-inch lift.
+  const { size } = useThree();
+  const verticalOffset = useMemo(() => {
+    const t = smoothstep(size.width, MOBILE_WIDTH_BREAKPOINT, DESKTOP_WIDTH_BREAKPOINT);
+    return THREE.MathUtils.lerp(MOBILE_Y_OFFSET, DESKTOP_Y_OFFSET, t);
+  }, [size.width]);
 
-  const verticalOffset = isDesktop ? DESKTOP_Y_OFFSET : MOBILE_Y_OFFSET;
+  const surfaceProLift = isSurfacePro ? SURFACE_PRO_Y_LIFT : 0;
 
   return (
     <>
       <CameraRig pointer={pointer} frameBox={frameBox} />
-      <group position={[0, ASSEMBLY_OFFSET_Y + verticalOffset, 0]}>
-        <StatueModel fit={fit} precision={precision} enableControls={enableControls} />
+      <group position={[0, ASSEMBLY_OFFSET_Y + verticalOffset + surfaceProLift, 0]}>
+        <StatueModel fit={fit} precision={precision} />
       </group>
       {useHDRI && <Environment preset="city" />}
     </>
   );
 }
 
-function Scene({ renderTier, isDark, enableControls, controlsEnabled, controlsRef }: { renderTier: RenderTier; isDark: boolean; enableControls: (enabled: boolean) => void; controlsEnabled: boolean; controlsRef: React.MutableRefObject<any> }) {
+function Scene({ renderTier, isDark }: { renderTier: RenderTier; isDark: boolean }) {
   const settings = RENDER_SETTINGS[renderTier];
   const pointer = usePointerState();
   const fit = useModelFit(MODEL_URL, TARGET_HEIGHT);
@@ -529,13 +748,9 @@ function Scene({ renderTier, isDark, enableControls, controlsEnabled, controlsRe
   const { gl } = useThree();
   const setDpr = useThree((state) => state.setDpr);
 
-  // Re-apply touchAction="pan-y" after OrbitControls mounts and sets touchAction="none"
   useEffect(() => {
-    if (controlsRef.current) {
-      controlsRef.current.domElement.style.touchAction = "pan-y";
-    }
     gl.domElement.style.touchAction = "pan-y";
-  }, [gl, controlsRef]);
+  }, [gl]);
 
   return (
     <>
@@ -548,19 +763,9 @@ function Scene({ renderTier, isDark, enableControls, controlsEnabled, controlsRe
       <LightingRig shadowMapSize={settings.shadowMapSize} isDark={isDark} useShadows={settings.useShadows} />
 
       <Suspense fallback={null}>
-        <FramedStatue pointer={pointer} useHDRI={settings.useHDRI} frameBox={frameBox} precision={settings.precision} enableControls={enableControls} />
+        <FramedStatue pointer={pointer} useHDRI={settings.useHDRI} frameBox={frameBox} precision={settings.precision} />
         <Preload all />
       </Suspense>
-
-      {/* OrbitControls is disabled by default and only enabled synchronously when hovering/touching the statue */}
-      <OrbitControls
-        ref={controlsRef}
-        enabled={controlsEnabled}
-        enableZoom={false}
-        enablePan={false}
-        minPolarAngle={Math.PI / 2 - 0.10}
-        maxPolarAngle={Math.PI / 2 + 0.10}
-      />
 
       {settings.usePostFX && (
         <EffectComposer>
@@ -584,22 +789,12 @@ interface LadyJusticeStatue3DProps {
 const INITIAL_CAMERA_FALLBACK: [number, number, number] = [0, 0, 8];
 
 const LadyJusticeStatue3D: React.FC<LadyJusticeStatue3DProps> = ({ className = "" }) => {
-  const renderTier = useRenderTier();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const renderTier = useRenderTier(containerRef);
   const settings = RENDER_SETTINGS[renderTier];
   const isDark = true;
 
-  const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(true);
-  
-  const controlsRef = useRef<any>(null);
-  const [controlsEnabled, setControlsEnabled] = useState(false);
-
-  const enableControls = (enabled: boolean) => {
-    if (controlsRef.current) {
-      controlsRef.current.enabled = enabled;
-    }
-    setControlsEnabled(enabled);
-  };
 
   useEffect(() => {
     const node = containerRef.current;
@@ -625,7 +820,6 @@ const LadyJusticeStatue3D: React.FC<LadyJusticeStatue3DProps> = ({ className = "
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: isDark ? 1.1 : 1.05,
         }}
-        onPointerMissed={() => enableControls(false)}
         style={{
           pointerEvents: "auto",
           background: isDark
@@ -634,13 +828,7 @@ const LadyJusticeStatue3D: React.FC<LadyJusticeStatue3DProps> = ({ className = "
           touchAction: "pan-y",
         }}
       >
-        <Scene 
-          renderTier={renderTier} 
-          isDark={isDark} 
-          enableControls={enableControls} 
-          controlsEnabled={controlsEnabled}
-          controlsRef={controlsRef}
-        />
+        <Scene renderTier={renderTier} isDark={isDark} />
       </Canvas>
     </div>
   );
